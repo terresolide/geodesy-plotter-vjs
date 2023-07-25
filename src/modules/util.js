@@ -25,18 +25,40 @@ export default {
     var corner2 = bounds.getSouthEast()
     var tile1 = this.pos2tile(corner1)
     var tile2 = this.pos2tile(corner2)
+    var center = bounds.getCenter()
+    console.log(tile1)
+    console.log(tile2)
+    var tile = this.pos2tile(center)
+    console.log(tile)
     var tiles = []
     // commence par le milieu
-     var middle = parseInt((tile1.x + tile2.x)/2)
-     for (var i=middle; i <= tile2.x; i++) {
-        console.log(2 * middle - i)
-        for (var j= tile1.y; j <= tile2.y; j++) {
-          tiles.push(j + '/' + i)
-          if (2 * middle - i >= tile1.x && middle < i) {
-            tiles.push(j + '/' + (2 * middle - i))
+     
+    for (var i=tile.x; i <= 9; i++) {
+        console.log(2 * tile.x - i)
+        for (var j= tile.y; j <= tile2.y; j++) {
+          if (i <= 8) {
+            tiles.push(j + '/' + i)
+          }
+          if (tile.x < i && 2 * tile.x - i >= 1) {
+            tiles.push(j + '/' + (2 * tile.x - i))
+          }
+          if (tile.y < j && 2 * tile.y - j >= 1 && 2 * tile.y - j >= tile1.y) {
+            tiles.push((2 * tile.y - j) + '/' + i)
+             if (tile.x < i && 2 * tile.x - i >= 1) {
+                tiles.push((2 * tile.y - j) + '/' + (2 * tile.x - i))
+             }
           }
         }
     }
+    for (var i=1; i <= 8; i++) {
+        for (var j= tile.y - 1 ; j > 0 ; j--) {
+          tiles.push(j + '/' + i)
+        }
+        for (var j= tile2.y +1 ; j < 3 ; j++) {
+          tiles.push(j + '/' + i)
+        }
+    }
+    console.log(tiles)
     return tiles
   }
 }
