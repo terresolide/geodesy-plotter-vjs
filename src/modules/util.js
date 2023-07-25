@@ -14,5 +14,29 @@ export default {
   },
   deg2rad(deg) {
     return deg * (Math.PI/180)
+  },
+  pos2tile (latlng) {
+    var x = 1 + parseInt((latlng.lng + 180) / 45)
+    var y = 1 + parseInt((90 - latlng.lat) / 90)
+    return {x:x, y: y}
+  },
+  bounds2tiles (bounds) {
+    var corner1 = bounds.getNorthWest()
+    var corner2 = bounds.getSouthEast()
+    var tile1 = this.pos2tile(corner1)
+    var tile2 = this.pos2tile(corner2)
+    var tiles = []
+    // commence par le milieu
+     var middle = parseInt((tile1.x + tile2.x)/2)
+     for (var i=middle; i <= tile2.x; i++) {
+        console.log(2 * middle - i)
+        for (var j= tile1.y; j <= tile2.y; j++) {
+          tiles.push(j + '/' + i)
+          if (2 * middle - i >= tile1.x && middle < i) {
+            tiles.push(j + '/' + (2 * middle - i))
+          }
+        }
+    }
+    return tiles
   }
 }

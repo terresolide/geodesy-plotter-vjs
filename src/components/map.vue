@@ -114,6 +114,7 @@ Icon.Default.mergeOptions({
   iconUrl: require('leaflet/dist/images/marker-icon.png').default,
   shadowUrl: require('leaflet/dist/images/marker-shadow.png').default,
 });
+import Util from '../modules/util.js'
 import FileForm from './file-form.vue'
 import GnssMenu from './gnss-menu.vue'
 require('leaflet-draw')
@@ -573,12 +574,19 @@ export default {
         this.init = true
       } 
       if (bounds && bounds.isValid()) {
+        var tiles = Util.bounds2tiles(bounds)
         this.map.fitBounds(bounds)
       } else {
-        this.map.fitBounds([[50, -6.5],[41, 10.5]])
+        var bounds =  L.latLngBounds([50, -6.5],[41, 10.5])
+        var tiles = Util.bounds2tiles(bounds)
+        
+        this.map.fitBounds(bounds)
       }
+      
       // this.dateLayers = L.layerGroup()
-      this.treatmentQuery(this.$route.query, true)
+      this.loadTile(tiles[0])
+      
+      // this.treatmentQuery(this.$route.query, true)
       this.initialized = true
      
     },
@@ -607,7 +615,16 @@ export default {
       delete query.several
       this.$router.push({ name: 'station', params: { name: this.selected[1], id: this.selected[0]}, query: query})
     },
-
+    loadTile(tile) {
+      var url = this.api + 'stations/' + tile
+      var params = Object.assign({}, this.defaultRequest)
+      params = Object.assign(params, this.$route.query)
+      this.$http.get(url, {params: params})
+      .then(
+          resp => {this.display({stations: resp.body}, 0, true)},
+          resp => {console.log('Erreur de chargement')}
+       )
+    },
     load (i, first) {
       if (!this.api) {
         console.log('Service unvailable!')
