@@ -268,10 +268,12 @@ export default {
        if (!window.confirm("Voulez-vous réellement supprimer la station " + selected[1] + "\navec tous ses produits!")) {
          return
        }
-       this.$http.delete(this.$store.state.back + '/entities/removeStation/' + selected[0], {credentials: true} )
-       .then(resp => {
+       this.$http.delete(this.$store.state.back + '/entities/removeStation/' + selected[0], {
+         headers: {'X-Requested-With': 'XMLHttpRequest'},
+         credentials: true
+       }).then(resp => {
            this.load(0)
-       }, resp => {console.log('error')})
+       }, resp => {alert('error status:' + resp.status)})
     },
     closeMenuContext(e) { 
       e.stopPropagation()
@@ -499,7 +501,7 @@ export default {
       legend.addTo(this.map)
 //       var control = new L.Control.Form()
 //       control.addTo(this.map)
-      this.popup = L.popup({autoPan:true, minWidth: 250, autoPanPaddingTopLeft: [0,0], minHeight:250, maxHeight:300, closeButton: false})
+      this.popup = L.popup({autoPan:true, minWidth: 250, autoPanPaddingTopLeft: [0,0], minHeight:250, maxHeight:310, closeButton: false})
       this.initDrawControl()
       var self = this
 //       this.map.whenReady(function (e) {

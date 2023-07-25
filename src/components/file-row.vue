@@ -100,8 +100,10 @@ export default {
         return
       }
       
-      this.$http.delete(this.$store.state.back + '/entities/removeFile/' + this.file.id, {credentials: true} )
-      .then(resp => {
+      this.$http.delete(this.$store.state.back + '/entities/removeFile/' + this.file.id, {
+        headers: {'X-Requested-With': 'XMLHttpRequest'},
+        credentials: true
+      }).then(resp => {
         this.$emit('remove', this.file.id)
       }, resp => {console.log('error')})
     },

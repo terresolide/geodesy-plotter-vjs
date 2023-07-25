@@ -452,19 +452,24 @@ export default {
       } 
     },
     mergeIn (id1, id2) {
-      this.$http.post(this.$store.state.back + '/entities/merge',{from: id1, to:id2}, {credentials: true, emulateJSON: true} )
-      .then(resp => {
+      this.$http.post(this.$store.state.back + '/entities/merge',{from: id1, to:id2}, {
+         headers: {'X-Requested-With': 'XMLHttpRequest'},
+         credentials: true,
+         emulateJSON: true
+      }).then(resp => {
         // this.removed = true
-      }, resp => {console.log('error')})
+      }, resp => {alert('error status ' + resp.status)})
     },
     removeStation () {
       if (!window.confirm("Voulez-vous réellement supprimer la station " + this.stationName + "\navec tous ses produits!")) {
         return
       }
-      this.$http.delete(this.$store.state.back + '/entities/removeStation/' + this.stationId, {credentials: true} )
-      .then(resp => {
+      this.$http.delete(this.$store.state.back + '/entities/removeStation/' + this.stationId, {
+        headers: {'X-Requested-With': 'XMLHttpRequest'}, 
+        credentials: true
+      }).then(resp => {
         this.removed = true
-      }, resp => {console.log('error')})
+      }, resp => {alert('error status ' + resp.status)})
     },
     removeFile (index) {
       var file = this.files[this.productType][index]
@@ -472,11 +477,13 @@ export default {
         return
       }
       
-      this.$http.delete(this.$store.state.back + '/entities/removeFile/' + file.id, {credentials: true} )
-      .then(resp => {
+      this.$http.delete(this.$store.state.back + '/entities/removeFile/' + file.id, {
+        headers: {'X-Requested-With': 'XMLHttpRequest'}, 
+        credentials: true
+      }).then(resp => {
         this.files[this.productType][index].removed = true
         this.$forceUpdate()
-      }, resp => {console.log('error')})
+      }, resp => {alert('error status ' + resp.status)})
     },
     scroll (event) {
       this.scrollY = event.target.scrollTop
