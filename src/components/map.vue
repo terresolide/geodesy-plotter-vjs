@@ -232,6 +232,7 @@ export default {
       popup: null,
       groups: [],
       groupLayers: [],
+      tiles: null,
       classnames: {
         1: 'blue',
         2: 'red',
@@ -378,11 +379,8 @@ export default {
           // remove query bbox?
         }
       }
-      if (this.$store.state.stations) {
-        this.displayStore(0)
-      } else {
-        this.load(0, first)
-      }
+      this.load(0, first)
+
     },
    
     initDrawControl () {
@@ -574,19 +572,18 @@ export default {
         this.init = true
       } 
       if (bounds && bounds.isValid()) {
-        var tiles = Util.bounds2tiles(bounds)
+        this.tiles = Util.bounds2tiles(bounds)
         this.map.fitBounds(bounds)
       } else {
         var bounds =  L.latLngBounds([50, -6.5],[41, 10.5])
-        var tiles = Util.bounds2tiles(bounds)
+        this.tiles = Util.bounds2tiles(bounds)
         
         this.map.fitBounds(bounds)
       }
       
       // this.dateLayers = L.layerGroup()
-      this.loadTile(tiles[0])
       
-      // this.treatmentQuery(this.$route.query, true)
+      this.treatmentQuery(this.$route.query, true)
       this.initialized = true
      
     },
@@ -615,17 +612,27 @@ export default {
       delete query.several
       this.$router.push({ name: 'station', params: { name: this.selected[1], id: this.selected[0]}, query: query})
     },
-    loadTile(tile) {
-      var url = this.api + 'stations/' + tile
+    loadTile(index, first) {
+      
+      if (index > this.tiles.length) {
+        return
+      }
+      var url = this.api + 'stations/' + this.tiles[index]
       var params = Object.assign({}, this.defaultRequest)
       params = Object.assign(params, this.$route.query)
       this.$http.get(url, {params: params})
       .then(
-          resp => {this.display({stations: resp.body}, 0, true)},
+          resp => {
+            this.loadTile(index + 1, first)
+            this.displayByTile(resp.body, index, true)
+          },
           resp => {console.log('Erreur de chargement')}
        )
     },
     load (i, first) {
+      
+      this.loadTile(0,first)
+      return
       if (!this.api) {
         console.log('Service unvailable!')
       }
@@ -750,6 +757,43 @@ export default {
       this.displayEnd(init)
       
     },
+    displayByTile (stations, index, keys, init) {
+      var self = this
+      var tile = this.tiles[index]
+      if (index === 0) {
+           for (var tile in this.markers) {
+             this.markers[tile].off()
+             this.markers[tile].clearLayers()
+             this.markers[tile].remove(this.map)
+             this.markers[tile] = null
+           }
+           
+           this.markers = {}
+//         for (var key in this.groupLayers) {
+//           if (this.groupLayers[key]) {
+//            this.groupLayers[key].clearLayers()
+//            this.groupLayers[key].remove(this.map)
+//            this.layerControl.removeLayer(this.groupLayers[key])
+//            this.groupLayers[key] = null
+//           }
+//        }
+        this.groupLayers = []
+        this.stations = []
+        this.groups = []
+        this.bounds = null
+      }
+      if (index === 0 && keys.length === 0) {
+     // if (index === 0 && data.stations.length === 0) {
+        this.noStation = true
+        this.$store.commit('setSearching', false)
+        return
+     }
+     this.addTile(tile,stations)
+     if (index === this.tiles.length - 1) {
+      this.displayEnd(init)
+     }
+    },
+    
     displayEnd (init) {
       if (this.markers['W_EU']) {
         this.markers['W_EU'].addTo(this.map)
@@ -797,29 +841,29 @@ export default {
         }
       }
     },
-    displayStore (index) {
-      if (index === 0) {
-        this.$store.commit('setSearching', true)
-      }
-      if (index === 0 && this.$store.state.stations.length === 0) {
-        this.noStation = true
-      }
-      for (var i = index; i < this.$store.state.stations.length && i < index + this.$store.state.batch; i++) {
+//     displayStore (index) {
+//       if (index === 0) {
+//         this.$store.commit('setSearching', true)
+//       }
+//       if (index === 0 && this.$store.state.stations.length === 0) {
+//         this.noStation = true
+//       }
+//       for (var i = index; i < this.$store.state.stations.length && i < index + this.$store.state.batch; i++) {
       
-        if (this.$store.state.stations[i]) {
-           this.addStation(this.$store.state.stations[i])
-        }
-      }
-      if (index + this.$store.state.batch < this.$store.state.stations.length) {
-        var self = this
-        setTimeout(function () {
-          self.displayStore(index + self.$store.state.batch)
-        },0)
+//         if (this.$store.state.stations[i]) {
+//            this.addStation(this.$store.state.stations[i])
+//         }
+//       }
+//       if (index + this.$store.state.batch < this.$store.state.stations.length) {
+//         var self = this
+//         setTimeout(function () {
+//           self.displayStore(index + self.$store.state.batch)
+//         },0)
         
-        return
-      }
-      this.displayEnd(true)
-    },
+//         return
+//       }
+//       this.displayEnd(true)
+//     },
     getClassname (year) {
       if (year < 1) {
         return 'blue'
@@ -969,6 +1013,46 @@ export default {
         this.bounds = L.latLngBounds()
       }
       this.bounds.extend(this.markers[region].getBounds())
+    },
+    addTile (tile, features) {
+      var self = this
+      this.markers[tile] = L.markerClusterGroup({
+        polygonOptions:{weight:1, color: '#00008b', opacity:1, fillOpacity:0.1},
+        disableClusteringAtZoom: null, 
+        maxClusterRadius:function (zoom) {
+          if (zoom > 5) {
+              return 3
+          }
+          return 40
+        },
+        animateAddingMarkers:true})
+       this.markers[tile].on('animationend', function () {
+        self.animationEnd()
+      })
+      features.forEach(function (feature) {
+        self.stations[feature[0]] = feature
+        var html = '<span></span>'
+        var className = self.getClassname(feature[2])
+        var icon = L.divIcon({
+          className: 'icon-marker marker-' + className, 
+          iconSize: [15,15],
+          html: html})
+
+          var marker = L.marker(feature[3], {icon: icon, id: feature[0], title: feature[1]})
+          // marker.on('click', self.getData)
+          self.markers[tile].addLayer(marker)
+      })
+      this.markers[tile].addTo(this.map)
+      this.markers[tile].on('click', function (e) {
+          self.getData(e.layer)
+       })
+       this.markers[tile].on('contextmenu', function (e) {
+          self.openStationContextMenu(e)
+       })
+       if (!this.bounds) {
+        this.bounds = L.latLngBounds()
+      }
+      this.bounds.extend(this.markers[tile].getBounds())
     },
     addStation (feature) {
       this.stations[feature[0]] = feature

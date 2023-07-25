@@ -26,10 +26,7 @@ export default {
     var tile1 = this.pos2tile(corner1)
     var tile2 = this.pos2tile(corner2)
     var center = bounds.getCenter()
-    console.log(tile1)
-    console.log(tile2)
     var tile = this.pos2tile(center)
-    console.log(tile)
     var tiles = []
     // commence par le milieu
      
@@ -58,7 +55,6 @@ export default {
           tiles.push(j + '/' + i)
         }
     }
-    console.log(tiles)
     return tiles
   }
 }
