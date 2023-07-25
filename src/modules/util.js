@@ -27,10 +27,13 @@ export default {
     var tile2 = this.pos2tile(corner2)
     var center = bounds.getCenter()
     var tile = this.pos2tile(center)
+    console.log(tile1)
+    console.log(tile2)
+    console.log(tile)
     var tiles = []
     // commence par le milieu
      
-    for (var i=tile.x; i <= 9; i++) {
+    for (var i=tile.x; i <= 16; i++) {
         console.log(2 * tile.x - i)
         for (var j= tile.y; j <= tile2.y; j++) {
           if (i <= 8) {
@@ -55,6 +58,7 @@ export default {
           tiles.push(j + '/' + i)
         }
     }
+    console.log(tiles)
     return tiles
   }
 }

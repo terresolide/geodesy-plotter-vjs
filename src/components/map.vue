@@ -1,6 +1,6 @@
 <template>
   <div style="position:relative;overflow:hidden;"  >
-   <div v-if="searching" style="position:absolute; z-index:1;font-size:50px;top:calc(50% - 50px);left:calc(50% - 50px);text-shadow: 2px 2px 2px #040201;">
+   <div v-if="searching && !$store.state.adding" style="position:absolute; z-index:1;font-size:50px;top:calc(50% - 50px);left:calc(50% - 50px);text-shadow: 2px 2px 2px #040201;">
 
     <font-awesome-icon icon="fa-sharp fa-spinner" spin></font-awesome-icon>
 
@@ -478,6 +478,7 @@ export default {
       var bbox = this.map.getBounds().toBBoxString()
       var query = Object.assign({}, this.$route.query)
       query.bounds = bbox
+      this.tiles = Util.bounds2tiles(this.map.getBounds())
       // this.$store.commit('changeBounds', true)
       var self = this
       // self.$store.commit('setReset', true)
@@ -495,7 +496,16 @@ export default {
       this.layerControl = new L.TilesControl(null, null, {position: 'topleft'})
       this.layerControl.tiles.osm.layer.addTo(this.map)
       this.layerControl.addTo(this.map)
-      
+      if (this.$store.state.adding) {
+        var self = this
+        var url = this.api.replace('api', 'admin') + 'entities/add'
+        this.map.on('click', function (e) {
+          console.log(e.latlng)
+          self.$http.post(url, e.latlng, {credentials: true, emulateJSON:true})
+          .then(resp => {console.log(resp.body)})
+        })
+        return
+      }
       var legend = new L.Control.Legend()
       legend.addTo(this.map)
 //       var control = new L.Control.Form()
@@ -571,17 +581,11 @@ export default {
         }
         this.init = true
       } 
-      if (bounds && bounds.isValid()) {
-        this.tiles = Util.bounds2tiles(bounds)
-        this.map.fitBounds(bounds)
-      } else {
-        var bounds =  L.latLngBounds([50, -6.5],[41, 10.5])
-        this.tiles = Util.bounds2tiles(bounds)
-        
-        this.map.fitBounds(bounds)
+      if (!bounds || !bounds.isValid()) {
+        var bounds =  L.latLngBounds([50, 0.01],[41, 10.5])
       }
-      
-      // this.dateLayers = L.layerGroup()
+      this.tiles = Util.bounds2tiles(bounds)
+      this.map.fitBounds(bounds)
       
       this.treatmentQuery(this.$route.query, true)
       this.initialized = true
@@ -612,154 +616,113 @@ export default {
       delete query.several
       this.$router.push({ name: 'station', params: { name: this.selected[1], id: this.selected[0]}, query: query})
     },
-    loadTile(index, first) {
+    loadTile(index, tiles, params, first) {
       
-      if (index > this.tiles.length) {
+      if (index >= tiles.length) {
         return
       }
-      var url = this.api + 'stations/' + this.tiles[index]
-      var params = Object.assign({}, this.defaultRequest)
-      params = Object.assign(params, this.$route.query)
+      var url = this.api + 'stations/' + tiles[index]
+//       var params = Object.assign({}, this.defaultRequest)
+//       params = Object.assign(params, this.$route.query)
       this.$http.get(url, {params: params})
       .then(
           resp => {
-            this.loadTile(index + 1, first)
-            this.displayByTile(resp.body, index, true)
+            this.loadTile(index + 1, tiles, params, first)
+            this.displayByTile(resp.body, index, tiles[index], true)
           },
           resp => {console.log('Erreur de chargement')}
        )
     },
     load (i, first) {
-      
-      this.loadTile(0,first)
-      return
       if (!this.api) {
         console.log('Service unvailable!')
       }
-      // all stations case get in cache
-      var props =  Object.keys(this.$route.query)
-      var toSearch = props.filter(key => ['expand', 'bounds', 'selected', 'nodraw'].indexOf(key) < 0)
-       if (i === 0) {
-        this.$store.commit('setSearching', true)
-      }
-      if (!this.$store.state.back && (toSearch.length === 0 || (toSearch.length === 1 && toSearch.indexOf('solution') >= 0))) {
-        var url = this.api + 'stations/cache'
-        var params = []
-        this.$http.get(url, {params: this.$route.query})
-        .then(
-            resp => {this.displayByPart(resp.body, i, null, first)},
-            resp => {console.log('Erreur de chargement: ' + resp.status)}
-         )
-         return
-      } else {
-   
-	      var url = this.api + 'stations/'
-	      var params = Object.assign({}, this.defaultRequest)
-	      params = Object.assign(params, this.$route.query)
-	      params['page'] = i + 1
-	      params['maxRecords'] = this.maxRecords
-	      params['short'] = 1
-      
+      var tiles = this.tiles
+      var params = Object.assign({}, this.defaultRequest)
+      params = Object.assign(params, this.$route.query)
+      this.loadTile(0, tiles, params, first)
+      return
      
-//       if (params['start'] && !params['end']) {
-//         params['end'] = params['start']
-//       } else if (params['end'] && ! params['start']) {
-//         params['start'] = params['end']
-//       }
-      this.$http.get(url, {params: params})
-      .then(
-          resp => {this.display(resp.body, i, first)},
-          resp => {console.log('Erreur de chargement')}
-       )
-      }
     },
-    displayByPart (data, index, keys, init) {
-      var self = this
+//     displayByPart (data, index, keys, init) {
+//       var self = this
       
-      if (index === 0) {
-           for (var region in this.markers) {
-             this.markers[region].off()
-             this.markers[region].clearLayers()
-             this.markers[region].remove(this.map)
-             this.markers[region] = null
-           }
-           keys = Object.keys(data)
-           this.markers = {}
-//         for (var key in this.groupLayers) {
-//           if (this.groupLayers[key]) {
-//            this.groupLayers[key].clearLayers()
-//            this.groupLayers[key].remove(this.map)
-//            this.layerControl.removeLayer(this.groupLayers[key])
-//            this.groupLayers[key] = null
-//           }
-//        }
-        this.groupLayers = []
-        this.stations = []
-        this.groups = []
-        this.bounds = null
-      }
-      if (index === 0 && keys.length === 0) {
-     // if (index === 0 && data.stations.length === 0) {
-        this.noStation = true
-        this.$store.commit('setSearching', false)
-        return
-     }
-     this.addRegion(keys[index],data[keys[index]] )
-
-//       for(var i= index; i < index + this.$store.state.batch && i < data.stations.length ; i++) {
-//           this.addStation(data.stations[i])
+//       if (index === 0) {
+//            for (var region in this.markers) {
+//              this.markers[region].off()
+//              this.markers[region].clearLayers()
+//              this.markers[region].remove(this.map)
+//              this.markers[region] = null
+//            }
+//            keys = Object.keys(data)
+//            this.markers = {}
+//         this.groupLayers = []
+//         this.stations = []
+//         this.groups = []
+//         this.bounds = null
 //       }
+//       if (index === 0 && keys.length === 0) {
+//      // if (index === 0 && data.stations.length === 0) {
+//         this.noStation = true
+//         this.$store.commit('setSearching', false)
+//         return
+//      }
+//      this.addRegion(keys[index],data[keys[index]] )
+
+// //       for(var i= index; i < index + this.$store.state.batch && i < data.stations.length ; i++) {
+// //           this.addStation(data.stations[i])
+// //       }
     
-       if (keys.length -1 > index ) {
-        setTimeout(function () {
-          self.displayByPart(data, index + 1 , keys, init)
-        }, 0)
-//       if (data.stations.length > index + this.$store.state.batch ) {
+//        if (keys.length -1 > index ) {
 //         setTimeout(function () {
-//           self.displayByPart(data, index + self.$store.state.batch , init)
+//           self.displayByPart(data, index + 1 , keys, init)
 //         }, 0)
-         return
-      }
-      this.displayEnd(init)
+// //       if (data.stations.length > index + this.$store.state.batch ) {
+// //         setTimeout(function () {
+// //           self.displayByPart(data, index + self.$store.state.batch , init)
+// //         }, 0)
+//          return
+//       }
+//       this.displayEnd(init)
       
-    },
-    display (data, index, init) {
-      var self = this
-      if (index === 0) {
-           for (var region in this.markers) {
-             this.markers[region].off()
-             this.markers[region].clearLayers()
-             this.markers[region].remove(this.map)
-             this.markers[region] = null
-           }
-           this.markers = {}
+//     },
+//     display (data, index, init) {
+//       var self = this
+//       if (index === 0) {
+//            for (var region in this.markers) {
+//              this.markers[region].off()
+//              this.markers[region].clearLayers()
+//              this.markers[region].remove(this.map)
+//              this.markers[region] = null
+//            }
+//            this.markers = {}
 
-        this.groupLayers = []
-        this.stations = []
-        this.groups = []
-        this.bounds = null
-      }
-      if (index === 0 && data.stations.length === 0) {
-        this.noStation = true
-        this.$store.commit('setSearching', false)
-        return
-      }
-      data.stations.forEach(function (value) {
+//         this.groupLayers = []
+//         this.stations = []
+//         this.groups = []
+//         this.bounds = null
+//       }
+//       if (index === 0 && data.stations.length === 0) {
+//         this.noStation = true
+//         this.$store.commit('setSearching', false)
+//         return
+//       }
+//       data.stations.forEach(function (value) {
 
-	        self.addStation(value)
-      })
+// 	        self.addStation(value)
+//       })
     
      
-      if (data.stations.length === this.maxRecords ) {
-         this.load(index + 1, init)
-         return
-      }
-      this.displayEnd(init)
+//       if (data.stations.length === this.maxRecords ) {
+//          this.load(index + 1, init)
+//          return
+//       }
+//       this.displayEnd(init)
       
-    },
-    displayByTile (stations, index, keys, init) {
+//     },
+    displayByTile (stations, index, tile, init) {
       var self = this
-      var tile = this.tiles[index]
+      
       if (index === 0) {
            for (var tile in this.markers) {
              this.markers[tile].off()
@@ -769,6 +732,7 @@ export default {
            }
            
            this.markers = {}
+           
 //         for (var key in this.groupLayers) {
 //           if (this.groupLayers[key]) {
 //            this.groupLayers[key].clearLayers()
@@ -782,12 +746,13 @@ export default {
         this.groups = []
         this.bounds = null
       }
-      if (index === 0 && keys.length === 0) {
-     // if (index === 0 && data.stations.length === 0) {
-        this.noStation = true
-        this.$store.commit('setSearching', false)
-        return
-     }
+      // var tile = tiles[index]
+//       if (index === ) {
+//      // if (index === 0 && data.stations.length === 0) {
+//         this.noStation = true
+//         this.$store.commit('setSearching', false)
+//         return
+//      }
      this.addTile(tile,stations)
      if (index === this.tiles.length - 1) {
       this.displayEnd(init)
@@ -795,9 +760,9 @@ export default {
     },
     
     displayEnd (init) {
-      if (this.markers['W_EU']) {
-        this.markers['W_EU'].addTo(this.map)
-      }
+//       if (this.markers['W_EU']) {
+//         this.markers['W_EU'].addTo(this.map)
+//       }
       this.$store.commit('setSearching', false)
 
       if (init && this.$route.query.nodraw) {
@@ -1023,7 +988,7 @@ export default {
           if (zoom > 5) {
               return 3
           }
-          return 40
+          return 50
         },
         animateAddingMarkers:true})
        this.markers[tile].on('animationend', function () {
