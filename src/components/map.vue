@@ -43,7 +43,7 @@
     </div> -->
   
     <div id="map" class="fullmap" @click="noStation=false"></div>
-    <div  id="json" v-show="show" style="background:white;max-width:270px;min-height:300px;max-height:400px;">
+    <div  id="json" v-show="show" style="background:white;max-width:270px;">
       <div class="gnss-close" @click="closePopup"><font-awesome-icon icon="fa-solid fa-close" /></div>
       <div  style="min-height:100px;cursor:pointer;">
            <h4 style="position:relative;display:inline-block;" v-if="selected" @click="goToStation($event)" title="Go to station page" @contextmenu="menuContext($event)">STATION {{selected[1]}}
@@ -501,7 +501,14 @@ export default {
       legend.addTo(this.map)
 //       var control = new L.Control.Form()
 //       control.addTo(this.map)
-      this.popup = L.popup({autoPan:true, minWidth: 250, autoPanPaddingTopLeft: [0,0], minHeight:250, maxHeight:310, closeButton: false})
+      this.popup = L.popup({
+        autoPan:true, 
+        minWidth: 250, 
+        autoPanPaddingTopLeft: [0,0], 
+        minHeight:250, 
+        maxHeight: this.$store.state.back ? 310 : 270, 
+        closeButton: false
+      })
       this.initDrawControl()
       var self = this
 //       this.map.whenReady(function (e) {
