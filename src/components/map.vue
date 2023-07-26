@@ -161,10 +161,10 @@ export default {
     },
     searching () {
       return this.$store.getters['search']
-    },
-    maxRecords () {
-      return this.$store.state.limit
-    }
+    } // ,
+//     maxRecords () {
+//       return this.$store.state.limit
+//     }
   },
   watch: {
     $route (newroute, oldroute) {
@@ -245,7 +245,8 @@ export default {
       noStation: false,
       initialized: false,
       selectedContextMenu: null,
-      closingPopup: false
+      closingPopup: false,
+      zoomMax: 5
     }
   },
   created () {
@@ -1019,6 +1020,14 @@ export default {
     addTile (index, tiles, features, params, init) {
       var self = this
       var tile = tiles[index]
+      
+      if (index === 0) {
+        this.zoomMax = 5
+        if (features.length > 1000) {
+            this.zoomMax = 7
+        }
+      } 
+      var zoomMax = this.zoomMax
       console.log('tile=' + index + '..ie ' + tiles[index])
       this.markers[tile] = L.markerClusterGroup({
         polygonOptions:{weight:1, color: '#00008b', opacity:1, fillOpacity:0.1},
@@ -1029,7 +1038,7 @@ export default {
         chunkInterval: 200,
         chunkDelay: 50,
         maxClusterRadius:function(zoom) {
-          if (zoom > 5) {
+          if (zoom > zoomMax) {
             return 3
           }
           return 80
