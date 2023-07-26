@@ -20,35 +20,47 @@ export default {
     var y = 1 + parseInt((90 - latlng.lat) / 45)
     return {x:x, y: y}
   },
-  bounds2tiles (bounds) {
+  bounds2tiles (bounds, uncomplete) {
     var corner1 = bounds.getNorthWest()
     var corner2 = bounds.getSouthEast()
     var tile1 = this.pos2tile(corner1)
     var tile2 = this.pos2tile(corner2)
     var center = bounds.getCenter()
     var tile = this.pos2tile(center)
-    console.log(tile1)
-    console.log(tile2)
-    console.log(tile)
     var tiles = []
     // commence par le milieu
      
     for (var i=tile.x; i <= 9; i++) {
         console.log(2 * tile.x - i)
         for (var j= tile.y; j <= tile2.y; j++) {
-          if (i <= 8) {
+          if (i <= 4) {
             tiles.push(j + '/' + i)
           }
-          if (tile.x < i && 2 * tile.x - i >= 1) {
-            tiles.push(j + '/' + (2 * tile.x - i))
-          }
-          if (tile.y < j && 2 * tile.y - j >= 1 && 2 * tile.y - j >= tile1.y) {
-            tiles.push((2 * tile.y - j) + '/' + i)
-             if (tile.x < i && 2 * tile.x - i >= 1) {
-                tiles.push((2 * tile.y - j) + '/' + (2 * tile.x - i))
-             }
+          if (uncomplete) {
+            if (tile.x < i && 2 * tile.x - i >= tile1.x) {
+              tiles.push(j + '/' + (2 * tile.x - i))
+            }
+            if (tile.y < j && 2 * tile.y - j >= tile1.y ) {
+              tiles.push((2 * tile.y - j) + '/' + i)
+               if (tile.x < i && 2 * tile.x - i >= tile1.x) {
+                  tiles.push((2 * tile.y - j) + '/' + (2 * tile.x - i))
+               }
+            }
+          } else {
+            if (tile.x < i && 2 * tile.x - i >= 1) {
+              tiles.push(j + '/' + (2 * tile.x - i))
+            }
+            if (tile.y < j && 2 * tile.y - j >= 1 && 2 * tile.y - j >= tile1.y) {
+              tiles.push((2 * tile.y - j) + '/' + i)
+               if (tile.x < i && 2 * tile.x - i >= 1) {
+                  tiles.push((2 * tile.y - j) + '/' + (2 * tile.x - i))
+               }
+            }
           }
         }
+    }
+    if(uncomplete) {
+      return tiles
     }
     for (var i=1; i <= 4; i++) {
         for (var j= tile.y - 1 ; j > 0 ; j--) {

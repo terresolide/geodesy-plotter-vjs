@@ -207,7 +207,7 @@ export default {
            }
         }
         // this.$store.commit('changeBounds', false)
-        return
+       return
       }
       this.treatmentQuery(newroute.query)
       this.$store.commit('setReset', false)
@@ -275,7 +275,7 @@ export default {
          headers: {'X-Requested-With': 'XMLHttpRequest'},
          credentials: true
        }).then(resp => {
-           this.load(0)
+           this.load(false)
        }, resp => {alert('error status:' + resp.status)})
     },
     closeMenuContext(e) { 
@@ -374,16 +374,20 @@ export default {
         var point = query.center.split(',')
         var circle = L.circle([point[1],point[0]], query.radius * 1000, {color: 'red', weight: 1, fillOpacity:0.1})
         this.drawLayers.addLayer(circle)
+        var bounds = circle.getBounds()
+        this.tiles = Util.bounds2tiles(bounds, true)
       } else if (query.bbox) {
         var tab = query.bbox.match(/\-{0,1}\d+(?:\.\d+)?/g).map(Number)
         if (tab.length == 4) {
           var rectangle = L.rectangle([[tab[1], tab[0]], [tab[3], tab[2]]], {color: 'red', weight: 1, fillOpacity:0.1})
           this.drawLayers.addLayer(rectangle)
+          var bounds = rectangle.getBounds()
+          this.tiles = Util.bounds2tiles(bounds, true)
         } else {
           // remove query bbox?
         }
       }
-      this.load(0, first)
+      this.load(first)
 
     },
    
@@ -646,16 +650,30 @@ export default {
       this.$http.get(url, {params: params})
       .then(
           resp => {
-            this.loadTile(index + 1, tiles, params, first)
-            this.displayByTile(resp.body, index, tiles[index], true)
+            this.displayByTile(resp.body, index, tiles, params, true)
+            // this.loadTile(index + 1, tiles, params, first)
           },
           resp => {console.log('Erreur de chargement')}
        )
     },
-    load (i, first) {
+    load (first) {
       if (!this.api) {
         console.log('Service unvailable!')
       }
+      // remove all layers
+      for (var x in this.markers) {
+         this.markers[x].off()
+         this.markers[x].clearLayers()
+         this.markers[x].remove(this.map)
+         this.markers[x] = null
+       }
+       
+       this.markers = {}
+
+       this.stations = []
+       // this.bounds = null
+     
+      this.$store.commit('setSearching', true)
       var tiles = this.tiles
       var params = Object.assign({}, this.defaultRequest)
       params = Object.assign(params, this.$route.query)
@@ -739,7 +757,7 @@ export default {
 //       this.displayEnd(init)
       
 //     },
-    displayByTile (stations, index, tile, init) {
+    displayByTile (stations, index, tiles, params, init) {
       var self = this
       
       if (index === 0) {
@@ -772,8 +790,8 @@ export default {
 //         this.$store.commit('setSearching', false)
 //         return
 //      }
-     this.addTile(tile,stations)
-     if (index === this.tiles.length - 1) {
+     this.addTile(index, tiles,stations, params, init)
+     if (index === tiles.length - 1) {
       this.displayEnd(init)
      }
     },
@@ -998,14 +1016,18 @@ export default {
 //       }
 //       this.bounds.extend(this.markers[region].getBounds())
 //     },
-    addTile (tile, features) {
+    addTile (index, tiles, features, params, init) {
       var self = this
+      var tile = tiles[index]
+      console.log('tile=' + index + '..ie ' + tiles[index])
       this.markers[tile] = L.markerClusterGroup({
         polygonOptions:{weight:1, color: '#00008b', opacity:1, fillOpacity:0.1},
         disableClusteringAtZoom: null,
         chunkedLoading: true,
         removeOutsideVisibleBounds:true,
         spiderfyOnMaxZoom: true,
+        chunkInterval: 200,
+        chunkDelay: 50,
         maxClusterRadius:function(zoom) {
           if (zoom > 5) {
             return 3
@@ -1013,9 +1035,11 @@ export default {
           return 80
         },
         animateAddingMarkers:false})
-       this.markers[tile].on('animationend', function () {
-        self.animationEnd()
-      })
+//        this.markers[tile].on('animationend', function () {
+//          //self.loadTile(index + 1, tiles, params, init)
+//         // self.animationEnd()
+//       })
+      
       features.forEach(function (feature) {
         self.stations[feature[0]] = feature
         var html = '<span></span>'
@@ -1040,6 +1064,8 @@ export default {
         this.bounds = L.latLngBounds()
       }
       this.bounds.extend(this.markers[tile].getBounds())
+      this.loadTile(index + 1, tiles, params, init)
+         
     },
     addStation (feature) {
       this.stations[feature[0]] = feature
