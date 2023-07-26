@@ -1,7 +1,7 @@
 <template>
-<div class="form" @click="clickOnForm($event)">
+<div class="form">
      <div>
-		<div class="file-form" :class="{'station-form': mode === 'station'}">
+		<div class="file-form" @click="$event.stopPropagation()" :class="{'station-form': mode === 'station'}">
 		<div >
 		  <div>
 		    <label>Station name</label>
@@ -216,10 +216,6 @@ export default {
     }
   },
   methods: {
-    clickOnForm(event) {
-      console.log(event)
-      this.$parent.$el.click(event)
-    },
     search (event) {
       event.preventDefault()
       var self = this
@@ -362,7 +358,6 @@ div.form > div:nth-child(1) {
      width:350px;
      margin:0;
      border-radius: 0 0 0 5px;
-    padding: 10px;
      box-shadow: 0 0 5px rgba(0,0,0,0.5);
       max-height: calc(100vh - 50px);
        overflow-y: scroll;
@@ -380,6 +375,8 @@ div.form.expand {
 }
 .file-form {
   clear:both;
+  padding:10px;
+  pointer-events:auto;
 }
 .file-form > div > div {
   margin: 3px 0;
