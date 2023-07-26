@@ -230,8 +230,8 @@ export default {
       show: false,
       markers: {},
       popup: null,
-      groups: [],
-      groupLayers: [],
+    //  groups: [],
+    // groupLayers: [],
       tiles: null,
       classnames: {
         1: 'blue',
@@ -261,7 +261,8 @@ export default {
   },
   mounted () {
     if (this.$route.name === 'home') {
-       this.initialize()
+       var bounds = this.initTiles()
+       this.initialize(bounds)
     }
   },
   methods: {
@@ -365,7 +366,10 @@ export default {
       this.$router.push({name: 'home', query: newquery}).catch(()=>{})
     },
     treatmentQuery (query, first) {
-      this.drawLayers.clearLayers()
+      
+      if (this.drawLayers) {
+         this.drawLayers.clearLayers()
+      }
       if (query.center && query.radius) {
         var point = query.center.split(',')
         var circle = L.circle([point[1],point[0]], query.radius * 1000, {color: 'red', weight: 1, fillOpacity:0.1})
@@ -488,8 +492,32 @@ export default {
       this.$router.push({name: 'home', query: query}).catch(()=>{})
      
     },
-    initialize () {
-      this.map = L.map( "map", {scrollWheelZoom: true, maxZoom:18}).setView([20, -0.09], 3);
+    initTiles () {
+      var self = this
+      var bounds = null
+      if (this.$route.query.bounds ) {
+        console.log('hasBounds')
+        var tab = this.$route.query.bounds.split(',')
+        if (tab.length === 4) {
+          bounds = L.latLngBounds(
+            L.latLng(parseFloat(tab[1]), parseFloat(tab[0])),
+            L.latLng(parseFloat(tab[3]), parseFloat(tab[2]))
+          )
+        }
+        this.init = true
+      } 
+      if (!bounds || !bounds.isValid()) {
+        var bounds =  L.latLngBounds([50, 0.01],[41, 10.5])
+      }
+      this.tiles = Util.bounds2tiles(bounds)
+      // this.map.fitBounds(bounds)
+      
+      
+      return bounds
+    },
+    initialize (bounds) {
+      this.map = L.map( "map", {scrollWheelZoom: true, maxZoom:18}).setView(bounds.getCenter(), 6);
+      this.map.fitBounds(bounds)
       var overview = new L.Control.Overview(this.overview)
       overview.addTo(this.map)
       
@@ -501,10 +529,12 @@ export default {
         var url = this.api.replace('api', 'admin') + 'entities/add'
         this.map.on('click', function (e) {
           console.log(e.latlng)
+          L.marker(e.latlng)
+          .addTo(self.map)
           self.$http.post(url, e.latlng, {credentials: true, emulateJSON:true})
           .then(resp => {console.log(resp.body)})
         })
-        return
+       
       }
       var legend = new L.Control.Legend()
       legend.addTo(this.map)
@@ -519,20 +549,9 @@ export default {
         closeButton: false
       })
       this.initDrawControl()
+      this.treatmentQuery(this.$route.query, true)
       var self = this
-//       this.map.whenReady(function (e) {
-//         var container = self.map.getContainer()
-//         var panes = self.map.getPanes()
-//         console.log(container)
-//         console.log(panes)
-// //         var div = L.DomUtil.create('div', 'gnss-panes leaflet-pane leaflet-map-pane')
-// //         container.append(div)
-//         for (var name in panes) {
-// //           if (name !== 'popupPane') {
-// //             div.append(panes[name])
-// //           }
-//         }
-//       })
+
       
        this.map.on('popupclose', function (e) {
         // self.selected = null
@@ -568,26 +587,26 @@ export default {
 	     })
       var node = document.querySelector('#json')
       this.popup.setContent(node)
-      var self = this
-      var bounds = null
-      if (this.$route.query.bounds ) {
-        console.log('hasBounds')
-        var tab = this.$route.query.bounds.split(',')
-        if (tab.length === 4) {
-          bounds = L.latLngBounds(
-            L.latLng(parseFloat(tab[1]), parseFloat(tab[0])),
-            L.latLng(parseFloat(tab[3]), parseFloat(tab[2]))
-          )
-        }
-        this.init = true
-      } 
-      if (!bounds || !bounds.isValid()) {
-        var bounds =  L.latLngBounds([50, 0.01],[41, 10.5])
-      }
-      this.tiles = Util.bounds2tiles(bounds)
-      this.map.fitBounds(bounds)
+//       var self = this
+//       var bounds = null
+//       if (this.$route.query.bounds ) {
+//         console.log('hasBounds')
+//         var tab = this.$route.query.bounds.split(',')
+//         if (tab.length === 4) {
+//           bounds = L.latLngBounds(
+//             L.latLng(parseFloat(tab[1]), parseFloat(tab[0])),
+//             L.latLng(parseFloat(tab[3]), parseFloat(tab[2]))
+//           )
+//         }
+//         this.init = true
+//       } 
+//       if (!bounds || !bounds.isValid()) {
+//         var bounds =  L.latLngBounds([50, 0.01],[41, 10.5])
+//       }
+//       this.tiles = Util.bounds2tiles(bounds)
+//       this.map.fitBounds(bounds)
       
-      this.treatmentQuery(this.$route.query, true)
+//       this.treatmentQuery(this.$route.query, true)
       this.initialized = true
      
     },
@@ -724,11 +743,11 @@ export default {
       var self = this
       
       if (index === 0) {
-           for (var tile in this.markers) {
-             this.markers[tile].off()
-             this.markers[tile].clearLayers()
-             this.markers[tile].remove(this.map)
-             this.markers[tile] = null
+           for (var x in this.markers) {
+             this.markers[x].off()
+             this.markers[x].clearLayers()
+             this.markers[x].remove(this.map)
+             this.markers[x] = null
            }
            
            this.markers = {}
@@ -741,9 +760,9 @@ export default {
 //            this.groupLayers[key] = null
 //           }
 //        }
-        this.groupLayers = []
+       // this.groupLayers = []
         this.stations = []
-        this.groups = []
+       // this.groups = []
         this.bounds = null
       }
       // var tile = tiles[index]
@@ -838,159 +857,162 @@ export default {
       }
       return 'red'
     },
-    getRegion(feature) {
-      switch (feature[1]) {
-        case 'COCO00AUS':
-        case 'MAC100AUS':
-        case 'ISPA00CHL':
-        case 'YELL00CAN':
-          return feature[1]
-        case 'GSTV00FRA':
-        case 'MAGT00FRA':
-        case 'CRO100VIR':
-          return 'CARAB'
-        case 'KOKB00USA':
-        case 'MAUI00USA':
-        case 'HNLC00USA':
-        case 'MKEA00USA':
-          return 'HAWAI'
-        case 'OHI100ATA':
-        case 'OHI200ATA':
-        case 'OHI300ATA':
-          return 'OHIATA'
-        case 'SPTG00ATF':
-          return 'SPTG00ATF'
-        case 'GSTV00FRA':
-          return 'CARAB'
-        case 'BREW00USA':
-          return 'CAN'
+//     getRegion(feature) {
+//       switch (feature[1]) {
+//         case 'COCO00AUS':
+//         case 'MAC100AUS':
+//         case 'ISPA00CHL':
+//         case 'YELL00CAN':
+//           return feature[1]
+//         case 'GSTV00FRA':
+//         case 'MAGT00FRA':
+//         case 'CRO100VIR':
+//           return 'CARAB'
+//         case 'KOKB00USA':
+//         case 'MAUI00USA':
+//         case 'HNLC00USA':
+//         case 'MKEA00USA':
+//           return 'HAWAI'
+//         case 'OHI100ATA':
+//         case 'OHI200ATA':
+//         case 'OHI300ATA':
+//           return 'OHIATA'
+//         case 'SPTG00ATF':
+//           return 'SPTG00ATF'
+//         case 'GSTV00FRA':
+//           return 'CARAB'
+//         case 'BREW00USA':
+//           return 'CAN'
         
-      }
-      var country = feature[1].substring(6,9)
-      switch (country) {
+//       }
+//       var country = feature[1].substring(6,9)
+//       switch (country) {
       
-        case 'TWN':
-           return 'CHN'
-        case 'CPV':
-           return 'SEN'
-	      case 'USA':
-	      case 'CAN':
-	        return 'N_AM';
-	      case 'FRA':
-	      case 'CHE':
-	      case 'BEL':
+//         case 'TWN':
+//            return 'CHN'
+//         case 'CPV':
+//            return 'SEN'
+// 	      case 'USA':
+// 	      case 'CAN':
+// 	        return 'N_AM';
+// 	      case 'FRA':
+// 	      case 'CHE':
+// 	      case 'BEL':
 	
-	      case 'PRT':
-        case 'ESP':
-	        return 'W_EU'
-	      case 'NOR':
-	      case 'SWE':
-	      case 'DNK':
-	      case 'LVA':
-	      case 'FIN':
-	      case 'EST':
-	        return 'N_EU'
-	      case 'NLD':
-	      case 'DEU':
-	      case 'POL':
-	      case 'CZE':
-	      case 'HUN':
-	      case 'GBR':
-	      case 'IRL':
-	      case 'SVK':
-	        return 'N_EU'
-	      case 'COK':
-	      case 'WSM': 
-	      case 'ASM': 
-	      case 'PYF':
-	         return 'POLYN'
-	      case 'SVN':
-	      case 'ITA':
-	      case 'GRC':
-	      case 'BGR':
-	      case 'ROU':
-	      case 'UKR':
-	      case 'MDA':
-	      case 'MNE':
-	      case 'TUR':
-	         return 'S_EU'
-	      case 'GLP':
-	      case 'CUB':
-	      case 'MTQ':
-	         return 'CARAB'
-	      case 'PER':
-	      case 'BRA':
-	      case 'ARG':
-	      case 'CHL':
-	        return 'S_AM'
-	      case 'ATA':
-	        return feature[1]
-        default:
-          return country
-      }
-    },
-    openStationContextMenu (e) {
-      if (e.layer.options.title.length === 9) {
-        this.selectedContextMenu = {
-            name: e.layer.options.title,
-            id: e.layer.options.id,
-            x: e.containerPoint.x,
-            y: e.containerPoint.y
-        }
-      }
-    },
-    addRegion (region, features) {
-      var self = this
-      this.markers[region] = L.markerClusterGroup({
-        polygonOptions:{weight:1, color: '#00008b', opacity:1, fillOpacity:0.1},
-        disableClusteringAtZoom: null, 
-        maxClusterRadius:function (zoom) {
-          if (zoom > 5 && region !== 'OHIATA' && region !== 'ATF') {
-              return 3
-          }
-          return 40
-        },
-        animateAddingMarkers:true})
-       this.markers[region].on('animationend', function () {
-        self.animationEnd()
-      })
-      features.forEach(function (feature) {
-        self.stations[feature[0]] = feature
-        var html = '<span></span>'
-        var className = self.getClassname(feature[2])
-        var icon = L.divIcon({
-          className: 'icon-marker marker-' + className, 
-          iconSize: [15,15],
-          html: html})
+// 	      case 'PRT':
+//         case 'ESP':
+// 	        return 'W_EU'
+// 	      case 'NOR':
+// 	      case 'SWE':
+// 	      case 'DNK':
+// 	      case 'LVA':
+// 	      case 'FIN':
+// 	      case 'EST':
+// 	        return 'N_EU'
+// 	      case 'NLD':
+// 	      case 'DEU':
+// 	      case 'POL':
+// 	      case 'CZE':
+// 	      case 'HUN':
+// 	      case 'GBR':
+// 	      case 'IRL':
+// 	      case 'SVK':
+// 	        return 'N_EU'
+// 	      case 'COK':
+// 	      case 'WSM': 
+// 	      case 'ASM': 
+// 	      case 'PYF':
+// 	         return 'POLYN'
+// 	      case 'SVN':
+// 	      case 'ITA':
+// 	      case 'GRC':
+// 	      case 'BGR':
+// 	      case 'ROU':
+// 	      case 'UKR':
+// 	      case 'MDA':
+// 	      case 'MNE':
+// 	      case 'TUR':
+// 	         return 'S_EU'
+// 	      case 'GLP':
+// 	      case 'CUB':
+// 	      case 'MTQ':
+// 	         return 'CARAB'
+// 	      case 'PER':
+// 	      case 'BRA':
+// 	      case 'ARG':
+// 	      case 'CHL':
+// 	        return 'S_AM'
+// 	      case 'ATA':
+// 	        return feature[1]
+//         default:
+//           return country
+//       }
+//     },
+//     openStationContextMenu (e) {
+//       if (e.layer.options.title.length === 9) {
+//         this.selectedContextMenu = {
+//             name: e.layer.options.title,
+//             id: e.layer.options.id,
+//             x: e.containerPoint.x,
+//             y: e.containerPoint.y
+//         }
+//       }
+//     },
+//     addRegion (region, features) {
+//       var self = this
+//       this.markers[region] = L.markerClusterGroup({
+//         polygonOptions:{weight:1, color: '#00008b', opacity:1, fillOpacity:0.1},
+//         disableClusteringAtZoom: null, 
+//         maxClusterRadius:function (zoom) {
+//           if (zoom > 5 && region !== 'OHIATA' && region !== 'ATF') {
+//               return 3
+//           }
+//           return 40
+//         },
+//         animateAddingMarkers:true})
+//        this.markers[region].on('animationend', function () {
+//         self.animationEnd()
+//       })
+//       features.forEach(function (feature) {
+//         self.stations[feature[0]] = feature
+//         var html = '<span></span>'
+//         var className = self.getClassname(feature[2])
+//         var icon = L.divIcon({
+//           className: 'icon-marker marker-' + className, 
+//           iconSize: [15,15],
+//           html: html})
 
-          var marker = L.marker(feature[3], {icon: icon, id: feature[0], title: feature[1]})
-          // marker.on('click', self.getData)
-          self.markers[region].addLayer(marker)
-      })
-      this.markers[region].addTo(this.map)
-      this.markers[region].on('click', function (e) {
-          self.getData(e.layer)
-       })
-       this.markers[region].on('contextmenu', function (e) {
-          self.openStationContextMenu(e)
-       })
-       if (!this.bounds) {
-        this.bounds = L.latLngBounds()
-      }
-      this.bounds.extend(this.markers[region].getBounds())
-    },
+//           var marker = L.marker(feature[3], {icon: icon, id: feature[0], title: feature[1]})
+//           // marker.on('click', self.getData)
+//           self.markers[region].addLayer(marker)
+//       })
+//       this.markers[region].addTo(this.map)
+//       this.markers[region].on('click', function (e) {
+//           self.getData(e.layer)
+//        })
+//        this.markers[region].on('contextmenu', function (e) {
+//           self.openStationContextMenu(e)
+//        })
+//        if (!this.bounds) {
+//         this.bounds = L.latLngBounds()
+//       }
+//       this.bounds.extend(this.markers[region].getBounds())
+//     },
     addTile (tile, features) {
       var self = this
       this.markers[tile] = L.markerClusterGroup({
         polygonOptions:{weight:1, color: '#00008b', opacity:1, fillOpacity:0.1},
-        disableClusteringAtZoom: null, 
-        maxClusterRadius:function (zoom) {
+        disableClusteringAtZoom: null,
+        chunkedLoading: true,
+        removeOutsideVisibleBounds:true,
+        spiderfyOnMaxZoom: true,
+        maxClusterRadius:function(zoom) {
           if (zoom > 5) {
-              return 3
+            return 3
           }
-          return 50
+          return 80
         },
-        animateAddingMarkers:true})
+        animateAddingMarkers:false})
        this.markers[tile].on('animationend', function () {
         self.animationEnd()
       })
@@ -1043,7 +1065,7 @@ export default {
             }
             return 40
           },
-          animateAddingMarkers:true})
+          animateAddingMarkers:false})
         this.markers[region].on('animationend', function () {
           self.animationEnd()
         })

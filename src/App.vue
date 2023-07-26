@@ -540,6 +540,7 @@ div.gnss-shortcut {
   font-weight:700;
   border-radius: 5px 0 0 5px;
   vertical-align:top;
+  pointer-events:auto;
   box-shadow: -1px 1px 5px rgba(0,0,0,0.5);
 }
 

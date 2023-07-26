@@ -1,5 +1,5 @@
 <template>
-<div class="form" >
+<div class="form" @click="clickOnForm($event)">
      <div>
 		<div class="file-form" :class="{'station-form': mode === 'station'}">
 		<div >
@@ -216,6 +216,10 @@ export default {
     }
   },
   methods: {
+    clickOnForm(event) {
+      console.log(event)
+      this.$parent.$el.click(event)
+    },
     search (event) {
       event.preventDefault()
       var self = this
@@ -347,7 +351,7 @@ div.form {
   transition: transform 330ms ease-in-out;
   font-size: 0.8rem;
   box-sizing: border-box;
-
+  pointer-events:none;
   z-index:2;
  
 }

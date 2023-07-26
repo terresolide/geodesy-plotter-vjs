@@ -16,8 +16,8 @@ export default {
     return deg * (Math.PI/180)
   },
   pos2tile (latlng) {
-    var x = 1 + parseInt((latlng.lng + 180) / 45)
-    var y = 1 + parseInt((90 - latlng.lat) / 90)
+    var x = 1 + parseInt((latlng.lng + 180) / 90)
+    var y = 1 + parseInt((90 - latlng.lat) / 45)
     return {x:x, y: y}
   },
   bounds2tiles (bounds) {
@@ -33,7 +33,7 @@ export default {
     var tiles = []
     // commence par le milieu
      
-    for (var i=tile.x; i <= 16; i++) {
+    for (var i=tile.x; i <= 9; i++) {
         console.log(2 * tile.x - i)
         for (var j= tile.y; j <= tile2.y; j++) {
           if (i <= 8) {
@@ -50,11 +50,11 @@ export default {
           }
         }
     }
-    for (var i=1; i <= 8; i++) {
+    for (var i=1; i <= 4; i++) {
         for (var j= tile.y - 1 ; j > 0 ; j--) {
           tiles.push(j + '/' + i)
         }
-        for (var j= tile2.y +1 ; j < 3 ; j++) {
+        for (var j= tile2.y +1 ; j < 5 ; j++) {
           tiles.push(j + '/' + i)
         }
     }
