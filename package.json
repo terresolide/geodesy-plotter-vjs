@@ -1,13 +1,13 @@
 {
-  "name": "gnss-components-vjs",
-  "version": "1.5.9",
+  "name": "geodesy-plotter-vjs",
+  "version": "1.6.0",
   "description": "Component to search and display Gnss products",
   "production": {
     "url": "https://cdn.jsdelivr.net/gh/terresolide"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/terresolide/gnss-components-vjs.git"
+    "url": "git+https://github.com/terresolide/geodesy-plotter-vjs.git"
   },
   "keywords": [
     "vue.js"
