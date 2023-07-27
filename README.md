@@ -1,4 +1,4 @@
-# gnss-components-vjs
+# geodesy-plotter-vjs
 
 ## Project setup
 ```
