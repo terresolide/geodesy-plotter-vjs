@@ -802,7 +802,9 @@ export default {
 //         this.markers['W_EU'].addTo(this.map)
 //       }
       this.$store.commit('setSearching', false)
-
+      if (this.stations.length === 0) {
+        this.noStation = true
+      }
       if (init && this.$route.query.nodraw) {
         this.drawLayers.remove()
       }

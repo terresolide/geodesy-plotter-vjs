@@ -40,7 +40,7 @@
        <ol><li>
        Vérifiez que la station exite bien sur le M<sup>3</sup>G et est identique en consultant <a :href="m3gUrl+ 'sitelog/exportlog?id=' + stationName.toUpperCase()" target="_blank"> {{stationName}} M<sup>3</sup>G sitelog</a>
        </li>
-       <li>Si l'erreur provient du M<sup>3</sup>G, liez cette station avec celle du M<sup>3</sup>G: <button type="button" >Lier</button><br>
+       <li>Si l'erreur provient du M<sup>3</sup>G, liez cette station avec celle du M<sup>3</sup>G: <button type="button" @click="linkToM3G(stationId)" >Lier</button><br>
        Sinon <button type="button" @click="removeStation()">supprimez</button> la station, corrigez ses coordonnées dans votre fichier et repoussez le.</li>
        </ol>
     </li>
@@ -459,6 +459,19 @@ export default {
       }).then(resp => {
         // this.removed = true
       }, resp => {alert('error status ' + resp.status)})
+    },
+    linkToM3G(id) {
+      this.$http.post(this.$store.state.back + '/entities/link2m3g/' + this.stationId, {
+        'id': id,
+        'name': this.stationName
+      }, {
+        headers: {'X-Requested-With': 'XMLHttpRequest'}, 
+        credentials: true,
+        emulateJSON: true
+      }).then(resp => {
+         this.station = resp.body.station
+         this.getMoreInfo()
+      }, resp => {alert('error ' + resp.status + ' - ' + resp.body.error)})
     },
     removeStation () {
       if (!window.confirm("Voulez-vous réellement supprimer la station " + this.stationName + "\navec tous ses produits!")) {
