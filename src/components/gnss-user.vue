@@ -37,7 +37,7 @@ wget {{$store.state.env === 'development' ? '--no-check-certificate ':''}}--head
 wget {{$store.state.env === 'development' ? '--no-check-certificate ':''}}--header="Cookie: {{cookie}}" {{downloadUrl}} </pre>
       </span>
       <span v-else >
-        <div>More information on <a :href="$store.state.api.replace('api/', 'userinfo')" target="_blank">data server</a></div>
+        <div>More information on <a :href="$store.state.api.replace('api/1.0/', 'userinfo')" target="_blank">data server</a></div>
       </span>
      </div>
      
@@ -82,14 +82,14 @@ export default {
     }
     var station = 'BRST00FRA'
     this.downloadUrl = this.$store.state.api + 'products/' + this.filename + '/download'
-    this.fileUrl = this.$store.state.api.replace('api', 'data') + station + '/' + this.filename
+    this.fileUrl = this.$store.state.api.replace('api/1.0', 'data') + station + '/' + this.filename
   },
   mounted () {
     this.getCookie()
   },
   methods: {
     getCookie () {
-       this.$http.get(this.$store.state.api.replace('api/', 'cookie') ,
+       this.$http.get(this.$store.state.api.replace('api/1.0/', 'cookie') ,
            { credentials: true})
        .then(resp => {if (resp.body.cookie) {
             this.cookie = resp.body.cookie
