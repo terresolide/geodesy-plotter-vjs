@@ -62,7 +62,7 @@ export default {
     this.escapeListener = this.escape.bind(this)
     document.addEventListener('keyup', this.escapeListener)
     // test userinfo
-    this.$http.get(this.$store.state.api.replace('api/', 'userinfo'), {credentials: true})
+    this.$http.get(this.$store.state.api.replace('api/1.0/', 'userinfo'), {credentials: true})
     .then(resp => {console.log(resp)}, resp => console.log('not authenticated'))
   },
   mounted () {

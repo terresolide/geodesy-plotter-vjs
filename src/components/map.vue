@@ -531,7 +531,7 @@ export default {
       this.layerControl.addTo(this.map)
       if (this.$store.state.adding) {
         var self = this
-        var url = this.api.replace('api', 'admin') + 'entities/add'
+        var url = this.api.replace('api/1.0', 'admin') + 'entities/add'
         this.map.on('click', function (e) {
           console.log(e.latlng)
           L.marker(e.latlng)
