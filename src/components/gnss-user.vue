@@ -10,8 +10,8 @@
         <div><label>Your email:</label> {{user.email}}</div>
         <div v-if="user['client-roles']"><label>Your roles: </label> {{user['client-roles']}}</div>
         <div><label>Name:</label> {{user.name}}</div>
-        <div><label>Given name:</label>{{user.given_name}}</div>
-        <div><label>Family name:</label>{{user.family_name}}</div>
+        <div><label>Given name:</label> {{user.given_name}}</div>
+        <div><label>Family name:</label> {{user.family_name}}</div>
         <div v-if="cookie" style="position:relative;"><label>Your cookie:</label> 
             <textarea>{{cookie}}</textarea>
             <button type="button" @click="CopyClipboard" style="position:relative;">

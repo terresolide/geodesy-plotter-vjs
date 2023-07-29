@@ -26,6 +26,9 @@
       <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
     </noscript>
     "back": "http://127.0.0.1:8083/admin",
+      "ssoLogin": "http://localhost:8080/#/sso-login",
+        "ssoLogout": "http://localhost:8080/#/sso-login",
+    
    <!--  <div id="app"></div> --> 
   <!--  <spot-gins root="https://catalog.formater/FROST-Server/v1.1/" ></spot-gins>
       -->
@@ -33,10 +36,7 @@
      {
         "api": "https://spotgins.formater/api/1.0/",
         "preview": "https://spotgins.formater/data/preview/",
-        "auth": false,
-        "back": "http://127.0.0.1:8083/admin",
-        "ssoLogin": "http://localhost:8080/#/sso-login",
-        "ssoLogout": "http://localhost:8080/#/sso-login",
+        "auth": true,
         "limit": 500
      }
      </script>

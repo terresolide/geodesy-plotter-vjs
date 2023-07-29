@@ -173,7 +173,8 @@ export default {
         }
         if (oldroute.name !== 'home') {
           if (!this.initialized) {
-            this.initialize()
+            var bounds = this.initTiles()
+            this.initialize(bounds)
           }
           if (!this.$store.state.viewMap) {
             return
@@ -846,29 +847,6 @@ export default {
         }
       }
     },
-//     displayStore (index) {
-//       if (index === 0) {
-//         this.$store.commit('setSearching', true)
-//       }
-//       if (index === 0 && this.$store.state.stations.length === 0) {
-//         this.noStation = true
-//       }
-//       for (var i = index; i < this.$store.state.stations.length && i < index + this.$store.state.batch; i++) {
-      
-//         if (this.$store.state.stations[i]) {
-//            this.addStation(this.$store.state.stations[i])
-//         }
-//       }
-//       if (index + this.$store.state.batch < this.$store.state.stations.length) {
-//         var self = this
-//         setTimeout(function () {
-//           self.displayStore(index + self.$store.state.batch)
-//         },0)
-        
-//         return
-//       }
-//       this.displayEnd(true)
-//     },
     getClassname (year) {
       if (year < 1) {
         return 'blue'
@@ -878,147 +856,18 @@ export default {
       }
       return 'red'
     },
-//     getRegion(feature) {
-//       switch (feature[1]) {
-//         case 'COCO00AUS':
-//         case 'MAC100AUS':
-//         case 'ISPA00CHL':
-//         case 'YELL00CAN':
-//           return feature[1]
-//         case 'GSTV00FRA':
-//         case 'MAGT00FRA':
-//         case 'CRO100VIR':
-//           return 'CARAB'
-//         case 'KOKB00USA':
-//         case 'MAUI00USA':
-//         case 'HNLC00USA':
-//         case 'MKEA00USA':
-//           return 'HAWAI'
-//         case 'OHI100ATA':
-//         case 'OHI200ATA':
-//         case 'OHI300ATA':
-//           return 'OHIATA'
-//         case 'SPTG00ATF':
-//           return 'SPTG00ATF'
-//         case 'GSTV00FRA':
-//           return 'CARAB'
-//         case 'BREW00USA':
-//           return 'CAN'
-        
-//       }
-//       var country = feature[1].substring(6,9)
-//       switch (country) {
-      
-//         case 'TWN':
-//            return 'CHN'
-//         case 'CPV':
-//            return 'SEN'
-// 	      case 'USA':
-// 	      case 'CAN':
-// 	        return 'N_AM';
-// 	      case 'FRA':
-// 	      case 'CHE':
-// 	      case 'BEL':
-	
-// 	      case 'PRT':
-//         case 'ESP':
-// 	        return 'W_EU'
-// 	      case 'NOR':
-// 	      case 'SWE':
-// 	      case 'DNK':
-// 	      case 'LVA':
-// 	      case 'FIN':
-// 	      case 'EST':
-// 	        return 'N_EU'
-// 	      case 'NLD':
-// 	      case 'DEU':
-// 	      case 'POL':
-// 	      case 'CZE':
-// 	      case 'HUN':
-// 	      case 'GBR':
-// 	      case 'IRL':
-// 	      case 'SVK':
-// 	        return 'N_EU'
-// 	      case 'COK':
-// 	      case 'WSM': 
-// 	      case 'ASM': 
-// 	      case 'PYF':
-// 	         return 'POLYN'
-// 	      case 'SVN':
-// 	      case 'ITA':
-// 	      case 'GRC':
-// 	      case 'BGR':
-// 	      case 'ROU':
-// 	      case 'UKR':
-// 	      case 'MDA':
-// 	      case 'MNE':
-// 	      case 'TUR':
-// 	         return 'S_EU'
-// 	      case 'GLP':
-// 	      case 'CUB':
-// 	      case 'MTQ':
-// 	         return 'CARAB'
-// 	      case 'PER':
-// 	      case 'BRA':
-// 	      case 'ARG':
-// 	      case 'CHL':
-// 	        return 'S_AM'
-// 	      case 'ATA':
-// 	        return feature[1]
-//         default:
-//           return country
-//       }
-//     },
-//     openStationContextMenu (e) {
-//       if (e.layer.options.title.length === 9) {
-//         this.selectedContextMenu = {
-//             name: e.layer.options.title,
-//             id: e.layer.options.id,
-//             x: e.containerPoint.x,
-//             y: e.containerPoint.y
-//         }
-//       }
-//     },
-//     addRegion (region, features) {
-//       var self = this
-//       this.markers[region] = L.markerClusterGroup({
-//         polygonOptions:{weight:1, color: '#00008b', opacity:1, fillOpacity:0.1},
-//         disableClusteringAtZoom: null, 
-//         maxClusterRadius:function (zoom) {
-//           if (zoom > 5 && region !== 'OHIATA' && region !== 'ATF') {
-//               return 3
-//           }
-//           return 40
-//         },
-//         animateAddingMarkers:true})
-//        this.markers[region].on('animationend', function () {
-//         self.animationEnd()
-//       })
-//       features.forEach(function (feature) {
-//         self.stations[feature[0]] = feature
-//         var html = '<span></span>'
-//         var className = self.getClassname(feature[2])
-//         var icon = L.divIcon({
-//           className: 'icon-marker marker-' + className, 
-//           iconSize: [15,15],
-//           html: html})
 
-//           var marker = L.marker(feature[3], {icon: icon, id: feature[0], title: feature[1]})
-//           // marker.on('click', self.getData)
-//           self.markers[region].addLayer(marker)
-//       })
-//       this.markers[region].addTo(this.map)
-//       this.markers[region].on('click', function (e) {
-//           self.getData(e.layer)
-//        })
-//        this.markers[region].on('contextmenu', function (e) {
-//           self.openStationContextMenu(e)
-//        })
-//        if (!this.bounds) {
-//         this.bounds = L.latLngBounds()
-//       }
-//       this.bounds.extend(this.markers[region].getBounds())
-//     },
+    openStationContextMenu (e) {
+      if (e.layer.options.title.length === 9) {
+        this.selectedContextMenu = {
+            name: e.layer.options.title,
+            id: e.layer.options.id,
+            x: e.containerPoint.x,
+            y: e.containerPoint.y
+        }
+      }
+    },
+
     addTile (index, tiles, features, params, init) {
       var self = this
       var tile = tiles[index]
