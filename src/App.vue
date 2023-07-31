@@ -5,6 +5,8 @@
       <div v-if="hello && email" class="gnss-hello" @click="hello=false">
         Hello {{email}}!
       </div>
+      <div v-if="bye" class="gnss-hello" @click="bye=false" style="text-align:left;font-weight:500;" v-html="bye">
+      </div>
       <div class="gnss-hello" v-if="pleaseLogin" style="text-align:left;max-width:500px;font-weight:500;">
          To download product you must authenticate.<br><br>
          You can authenticate using an <b>Orcid</b> or <b>Renater</b> account or by creating an account.
@@ -31,9 +33,8 @@
 </template>
 
 <script>
-import {AuthService} from 'formater-auth-service-js'
-// import GnssUser from './components/gnss-user.vue'
-// import SpotGins from './components/spot-gins.vue'
+// import {AuthService} from 'formater-auth-service-js'
+import {AuthService} from './modules/AuthService.js'
 import MapComponent from './components/map.vue'
 export default {
   name: 'App',
@@ -50,6 +51,7 @@ export default {
     return {
       maintenance: false,
       hello: false,
+      bye: null,
       service: null,
       waitingUrl: null,
       pleaseLogin: false,
@@ -85,8 +87,11 @@ export default {
 	          self.hello = false
 	       }, 6000)
 	    })
-	    this.service.on('logout', function () {
+	    this.service.on('logout', function (resp) {
 	      self.$store.commit('user/set', null)
+	      if (resp && resp.msg) {
+	        self.bye = resp.msg
+	      }
 	    })
 	    this.service.testLogin()
     }
