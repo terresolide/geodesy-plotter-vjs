@@ -31,28 +31,29 @@ export default {
     // commence par le milieu
      
     for (var i=tile.x; i <= 9; i++) {
-        console.log(2 * tile.x - i)
         for (var j= tile.y; j <= tile2.y; j++) {
           if (i <= 4) {
             tiles.push(j + '/' + i)
           }
           if (uncomplete) {
-            if (tile.x < i && 2 * tile.x - i >= tile1.x) {
+            if (tile.x < i && 2 * tile.x - i >= tile1.x && 2 * tile.x - i < 5) {
               tiles.push(j + '/' + (2 * tile.x - i))
             }
-            if (tile.y < j && 2 * tile.y - j >= tile1.y ) {
+            if (tile.y < j && 2 * tile.y - j >= tile1.y && 2 * tile.y - j < 5) {
               tiles.push((2 * tile.y - j) + '/' + i)
-               if (tile.x < i && 2 * tile.x - i >= tile1.x) {
+               if (tile.x < i && 2 * tile.x - i >= tile1.x
+                   && 2 * tile.x - i < 5) {
                   tiles.push((2 * tile.y - j) + '/' + (2 * tile.x - i))
                }
             }
           } else {
-            if (tile.x < i && 2 * tile.x - i >= 1) {
+            if (tile.x < i && j < 5 && 2 * tile.x - i >= 1 && 2 * tile.x - i < 5) {
               tiles.push(j + '/' + (2 * tile.x - i))
             }
-            if (tile.y < j && 2 * tile.y - j >= 1 && 2 * tile.y - j >= tile1.y) {
+            if (tile.y < j && 2 * tile.y - j >= 1 && 2 * tile.y - j >= tile1.y && i < 5) {
               tiles.push((2 * tile.y - j) + '/' + i)
-               if (tile.x < i && 2 * tile.x - i >= 1) {
+               if (tile.x < i && 2 * tile.x - i >= 1 && 2 * tile.y - j < 5
+               && 2 * tile.x - i < 5) {
                   tiles.push((2 * tile.y - j) + '/' + (2 * tile.x - i))
                }
             }
@@ -64,10 +65,14 @@ export default {
     }
     for (var i=1; i <= 4; i++) {
         for (var j= tile.y - 1 ; j > 0 ; j--) {
-          tiles.push(j + '/' + i)
+          if (tiles.indexOf(j+ '/' + i) < 0) {
+            tiles.push(j + '/' + i)
+          }
         }
         for (var j= tile2.y +1 ; j < 5 ; j++) {
-          tiles.push(j + '/' + i)
+           if (tiles.indexOf(j+ '/' + i) < 0) {
+              tiles.push(j + '/' + i)
+           }
         }
     }
     console.log(tiles)

@@ -75,6 +75,7 @@
        
         <div v-if="station.MOID"><label>MOID:</label>  <a :href="station.MOID" target="_blank">M<sup>3</sup>G GNSS station page </a></div>
        <div v-if="station.properties.m3g"><label>Sitelog:</label>  <a :href="m3gUrl+ 'sitelog/exportlog?id=' + stationName.toUpperCase()" target="_blank">M<sup>3</sup>G sitelog</a></div>
+       <div v-if="station.properties.from"><label>Sitelog:</label> <a :href="api + 'stations/' + stationName + '/sitelog'" target="_blank">Sitelog from {{station.properties.from}}</a></div>
         <div v-if="station.owner"><label>Site owner: </label> 
            <span v-if="station.owner.ROR"><a :href="station.owner.ROR" target="_blank">{{station.owner.acronym}}</a></span>
            <span v-else>{{station.owner.acronym}}</span>
