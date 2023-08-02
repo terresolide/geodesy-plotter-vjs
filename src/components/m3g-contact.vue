@@ -23,6 +23,17 @@
              </div>
             </div>
         </div>
+        <div v-else-if="contact.agencyName">
+           <label>Agency</label>
+           <div class="contact-info" >
+              <div v-if="contact.agencyName">
+                  {{ contact.agencyName}}
+                 <span v-if="contact.preferedAbbreviation || contact.preferredAbbreviation">({{contact.preferedAbbreviation || contact.preferredAbbreviation}})</span></div> 
+             <div v-if="contact.mailingAddress" v-html="nl2br(contact.mailingAddress)"></div>
+             <div v-if="contact.email">{{contact.email}}</div>
+          
+           </div>
+        </div>
         <div v-for="key in ['primaryContact', 'secondaryContact']" v-if="contact[key] && contact[key]['publicnon-personalContact']">
           <label>{{labelize(key)}}</label>
           <div class="contact-info">
@@ -56,6 +67,9 @@ export default {
     labelize (label) {
       const result = label.replace(/([A-Z])/g, " $1");
       return result.charAt(0).toUpperCase() + result.slice(1);
+    },
+    nl2br (text) {
+      return text.replace('\n', '<br>')
     }
   }
 }

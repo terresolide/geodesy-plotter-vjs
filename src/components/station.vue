@@ -90,7 +90,7 @@
 	        <span v-else class="gnss-network-item">{{net}}</span>
 	        </span>
        </div>
-       <div v-if="!station.properties.m3g"><em>Sorry, we don't have more information about this station</em></div>
+       <div v-if="!station.properties.m3g && !station.properties.from"><em>Sorry, we don't have more information about this station</em></div>
        
       </div>
            
@@ -630,9 +630,10 @@ export default {
         }, resp => {this.setNoStation()})
     },
     getMoreInfo () {
-      if (!this.station.properties.m3g) {
+      if (!this.station.properties.m3g && !this.station.properties.from) {
         return
       }
+      
       this.$http.get(this.api + 'stations/' + this.stationName + '/sitelog')
       .then(resp  => {this.updateM3GInfos(resp.body)})
     },
@@ -640,7 +641,6 @@ export default {
       if (data.MOID) {
         this.station.MOID = data.MOID
       }
-      
       if (data.sitelog) {
         if (!this.location.properties.elevation && data.sitelog.location && data.sitelog.location.approximatePositionGRS80) {
           this.location.properties.elevation = data.sitelog.location.approximatePositionGRS80.elevation
@@ -652,7 +652,9 @@ export default {
           this.station.antennas = data.sitelog.antennas
         }
         this.station.contacts = {}
-        if (data.sitelog.siteOwner && data.sitelog.siteOwner.agency && data.sitelog.siteOwner.agency.agencyName) {
+        console.log(data.sitelog.siteOwner)
+        if (data.sitelog.siteOwner && ((data.sitelog.siteOwner.agency && data.sitelog.siteOwner.agency.agencyName)
+            || data.sitelog.siteOwner.agencyName)) {
           this.station.contacts.siteOwner = data.sitelog.siteOwner
           if (data.sitelog.siteOwner.agency && data.sitelog.siteOwner.agency.preferedAbbreviation) {
             this.station.owner = { acronym: data.sitelog.siteOwner.agency.preferedAbbreviation}
@@ -660,16 +662,22 @@ export default {
               this.station.owner.ROR = data.sitelog.siteOwner.agency.ROR
             }
           }
-          
+          if (data.sitelog.siteOwner.preferredAbbreviation) {
+            this.station.owner = { acronym: data.sitelog.siteOwner.preferredAbbreviation}
+          }
+          if (data.sitelog.siteOwner.preferedAbbreviation) {
+            this.station.owner = { acronym: data.sitelog.siteOwner.preferedAbbreviation}
+          }
         }
-        if (data.sitelog.onSiteContact && data.sitelog.onSiteContact.agency && data.sitelog.onSiteContact.agency.agencyName) {
+        if (data.sitelog.onSiteContact && ((data.sitelog.onSiteContact.agency && data.sitelog.onSiteContact.agency.agencyName)
+            || data.sitelog.onSiteContact.agencyName)) {
           this.station.contacts.onSiteContact = data.sitelog.onSiteContact
         }
         if (data.sitelog.siteMetadataCustodian && data.sitelog.siteMetadataCustodian.agency &&
             data.sitelog.siteMetadataCustodian.agency.agencyName) {
           this.station.contacts.siteMetadataCustodian = data.sitelog.siteMetadataCustodian
         }
-        
+      
         var countG = 0
         var geological = {}
         if (data.sitelog.location && data.sitelog.location.tectonicPlate) {
@@ -682,7 +690,9 @@ export default {
             this.station.dateInstalled = data.sitelog.siteForm.dateInstalled
             this.station.dateRemoved = data.sitelog.siteForm.dateRemoved ? data.sitelog.siteForm.dateRemoved : null
           }
-          
+          if (data.sitelog.siteForm.domes) {
+            this.station.properties.domes = data.sitelog.siteForm.domes
+          }
           this.geologicalKeys.forEach(function (key) {
             if (data.sitelog.siteForm[key]) {
               geological[key] = data.sitelog.siteForm[key]
