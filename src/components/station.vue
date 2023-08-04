@@ -78,7 +78,8 @@
        <div v-if="station.properties.from"><label>Sitelog:</label> <a :href="api + 'stations/' + stationName + '/sitelog'" target="_blank">Sitelog from {{station.properties.from}}</a></div>
         <div v-if="station.owner"><label>Site owner: </label> 
            <span v-if="station.owner.ROR"><a :href="station.owner.ROR" target="_blank">{{station.owner.acronym}}</a></span>
-           <span v-else>{{station.owner.acronym}}</span>
+           <span v-else-if="station.owner.acronym">{{station.owner.acronym}}</span>
+           <span v-else>{{station.owner.agencyName}}</span>
         </div>
        
        <div v-if="isEPOS"><label>EPOS</label> <a :href="'https://gnssdata-epos.oca.eu/#/metadata/marker='+ stationName.substring(0,4)" target="_blank">EPOS station page</a></div>
@@ -665,9 +666,10 @@ export default {
           }
           if (data.sitelog.siteOwner.preferredAbbreviation) {
             this.station.owner = { acronym: data.sitelog.siteOwner.preferredAbbreviation}
-          }
-          if (data.sitelog.siteOwner.preferedAbbreviation) {
+          } else if (data.sitelog.siteOwner.preferedAbbreviation) {
             this.station.owner = { acronym: data.sitelog.siteOwner.preferedAbbreviation}
+          } else if (data.sitelog.siteOwner.agencyName) {
+            this.station.owner = {agencyName: data.sitelog.siteOwner.agencyName}
           }
         }
         if (data.sitelog.onSiteContact && ((data.sitelog.onSiteContact.agency && data.sitelog.onSiteContact.agency.agencyName)
