@@ -34,8 +34,8 @@ var sso = require('./config.js')
 console.log(sso)
 console.log(process.env.NODE_ENV)
 let config = {}
-if (typeof gnssConfig != 'undefined') {
-  config = JSON.parse(gnssConfig.innerHTML)
+if (typeof geodesyConfig != 'undefined') {
+  config = JSON.parse(geodesyConfig.innerHTML)
 } 
 if (process.env.NODE_ENV === 'development') {
   config.sso = sso.dev
