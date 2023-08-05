@@ -762,15 +762,15 @@ export default {
     displayByTile (stations, index, tiles, params, init) {
       var self = this
       
-      if (index === 0) {
-           for (var x in this.markers) {
-             this.markers[x].off()
-             this.markers[x].clearLayers()
-             this.markers[x].remove(this.map)
-             this.markers[x] = null
-           }
+//       if (index === 0) {
+//            for (var x in this.markers) {
+//              this.markers[x].off()
+//              this.markers[x].clearLayers()
+//              this.markers[x].remove(this.map)
+//              this.markers[x] = null
+//            }
            
-           this.markers = {}
+//            this.markers = {}
            
 //         for (var key in this.groupLayers) {
 //           if (this.groupLayers[key]) {
@@ -781,10 +781,10 @@ export default {
 //           }
 //        }
        // this.groupLayers = []
-        this.stations = []
-       // this.groups = []
-        this.bounds = null
-      }
+//         this.stations = []
+//        // this.groups = []
+//         this.bounds = null
+//       }
       // var tile = tiles[index]
 //       if (index === ) {
 //      // if (index === 0 && data.stations.length === 0) {
