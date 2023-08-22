@@ -35,24 +35,34 @@ export default {
     // commence par le milieu
     tiles.push(tile.y + '/' + tile.x)
     for (var k=1; k <=4; k++) {
-       var x1 = tile.x
-       var x2 = tile.x
-       if (tile.x + k <= this.maxTiles.x) {
-         tiles.push(tile.y + '/' + (tile.x + k))
-         x2 = tile.x + k
-       }
-       if (tile.x - k > 0) {
-         tiles.push(tile.y + '/' + (tile.x - k))
-         x1 = tile.x - k
-       }
-       for (var x=x1; x <= x2; x++) {
-         if (tile.y - k > 0) {
-           tiles.push((tile.y - k) + '/' + x)
-           y1 = tile.y - k
+       var x1 = tile.x - k
+       var x2 = tile.x + k
+       var x1min = x1
+       var y1 = tile.y - k
+       var y2 = tile.y + k
+       if (x1!= tile.x && x1 > 0) {
+         for (var y = Math.max(y1, 1); y <=y2 && y <= this.maxTiles.y; y++) {
+           tiles.push(y + '/' + x1)
          }
-         if (tile.y + k <= this.maxTiles.y) {
-           tiles.push((tile.y + k) + '/' + x)
-           y2 = tile.y + k
+         x1min = x1 + 1
+       } else if (x1 > 0) {
+         x1min = x1
+       } else {
+         x1min = 1
+       }
+       if (y1!= tile.y && y1 > 0) {
+         for (var x = x1min ; x < x2 && x <= this.maxTiles.x; x++) {
+           tiles.push(y1 + '/' + x)
+         }
+       }
+       if (x2!= tile.x && x2 <= this.maxTiles.x) {
+         for (var y = Math.max(y1, 1); y <=y2 && y <= this.maxTiles.y; y++) {
+           tiles.push(y + '/' + x2)
+         }
+       }
+        if (y2!= tile.y && y2 <= this.maxTiles.y) {
+         for (var x = Math.max( x1, 1) + 1; x < x2 && x <= this.maxTiles.x; x++) {
+           tiles.push(y2 + '/' + x)
          }
        }
     }
