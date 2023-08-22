@@ -20,6 +20,10 @@ export default {
     var y = 1 + parseInt((90 - latlng.lat) / 45)
     return {x:x, y: y}
   },
+  maxTiles: {
+    x:4,
+    y:4
+  },
   bounds2tiles (bounds, uncomplete) {
     var corner1 = bounds.getNorthWest()
     var corner2 = bounds.getSouthEast()
@@ -29,7 +33,31 @@ export default {
     var tile = this.pos2tile(center)
     var tiles = []
     // commence par le milieu
-     
+    tiles.push(tile.y + '/' + tile.x)
+    for (var k=1; k <=4; k++) {
+       var x1 = tile.x
+       var x2 = tile.x
+       if (tile.x + k <= this.maxTiles.x) {
+         tiles.push(tile.y + '/' + (tile.x + k))
+         x2 = tile.x + k
+       }
+       if (tile.x - k > 0) {
+         tiles.push(tile.y + '/' + (tile.x - k))
+         x1 = tile.x - k
+       }
+       for (var x=x1; x <= x2; x++) {
+         if (tile.y - k > 0) {
+           tiles.push((tile.y - k) + '/' + x)
+           y1 = tile.y - k
+         }
+         if (tile.y + k <= this.maxTiles.y) {
+           tiles.push((tile.y + k) + '/' + x)
+           y2 = tile.y + k
+         }
+       }
+    }
+    console.log(tiles)
+    return tiles
     for (var i=tile.x; i <= 9; i++) {
         for (var j= tile.y; j <= tile2.y; j++) {
           if (i <= 4) {
@@ -75,7 +103,6 @@ export default {
            }
         }
     }
-    console.log(tiles)
     return tiles
   }
 }
