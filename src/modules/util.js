@@ -61,57 +61,10 @@ export default {
          }
        }
         if (y2!= tile.y && y2 <= this.maxTiles.y) {
-         for (var x = Math.max( x1, 1) + 1; x < x2 && x <= this.maxTiles.x; x++) {
+         for (var x = x1min; x < x2 && x <= this.maxTiles.x; x++) {
            tiles.push(y2 + '/' + x)
          }
        }
-    }
-    console.log(tiles)
-    return tiles
-    for (var i=tile.x; i <= 9; i++) {
-        for (var j= tile.y; j <= tile2.y; j++) {
-          if (i <= 4) {
-            tiles.push(j + '/' + i)
-          }
-          if (uncomplete) {
-            if (tile.x < i && 2 * tile.x - i >= tile1.x && 2 * tile.x - i < 5) {
-              tiles.push(j + '/' + (2 * tile.x - i))
-            }
-            if (tile.y < j && 2 * tile.y - j >= tile1.y && 2 * tile.y - j < 5) {
-              tiles.push((2 * tile.y - j) + '/' + i)
-               if (tile.x < i && 2 * tile.x - i >= tile1.x
-                   && 2 * tile.x - i < 5) {
-                  tiles.push((2 * tile.y - j) + '/' + (2 * tile.x - i))
-               }
-            }
-          } else {
-            if (tile.x < i && j < 5 && 2 * tile.x - i >= 1 && 2 * tile.x - i < 5) {
-              tiles.push(j + '/' + (2 * tile.x - i))
-            }
-            if (tile.y < j && 2 * tile.y - j >= 1 && 2 * tile.y - j >= tile1.y && i < 5) {
-              tiles.push((2 * tile.y - j) + '/' + i)
-               if (tile.x < i && 2 * tile.x - i >= 1 && 2 * tile.y - j < 5
-               && 2 * tile.x - i < 5) {
-                  tiles.push((2 * tile.y - j) + '/' + (2 * tile.x - i))
-               }
-            }
-          }
-        }
-    }
-    if(uncomplete) {
-      return tiles
-    }
-    for (var i=1; i <= 4; i++) {
-        for (var j= tile.y - 1 ; j > 0 ; j--) {
-          if (tiles.indexOf(j+ '/' + i) < 0) {
-            tiles.push(j + '/' + i)
-          }
-        }
-        for (var j= tile2.y +1 ; j < 5 ; j++) {
-           if (tiles.indexOf(j+ '/' + i) < 0) {
-              tiles.push(j + '/' + i)
-           }
-        }
     }
     return tiles
   }
