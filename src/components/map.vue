@@ -93,12 +93,13 @@
         </span>
       </div> 
     </div>
+     <div id="test2">test2</div>
    </div>
 </template>
 
 <script>
 // const SsrCarousel () => import('vue-ssr-carousel')
-
+import hopscotch from 'hopscotch'
 import moment from 'moment'
 // import FmtTimeline from './fmt-timeline.vue'
 var L = require('leaflet')
@@ -263,9 +264,78 @@ export default {
   },
   mounted () {
     if (this.$route.name === 'home') {
+      
+     
+   
        var bounds = this.initTiles()
        this.initialize(bounds)
-    }
+       var menu = document.querySelector('.gnss-menu')
+       console.log(menu)
+       var tour = {
+           id: "hello-hopscotch",
+           zindex:1000,
+           showPrevButton: true,
+           steps: [
+             {
+               title: "Overview all stations",
+               content: "blabla",
+               target: document.querySelector('.leaflet-overview'),
+               placement: "right",
+               
+             },{
+             title: "My Header",
+             content: "This is the header of my page.",
+             target: menu,
+             xOffset: "-200px",
+             onShow: function (e) {
+               var node = document.querySelector('.gnss-menu .gnss-shortcut')
+               setTimeout(function () {
+                 node.classList.add('selected')
+               }, 200)
+               
+             },
+             placement: "left"
+           },
+           {
+             title: "layer",
+             content: "blabla",
+             target: document.querySelector('.leaflet-control-layers-toggle'),
+             placement: "right",
+            
+             
+           },
+           {
+             title: "My content",
+             content: "Here is where I put my content.",
+             target: document.querySelector('.form .gnss-shortcut'),
+             placement: "left",
+             xOffset: '-350px',
+             showPrevButton: true,
+             onShow: function (e) {
+               var node = document.querySelector('.form')
+               node.classList.add('expand')
+             },
+             onNext: function (e) {
+               var node = document.querySelector('.form')
+               node.classList.remove('expand')
+             },
+             onPrev: function (e) {
+               var node = document.querySelector('.form')
+               node.classList.remove('expand')
+             }
+           }
+           ]
+         }
+        // Start the tour!
+        console.log(hopscotch)
+        hopscotch.startTour(tour,0);
+        var node = document.querySelector('.hopscotch-container')
+        node.addEventListener('click', function (e) {
+          e.stopPropagation()
+          e.preventDefault()
+          return false
+        })
+     } 
   },
   methods: {
     
@@ -1032,10 +1102,13 @@ export default {
 </style> 
 <style src="leaflet-draw/dist/leaflet.draw.css"></style>
 <style src="leaflet.markercluster/dist/MarkerCluster.Default.css"></style>
+<style src="hopscotch/dist/css/hopscotch.css"></link>
 <!--  <style src='../assets/css/leaflet.divicon.arrow.css'></style>-->
 
 <style>
-
+.tour-hello-hopscotch {
+  z-index:1000;
+}
 /** .gnss-bars:hover + .gnss-bars-content {
   display:block;
 }
