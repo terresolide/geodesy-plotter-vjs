@@ -98,14 +98,11 @@
 </template>
 
 <script>
-// const SsrCarousel () => import('vue-ssr-carousel')
-import hopscotch from 'hopscotch'
+// import hopscotch from 'hopscotch'
 import moment from 'moment'
-// import FmtTimeline from './fmt-timeline.vue'
 var L = require('leaflet')
 import { Icon } from 'leaflet';
 L.TilesControl = require('../modules/leaflet.tiles.js')
-// L.DivIcon.Arrow = require('../modules/leaflet.divicon.arrow.js')
 import {MarkerClusterGroup} from 'leaflet.markercluster'
 L.Control.Legend = require('../modules/leaflet.legend.js')
 L.Control.Overview = require('../modules/leaflet.overview.js')
@@ -264,77 +261,74 @@ export default {
   },
   mounted () {
     if (this.$route.name === 'home') {
-      
-     
-   
        var bounds = this.initTiles()
        this.initialize(bounds)
        var menu = document.querySelector('.gnss-menu')
-       console.log(menu)
-       var tour = {
-           id: "hello-hopscotch",
-           zindex:1000,
-           showPrevButton: true,
-           steps: [
-             {
-               title: "Overview all stations",
-               content: "blabla",
-               target: document.querySelector('.leaflet-overview'),
-               placement: "right",
+       
+//        var tour = {
+//            id: "hello-hopscotch",
+//            zindex:1000,
+//            showPrevButton: true,
+//            steps: [
+//              {
+//                title: "Overview all stations",
+//                content: "blabla",
+//                target: document.querySelector('.leaflet-overview'),
+//                placement: "right",
                
-             },{
-             title: "My Header",
-             content: "This is the header of my page.",
-             target: menu,
-             xOffset: "-200px",
-             onShow: function (e) {
-               var node = document.querySelector('.gnss-menu .gnss-shortcut')
-               setTimeout(function () {
-                 node.classList.add('selected')
-               }, 200)
+//              },{
+//              title: "My Header",
+//              content: "This is the header of my page.",
+//              target: menu,
+//              xOffset: "-200px",
+//              onShow: function (e) {
+//                var node = document.querySelector('.gnss-menu .gnss-shortcut')
+//                setTimeout(function () {
+//                  node.classList.add('selected')
+//                }, 200)
                
-             },
-             placement: "left"
-           },
-           {
-             title: "layer",
-             content: "blabla",
-             target: document.querySelector('.leaflet-control-layers-toggle'),
-             placement: "right",
+//              },
+//              placement: "left"
+//            },
+//            {
+//              title: "layer",
+//              content: "blabla",
+//              target: document.querySelector('.leaflet-control-layers-toggle'),
+//              placement: "right",
             
              
-           },
-           {
-             title: "My content",
-             content: "Here is where I put my content.",
-             target: document.querySelector('.form .gnss-shortcut'),
-             placement: "left",
-             xOffset: '-350px',
-             showPrevButton: true,
-             onShow: function (e) {
-               var node = document.querySelector('.form')
-               node.classList.add('expand')
-             },
-             onNext: function (e) {
-               var node = document.querySelector('.form')
-               node.classList.remove('expand')
-             },
-             onPrev: function (e) {
-               var node = document.querySelector('.form')
-               node.classList.remove('expand')
-             }
-           }
-           ]
-         }
-        // Start the tour!
-        console.log(hopscotch)
-        hopscotch.startTour(tour,0);
-        var node = document.querySelector('.hopscotch-container')
-        node.addEventListener('click', function (e) {
-          e.stopPropagation()
-          e.preventDefault()
-          return false
-        })
+//            },
+//            {
+//              title: "My content",
+//              content: "Here is where I put my content.",
+//              target: document.querySelector('.form .gnss-shortcut'),
+//              placement: "left",
+//              xOffset: '-350px',
+//              showPrevButton: true,
+//              onShow: function (e) {
+//                var node = document.querySelector('.form')
+//                node.classList.add('expand')
+//              },
+//              onNext: function (e) {
+//                var node = document.querySelector('.form')
+//                node.classList.remove('expand')
+//              },
+//              onPrev: function (e) {
+//                var node = document.querySelector('.form')
+//                node.classList.remove('expand')
+//              }
+//            }
+//            ]
+//          }
+//         // Start the tour!
+//         console.log(hopscotch)
+//         hopscotch.startTour(tour,0);
+//         var node = document.querySelector('.hopscotch-container')
+//         node.addEventListener('click', function (e) {
+//           e.stopPropagation()
+//           e.preventDefault()
+//           return false
+//         })
      } 
   },
   methods: {
