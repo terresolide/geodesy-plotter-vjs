@@ -98,7 +98,8 @@
 </template>
 
 <script>
-// import hopscotch from 'hopscotch'
+// const hopscotch = () => import('hopscotch')
+import hopscotch from 'hopscotch'
 import moment from 'moment'
 var L = require('leaflet')
 import { Icon } from 'leaflet';
@@ -245,7 +246,8 @@ export default {
       initialized: false,
       selectedContextMenu: null,
       closingPopup: false,
-      zoomMax: 5
+      zoomMax: 5,
+      tour: null
     }
   },
   created () {
@@ -265,70 +267,70 @@ export default {
        this.initialize(bounds)
        var menu = document.querySelector('.gnss-menu')
        
-//        var tour = {
-//            id: "hello-hopscotch",
-//            zindex:1000,
-//            showPrevButton: true,
-//            steps: [
-//              {
-//                title: "Overview all stations",
-//                content: "blabla",
-//                target: document.querySelector('.leaflet-overview'),
-//                placement: "right",
+       this.tour = {
+           id: "hello-hopscotch",
+           zindex:1000,
+           showPrevButton: true,
+           steps: [
+             {
+               title: "Overview all stations",
+               content: "blabla",
+               target: document.querySelector('.leaflet-overview'),
+               placement: "right",
                
-//              },{
-//              title: "My Header",
-//              content: "This is the header of my page.",
-//              target: menu,
-//              xOffset: "-200px",
-//              onShow: function (e) {
-//                var node = document.querySelector('.gnss-menu .gnss-shortcut')
-//                setTimeout(function () {
-//                  node.classList.add('selected')
-//                }, 200)
+             },{
+             title: "My Header",
+             content: "This is the header of my page.",
+             target: menu,
+             xOffset: "-200px",
+             onShow: function (e) {
+               var node = document.querySelector('.gnss-menu .gnss-shortcut')
+               setTimeout(function () {
+                 node.classList.add('selected')
+               }, 200)
                
-//              },
-//              placement: "left"
-//            },
-//            {
-//              title: "layer",
-//              content: "blabla",
-//              target: document.querySelector('.leaflet-control-layers-toggle'),
-//              placement: "right",
+             },
+             placement: "left"
+           },
+           {
+             title: "layer",
+             content: "blabla",
+             target: document.querySelector('.leaflet-control-layers-toggle'),
+             placement: "right",
             
              
-//            },
-//            {
-//              title: "My content",
-//              content: "Here is where I put my content.",
-//              target: document.querySelector('.form .gnss-shortcut'),
-//              placement: "left",
-//              xOffset: '-350px',
-//              showPrevButton: true,
-//              onShow: function (e) {
-//                var node = document.querySelector('.form')
-//                node.classList.add('expand')
-//              },
-//              onNext: function (e) {
-//                var node = document.querySelector('.form')
-//                node.classList.remove('expand')
-//              },
-//              onPrev: function (e) {
-//                var node = document.querySelector('.form')
-//                node.classList.remove('expand')
-//              }
-//            }
-//            ]
-//          }
-//         // Start the tour!
-//         console.log(hopscotch)
-//         hopscotch.startTour(tour,0);
-//         var node = document.querySelector('.hopscotch-container')
-//         node.addEventListener('click', function (e) {
-//           e.stopPropagation()
-//           e.preventDefault()
-//           return false
-//         })
+           },
+           {
+             title: "My content",
+             content: "Here is where I put my content.",
+             target: document.querySelector('.form .gnss-shortcut'),
+             placement: "left",
+             xOffset: '-350px',
+             showPrevButton: true,
+             onShow: function (e) {
+               var node = document.querySelector('.form')
+               node.classList.add('expand')
+             },
+             onNext: function (e) {
+               var node = document.querySelector('.form')
+               node.classList.remove('expand')
+             },
+             onPrev: function (e) {
+               var node = document.querySelector('.form')
+               node.classList.remove('expand')
+             }
+           }
+           ]
+         }
+        // Start the tour!
+        console.log(hopscotch)
+        hopscotch.startTour(this.tour,0);
+        var node = document.querySelector('.hopscotch-container')
+        node.addEventListener('click', function (e) {
+          e.stopPropagation()
+          e.preventDefault()
+          return false
+        })
      } 
   },
   methods: {

@@ -100,7 +100,7 @@
 		  <div v-if="networks && mode === 'map'" class="gnss-networks"> 
 		     <label>Networks
 		     </label>
-		    <select class="gnss-control" multiple v-model="searchparams.network">
+		    <select class="gnss-control" v-model="searchparams.network">
            <option :value="null">---</option>
            <option v-for="pt in networks" :value="pt">{{pt}}</option>
         </select>
@@ -204,7 +204,7 @@ export default {
 	      solution: null,
 	      several: null,
 	      analysisCentre: null,
-	      network: [],
+	      network: null,
 	      constellation: null,
 	      start: null,
 	      end: null,
@@ -235,7 +235,7 @@ export default {
       } else {
         this.searchparams.lenMax = null
       }
-      this.searchparams.network = this.searchparams.network.filter(nt => self.networks.indexOf(nt) >= 0)
+      // this.searchparams.network = this.searchparams.network.filter(nt => self.networks.indexOf(nt) >= 0)
       this.$store.commit('setReset', true)
       this.changeQuery(this.searchparams)
     },
@@ -245,9 +245,10 @@ export default {
       // console.log(query.expand)
       
       for (var key in query) {
-        if (key === 'network') {
-          this.searchparams.network = query['network'].split(',')
-        } else if (['center', 'radius', 'bbox'].indexOf(key) < 0) {
+//         if (key === 'network') {
+//           this.searchparams.network = query['network'].split(',')
+//         } else 
+        if (['center', 'radius', 'bbox', 'network'].indexOf(key) < 0) {
           this.searchparams[key] = query[key]
         }
         if (key === 'fill') {
@@ -262,11 +263,11 @@ export default {
       }
       for (var key in this.searchparams) {
         if (!query[key]) {
-          if (key === 'network') {
-            this.searchparams[key] = []
-          } else {
+//           if (key === 'network') {
+//             this.searchparams[key] = []
+//           } else {
             this.searchparams[key] = null
-          }
+ //         }
         }
       }
       if (init && query.expand) {
