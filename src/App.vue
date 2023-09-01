@@ -546,6 +546,8 @@ div.gnss-shortcut {
   border-radius: 5px 0 0 5px;
   vertical-align:top;
   pointer-events:auto;
+  width:46px;
+  text-align:center;
   box-shadow: -1px 1px 5px rgba(0,0,0,0.5);
 }
 

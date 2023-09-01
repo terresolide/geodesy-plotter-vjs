@@ -120,7 +120,6 @@
 		      </div>
 		  </div>
 		</div>
-		<gnss-tour></gnss-tour>
 		
     </div>
      <div class="gnss-shortcut"   @click="toggleForm()"><font-awesome-icon icon="fa-solid fa-search" /></div>
@@ -130,10 +129,10 @@
 <script>
 import VueSlider from 'vue-slider-component'
 
-const GnssTour = () => import('./gnss-tour.vue')
+
 export default {
   name: 'FileForm',
-  components: {GnssTour, VueSlider},
+  components: {VueSlider},
   props: {
     mode: {
       type: String,
@@ -341,37 +340,43 @@ input[id="fillrate"]::after {
 </style>
 <style scoped>
 div.form {
-  position: absolute;
-  transform: translateX(353px);
- 
+  clear:both;
+  position: relative;
+  transform: translateX(350px);
+  min-height:48px;
   width: 400px;
   z-index: 1001;
   right: 0px;
-  top: 55px;
+  top: 5px;
   background-clip: padding-box;
-  transition: transform 330ms ease-in-out;
+  transition: all 330ms ease-in-out;
   font-size: 0.8rem;
   box-sizing: border-box;
   pointer-events:none;
-  height:50px;
   z-index:2;
- 
 }
 div.form > div:nth-child(1) {
      float:right;
      background: white;
      display:inline-block;
      width:350px;
+     height:44px;
      margin:0;
+     margin-bottom: 10px;
      border-radius: 0 0 0 5px;
      box-shadow: 0 0 5px rgba(0,0,0,0.5);
-      max-height: calc(100vh - 50px);
+     max-height: calc(100vh - 50px);
        overflow-y: scroll;
+    transition: all 330ms ease-in-out;
 }
 div.form.expand {
   transform: translateX(0px);
-  transition: transform 330ms ease-in-out;
-  height:auto;
+  transition: all 330ms ease-in-out;
+  
+}
+div.form.expand > div:nth-child(1) {
+   height:auto;
+   transition: all 330ms ease-in-out;
 }
 .gnss-question{ 
   cursor:pointer;

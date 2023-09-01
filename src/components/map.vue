@@ -16,12 +16,13 @@
               @contextmenu="$event.target.click()" target="_blank">Open {{selectedContextMenu.name}} in new tab</a>
           </li></ul>
       </div>
-     
-     <file-form mode="map" v-show="$route.name=='home'"></file-form>
-    
-    <gnss-menu mode="map" v-show="$route.name=='home'"></gnss-menu>
-    <gnss-tour id="1"></gnss-tour>
-  
+     <div style="position:absolute;right:0;z-index:2;pointer-events:none;">
+         <gnss-menu mode="map" v-show="$route.name=='home'"></gnss-menu>
+		     <file-form mode="map" v-show="$route.name=='home'"></file-form>
+		    <gnss-tour id="1"></gnss-tour>
+		    
+		    
+    </div>
     <div id="map" class="fullmap" @click="noStation=false"></div>
     <div  id="json" v-show="show" style="background:white;max-width:270px;">
       <div class="gnss-close" @click="closePopup"><font-awesome-icon icon="fa-solid fa-close" /></div>
@@ -96,6 +97,7 @@ Icon.Default.mergeOptions({
 import Util from '../modules/util.js'
 import FileForm from './file-form.vue'
 import GnssMenu from './gnss-menu.vue'
+const GnssTour = () => import('./gnss-tour.vue')
 require('leaflet-draw')
 L.modLat = function( lat ){
      lat = lat%180;
@@ -122,7 +124,8 @@ export default {
   components: {
     FileForm,
     GnssCarousel,
-    GnssMenu
+    GnssMenu,
+    GnssTour
   },
   props: {
     top: {

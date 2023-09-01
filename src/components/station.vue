@@ -1,9 +1,11 @@
 <template>
 <div class="page-station" :class="{removed: removed}" style="width:100%;position:relative;overflow:hidden;">
   
- 
+   <div style="position:absolute;top:55px;right:0;z-index:2;pointer-events:none;">
+   <gnss-menu :top="5"></gnss-menu>
   <file-form v-if="!$store.state.back" mode="station" ></file-form>
-  <gnss-menu :top="55"></gnss-menu>
+  
+  </div>
   <div v-if="scrollY > 400" class="gnss-top" @click="scrollTop"><font-awesome-icon icon="fa-solid fa-circle-chevron-up" /></div>
  <div class="station-content"  >
 	 <div class="station-header">
@@ -876,9 +878,7 @@ span.gnss-network-item::after {
   -o-background-size: cover;
   background-size: cover;
   } **/
-  div.page-station div.form {
-    top: 105px;
-  }
+ 
 /**  div.station-content {
     background:white;
     margin:auto;

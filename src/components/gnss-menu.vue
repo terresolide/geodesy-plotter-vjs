@@ -172,8 +172,8 @@ export default {
 </script>
 <style scoped>
   .gnss-menu {
-    position:absolute;
-    top:5px;
+    float:right;
+    margin-top:10px;
     right:0;
     z-index:2
   }
@@ -189,6 +189,8 @@ export default {
   -webkit-border-radius: 0 4px 4px 4px;
   border-radius: 4px 0px 4px 4px;
   box-shadow: 0 0 5px rgba(0,0,0,0.5);
+  z-index:3;
+  pointer-events:auto;
 }
 .gnss-shortcut.selected + .gnss-bars-content {
   display:block;

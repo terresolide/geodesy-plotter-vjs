@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import {faAngleLeft, faAnglesLeft, faAngleRight, faAnglesRight, faArrowsAlt, 
 faBars, faBookmark,  faCircle,  faCircleChevronLeft, faCircleChevronRight, faCircleChevronUp,
  faCircleQuestion, faClipboard, faClose, faDownload, faEnvelope, faFile, faHome, faGear,faList, 
-faLocationDot, faTriangleExclamation, faMap,faSearch, faRightFromBracket, faRightToBracket, faSpinner, faUser} from '@fortawesome/free-solid-svg-icons'
+faLocationDot, faTriangleExclamation, faMap,faQuestion, faSearch, faRightFromBracket, faRightToBracket, faSpinner, faUser} from '@fortawesome/free-solid-svg-icons'
 
 import {
   faCircle as farCircle
@@ -25,7 +25,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 library.add(faAngleLeft, faAnglesLeft, faAngleRight, faAnglesRight, faArrowsAlt,
  faBars, faBookmark, faCircle, faCircleChevronLeft, faCircleChevronRight, faCircleChevronUp,
  faCircleQuestion, faClipboard, faClose, faDownload, faEnvelope, faFile, faHome, faGear,faList,
- faLocationDot, faMap, faSearch, faTriangleExclamation, faRightFromBracket, faRightToBracket, faSpinner, 
+ faLocationDot, faMap, faQuestion, faSearch, faTriangleExclamation, faRightFromBracket, faRightToBracket, faSpinner, 
  faUser, farCircle)
 import App from './App.vue'
 import router from './router'
