@@ -19,7 +19,7 @@
      <div v-if="$route.name==='home'" style="position:absolute;top:10px;right:0;z-index:1;pointer-events:none;">
          <gnss-menu mode="map" v-show="$route.name=='home'"></gnss-menu>
          <file-form mode="map" v-show="$route.name=='home'"></file-form>
-        <gnss-tour mode="map" id="1"></gnss-tour>
+        <gnss-tour mode="map" id="map"></gnss-tour>
         
         
     </div>
@@ -247,72 +247,7 @@ export default {
     if (this.$route.name === 'home') {
        var bounds = this.initTiles()
        this.initialize(bounds)
-       var menu = document.querySelector('.gnss-menu')
        
-       this.tour = {
-           id: "hello-hopscotch",
-           zindex:1000,
-           showPrevButton: true,
-           steps: [
-             {
-               title: "Overview all stations",
-               content: "blabla",
-               target: document.querySelector('.leaflet-overview'),
-               placement: "right",
-               
-             },{
-             title: "My Header",
-             content: "This is the header of my page.",
-             target: menu,
-             xOffset: "-200px",
-             onShow: function (e) {
-               var node = document.querySelector('.gnss-menu .gnss-shortcut')
-               setTimeout(function () {
-                 node.classList.add('selected')
-               }, 200)
-               
-             },
-             placement: "left"
-           },
-           {
-             title: "layer",
-             content: "blabla",
-             target: document.querySelector('.leaflet-control-layers-toggle'),
-             placement: "right",
-            
-             
-           },
-           {
-             title: "My content",
-             content: "Here is where I put my content.",
-             target: document.querySelector('.form .gnss-shortcut'),
-             placement: "left",
-             xOffset: '-350px',
-             showPrevButton: true,
-             onShow: function (e) {
-               var node = document.querySelector('.form')
-               node.classList.add('expand')
-             },
-             onNext: function (e) {
-               var node = document.querySelector('.form')
-               node.classList.remove('expand')
-             },
-             onPrev: function (e) {
-               var node = document.querySelector('.form')
-               node.classList.remove('expand')
-             }
-           }
-           ]
-         }
-        // Start the tour!
-        console.log(hopscotch)
-        hopscotch.startTour(this.tour,0);
-        var node = document.querySelector('.hopscotch-container')
-        node.addEventListener('click', function (e) {
-          e.stopPropagation()
-          e.preventDefault()
-          return false
-        })
      } 
   },
   methods: {

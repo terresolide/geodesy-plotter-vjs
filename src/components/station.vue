@@ -4,7 +4,7 @@
    <div style="position:absolute;top:55px;right:0;z-index:2;pointer-events:none;">
    <gnss-menu :top="5"></gnss-menu>
   <file-form v-if="!$store.state.back" mode="station" ></file-form>
-  
+  <gnss-tour mode="map" id="station"></gnss-tour> 
   </div>
   <div v-if="scrollY > 400" class="gnss-top" @click="scrollTop"><font-awesome-icon icon="fa-solid fa-circle-chevron-up" /></div>
  <div class="station-content"  >
@@ -277,10 +277,11 @@ import GnssMenu from './gnss-menu.vue'
 import GnssCarousel from './gnss-carousel.vue'
 import M3gContact from './m3g-contact.vue'
 import GnssMaterial from './gnss-material.vue'
+import GnssTour from './gnss-tour.vue'
 // import Bokeh from '@bokeh/bokehjs/build/js/bokeh.esm.min.js';
 export default {
   name: 'Station',
-  components: {FileForm, GnssCarousel, GnssMaterial, GnssMenu, M3gContact},
+  components: {FileForm, GnssCarousel, GnssMaterial, GnssMenu, GnssTour, M3gContact},
   data () {
     return {
       sari: 'https://alvarosg.shinyapps.io/sari/',

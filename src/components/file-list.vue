@@ -1,10 +1,11 @@
 <template>
 <div class="page-station page-list" >
- 
+  <div style="position:absolute;top:55px;right:0;z-index:2;pointer-events:none;">
+    <gnss-menu></gnss-menu>
     <file-form mode="map" ></file-form>
-     
-    <gnss-menu :top="55"></gnss-menu>
-
+    <gnss-tour mode="map" id="list"></gnss-tour>    
+   
+ </div>
  <div class="station-content" >
 	 <div class="station-header">
 	    <span class="close button" @click="close($event)" style="margin-right:20px;"><font-awesome-icon icon="fa-solid fa-close" /></span>
@@ -79,9 +80,10 @@ import FileForm from './file-form.vue'
 import GnssMenu from './gnss-menu.vue'
 import FileRow from './file-row.vue'
 import GnssPaging from './gnss-paging.vue'
+import GnssTour from './gnss-tour.vue'
 export default {
   name: 'FileList',
-  components: {FileForm, FileRow, GnssMenu, GnssPaging},
+  components: {FileForm, FileRow, GnssMenu, GnssPaging, GnssTour},
   data () {
     return {
      
@@ -324,10 +326,6 @@ div.box-station a.station-link {
 
 </style>
 <style scoped>
- 
-  div.page-list div.form {
-    top: 105px;
-  }
   div.gnss-file:nth-child(2n) {
    background: #eee;
   }
