@@ -1,7 +1,9 @@
 <template>
  <div class="page-station" style="width:100%;position:relative;overflow:hidden;">
-
-  <gnss-menu :top="55"></gnss-menu>
+ 
+  <div style="position:absolute;top:55px;right:0;z-index:2;pointer-events:none;">
+    <gnss-menu></gnss-menu>
+  </div>
    <div v-if="scrollY > 400" class="gnss-top" @click="scrollTop"><font-awesome-icon icon="fa-solid fa-circle-chevron-up" /></div>
   
  <div class="station-content"  >

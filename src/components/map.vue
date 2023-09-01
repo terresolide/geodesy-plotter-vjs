@@ -16,12 +16,12 @@
               @contextmenu="$event.target.click()" target="_blank">Open {{selectedContextMenu.name}} in new tab</a>
           </li></ul>
       </div>
-     <div style="position:absolute;right:0;z-index:2;pointer-events:none;">
+     <div v-if="$route.name==='home'" style="position:absolute;top:10px;right:0;z-index:1;pointer-events:none;">
          <gnss-menu mode="map" v-show="$route.name=='home'"></gnss-menu>
-		     <file-form mode="map" v-show="$route.name=='home'"></file-form>
-		    <gnss-tour id="1"></gnss-tour>
-		    
-		    
+         <file-form mode="map" v-show="$route.name=='home'"></file-form>
+        <gnss-tour mode="map" id="1"></gnss-tour>
+        
+        
     </div>
     <div id="map" class="fullmap" @click="noStation=false"></div>
     <div  id="json" v-show="show" style="background:white;max-width:270px;">

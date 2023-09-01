@@ -50,7 +50,7 @@ export default {
   props: {
     top: {
       type: Number,
-      default: 5
+      default: 0
     }
   },
   computed: {
@@ -173,7 +173,7 @@ export default {
 <style scoped>
   .gnss-menu {
     float:right;
-    margin-top:10px;
+    margin-top:0px;
     right:0;
     z-index:2
   }
