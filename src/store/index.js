@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import user from './user'
+import tour from './tour'
 export default function makeStore( config ) {
   var defaultConfig = {
     api: 'http://127.0.0.1:8083/api/',
@@ -105,7 +106,8 @@ export default function makeStore( config ) {
       }
     },
     modules: {
-      user: user
+      user: user,
+      tour: tour
     }
   })
 }
