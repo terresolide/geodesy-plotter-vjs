@@ -16,31 +16,11 @@
               @contextmenu="$event.target.click()" target="_blank">Open {{selectedContextMenu.name}} in new tab</a>
           </li></ul>
       </div>
+     
      <file-form mode="map" v-show="$route.name=='home'"></file-form>
     
     <gnss-menu mode="map" v-show="$route.name=='home'"></gnss-menu>
-   <!--    <div style="position:absolute;top:5px;right:0;z-index:2">
-       <div class="gnss-shortcut gnss-bars" @click="toggle($event)"><font-awesome-icon icon="fa-solid fa-bars" /></div>
-       <div class="gnss-bars-content" >
-         <ul>
-           <li class="gnss-bars-link" title="Record state in clipboard" @click="copyClipboard($event)">
-                <font-awesome-icon icon="fa-solid fa-bookmark" />
-           
-               Record state url
-                <div class="bookmark-tooltip" >The url has been copied to clipboard</div>
-           </li>
-           <li class="gnss-bars-link"  @click="goToList()">
-             <font-awesome-icon icon="fa-solid fa-list" />
-             View list</li>
-          <li class="gnss-hr" style="margin-bottom:5px;"><hr /></li>
-          <li class="gnss-bars-link disabled" @click="goTo('solutions')">Solutions</li>
-          <li class="gnss-bars-link disabled" @click="goTo('productTypes')">Product Types</li>
-          <li class="gnss-bars-link disabled" @click="goTo('about')">About</li>
-          
-          
-         </ul>
-       </div>
-    </div> -->
+    <gnss-tour id="1"></gnss-tour>
   
     <div id="map" class="fullmap" @click="noStation=false"></div>
     <div  id="json" v-show="show" style="background:white;max-width:270px;">
@@ -99,7 +79,7 @@
 
 <script>
 // const hopscotch = () => import('hopscotch')
-import hopscotch from 'hopscotch'
+// import hopscotch from 'hopscotch'
 import moment from 'moment'
 var L = require('leaflet')
 import { Icon } from 'leaflet';
@@ -145,7 +125,6 @@ export default {
     GnssMenu
   },
   props: {
-    
     top: {
       type: Number,
       default: 20

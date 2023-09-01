@@ -120,16 +120,20 @@
 		      </div>
 		  </div>
 		</div>
+		<gnss-tour></gnss-tour>
+		
     </div>
      <div class="gnss-shortcut"   @click="toggleForm()"><font-awesome-icon icon="fa-solid fa-search" /></div>
- 
+     
 </div>
 </template>
 <script>
 import VueSlider from 'vue-slider-component'
+
+const GnssTour = () => import('./gnss-tour.vue')
 export default {
   name: 'FileForm',
-  components: {VueSlider},
+  components: {GnssTour, VueSlider},
   props: {
     mode: {
       type: String,
@@ -349,6 +353,7 @@ div.form {
   font-size: 0.8rem;
   box-sizing: border-box;
   pointer-events:none;
+  height:50px;
   z-index:2;
  
 }
@@ -366,6 +371,7 @@ div.form > div:nth-child(1) {
 div.form.expand {
   transform: translateX(0px);
   transition: transform 330ms ease-in-out;
+  height:auto;
 }
 .gnss-question{ 
   cursor:pointer;
