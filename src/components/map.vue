@@ -251,7 +251,9 @@ export default {
      } 
   },
   methods: {
-    
+    getStation () {
+      console.log(this.stations)
+    },
     removeStation (selected) {
        if (!window.confirm("Voulez-vous réellement supprimer la station " + selected[1] + "\navec tous ses produits!")) {
          return
