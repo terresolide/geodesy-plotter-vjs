@@ -74,7 +74,6 @@
         </span>
       </div> 
     </div>
-     <div id="test2">test2</div>
    </div>
 </template>
 
@@ -200,6 +199,7 @@ export default {
     return {
       map: null,
       stationId: null,
+      tourStation: 1207,
       stations: [],
 //       scheme: {},
       json: null,
@@ -251,8 +251,15 @@ export default {
      } 
   },
   methods: {
-    getStation () {
-      console.log(this.stations)
+    showStation () {
+      if (this.tourStation) {
+        var query = Object.assign({}, this.$route.query) 
+        query.selected = this.tourStation
+        this.$router.push({name: 'home', query: query}).catch(()=>{})
+         
+        return 'truc'
+      }
+      return null
     },
     removeStation (selected) {
        if (!window.confirm("Voulez-vous réellement supprimer la station " + selected[1] + "\navec tous ses produits!")) {
@@ -986,6 +993,7 @@ export default {
       }
       this.mode = 'image'
       this.selected = e.options
+      console.log(this.selected)
       this.show = true
 //       this.popup.setLatLng(e.target.getLatLng())
 //       this.popup.openOn(this.map)

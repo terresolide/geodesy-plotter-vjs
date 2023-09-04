@@ -64,7 +64,6 @@ export default {
           target: document.querySelector('.gnss-menu'),
           xOffset: "-200px",
           onShow: function (e) {
-            _this.$parent.getStation()
             var node = document.querySelector('.form')
             node.classList.remove('expand')
             var node = document.querySelector('.gnss-menu .gnss-shortcut')
@@ -96,11 +95,25 @@ export default {
           onNext: function (e) {
             var node = document.querySelector('.form')
             node.classList.remove('expand')
+             _this.$parent.showStation()
+             var node = document.querySelector('#json')
+             console.log(node)
           },
           onPrev: function (e) {
             var node = document.querySelector('.form')
             node.classList.remove('expand')
+           
           }
+        },
+        {
+          title: "Station information",
+          content: "machin bidule ",
+          target: document.querySelector('#json'),
+          delay:600,
+          onShow: function (e) {
+            _this.$parent.showStation()
+          }
+          
         },
         {
           title: "Overview all stations",
