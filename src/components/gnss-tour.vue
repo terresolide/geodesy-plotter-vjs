@@ -53,7 +53,7 @@ export default {
     getTour () {
 	    var _this = this
 	    var markerNode = document.querySelector('div.leaflet-marker-icon[title="FNJM00EWT"]')
-	    _this.$parent.showStation()
+	   // _this.$parent.showStation()
 	    var tour = {
 	        id: "map",
 	        zindex:1000,
@@ -104,7 +104,7 @@ export default {
 	          onNext: function (e) {
 	            var node = document.querySelector('.form')
 	            node.classList.remove('expand')
-	             _this.$parent.showStation()
+	            // _this.$parent.showStation()
 	          },
 	          onPrev: function (e) {
 	            var node = document.querySelector('.form')
@@ -120,7 +120,9 @@ export default {
 	          yOffset: '-20px',
 	          placement: 'right',
 	          onShow: function (e) {
-	           // _this.$parent.showStation()
+	            setTimeout(function () {
+	              _this.$parent.showStation()
+	            }, 600)
 	          }
 	          
 	        },
@@ -188,23 +190,26 @@ export default {
 
     launch(e) {
 //      this.$store.commit('tour/start', 'map')
-      if (!this.hopscotch) {
-        var self = this
-        import('hopscotch').then(module => {
-          self.hopscotch = module.default
-          self.hopscotch.startTour(this.getTour(),0);
-          var node = document.querySelector('.hopscotch-container')
-          if (node)
-          node.addEventListener('click', function (e) {
-            e.stopPropagation()
-            e.preventDefault()
-            return false
-          })
-        })
-      } else {
-        this.hopscotch.startTour(this.getTour(),0);
-      }
-      
+      var tour = this.getTour()
+      var self = this
+      setTimeout(function () {
+	      if (!this.hopscotch) {
+	       
+	        import('hopscotch').then(module => {
+	          self.hopscotch = module.default
+	          self.hopscotch.startTour(tour,0);
+	          var node = document.querySelector('.hopscotch-container')
+	          if (node)
+	          node.addEventListener('click', function (e) {
+	            e.stopPropagation()
+	            e.preventDefault()
+	            return false
+	          })
+	        })
+	      } else {
+	        this.hopscotch.startTour(tour,0);
+	      }
+	   },0)
     }
   }
 }
