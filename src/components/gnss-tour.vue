@@ -112,20 +112,20 @@ export default {
 	           
 	          }
 	        },
-	        {
-	          title: "Station information",
-	          content: "machin bidule ",
-	          target: markerNode,
-	         // delay:1000,
-	          yOffset: '-20px',
-	          placement: 'right',
-	          onShow: function (e) {
-	            setTimeout(function () {
-	              _this.$parent.showStation()
-	            }, 600)
-	          }
+// 	        {
+// 	          title: "Station information",
+// 	          content: "machin bidule ",
+// 	          target: markerNode,
+// 	         // delay:1000,
+// 	          xOffset: '-20px',
+// 	          placement: 'bottom',
+// 	          onShow: function (e) {
+// 	            setTimeout(function () {
+// 	              _this.$parent.showStation()
+// 	            }, 600)
+// 	          }
 	          
-	        },
+// 	        },
 	        {
 	          title: "Overview all stations",
 	          content: "blabla",
