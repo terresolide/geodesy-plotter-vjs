@@ -199,7 +199,7 @@ export default {
     return {
       map: null,
       stationId: null,
-      tourStation: 1207,
+      tourStation: 3010,
       stations: [],
 //       scheme: {},
       json: null,
@@ -256,7 +256,7 @@ export default {
         var query = Object.assign({}, this.$route.query) 
         query.selected = this.tourStation
         this.$router.push({name: 'home', query: query}).catch(()=>{})
-         
+        
         return 'truc'
       }
       return null
@@ -1094,7 +1094,8 @@ div[id="map"] div.lfh-control-legend:hover {
    background: white;
    width:auto;
 }
-div[id="map"] div.lfh-control-legend:hover  a {
+div[id="map"] div.lfh-control-legend:hover  a,
+div[id="map"] div.lfh-control-legend.hovered  a  {
   display:none;
 }
 
@@ -1107,7 +1108,8 @@ div[id="map"] div.lfh-control-legend  > div{
 div.leaflet-draw-section > .leaflet-draw-toolbar.leaflet-bar {
   margin-top:2px;
 }
-div[id="map"] div.lfh-control-legend:hover > div {
+div[id="map"] div.lfh-control-legend:hover > div,
+div[id="map"] div.lfh-control-legend.hovered > div {
   display:block;
 }
 div[id="map"] a.leaflet-draw-draw-circle:before {
