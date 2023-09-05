@@ -14,6 +14,7 @@ export default function makeStore( config ) {
     preview: 'https://spotgins.formater/data/preview/',
     limit: 500,
     batch: 200,
+    hopscotch: false,
     zoomMax: 5,
     search: true,
     reseting: false,

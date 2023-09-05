@@ -1,5 +1,5 @@
 <template>
-  <div class="gnss-tour" :style="{marginTop: top + 'px'}">
+  <div v-if="$store.state.hopscotch" class="gnss-tour" :style="{marginTop: top + 'px'}">
        <div class="gnss-shortcut gnss-bars" @click="launch($event)"><font-awesome-icon icon="fa-solid fa-question" /></div>
        
  </div>
