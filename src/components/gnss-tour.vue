@@ -5,8 +5,7 @@
  </div>
 </template>
 <script>
-// import hopscotch from 'hopscotch'
-// const hopscotch = () => import('hopscotch')
+
 export default {
   name: 'GnssMenu',
   props: {
