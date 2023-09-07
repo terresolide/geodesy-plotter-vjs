@@ -156,7 +156,7 @@ export default {
             var bounds = this.initTiles()
             this.initialize(bounds)
           }
-          if (!this.$store.state.viewMap) {
+          if (!this.$store.state.viewMap && !this.$store.state.back) {
             return
           } else {
             this.$store.state.viewMap = false
@@ -164,31 +164,33 @@ export default {
         }
        
         if (!this.routeChanged(oldroute, newroute)) {
-        if (parseInt(newroute.query.selected) !== parseInt(oldroute.query.selected)) {
-          // open popup
-          if (!newroute.query.selected) {
-            this.selected = null
-            this.closePopup()
-          } else if (this.stations[parseInt(this.$route.query.selected)]){
-	          var station = this.stations[parseInt(this.$route.query.selected)]
-		        if (station) {
-		           this.openPopup(station)
-		        }
-          }
-         
-        }
-        if (newroute.query.bounds &&  newroute.query.bounds !== oldroute.query.bounds ) {
-          var tab = newroute.query.bounds.split(',')
-          if (tab.length === 4) {
-            var bounds = L.latLngBounds(
-              L.latLng(parseFloat(tab[1]), parseFloat(tab[0])),
-              L.latLng(parseFloat(tab[3]), parseFloat(tab[2]))
-            )
-            this.map.fitBounds(bounds)
-           }
-        }
+          
+	        if (parseInt(newroute.query.selected) !== parseInt(oldroute.query.selected)) {
+	          // open popup
+	          if (!newroute.query.selected) {
+	            this.selected = null
+	            this.closePopup()
+	          } else if (this.stations[parseInt(this.$route.query.selected)]){
+		          var station = this.stations[parseInt(this.$route.query.selected)]
+			        if (station) {
+			           this.openPopup(station)
+			        }
+	          }
+	         
+	        }
+	        if (newroute.query.bounds &&  newroute.query.bounds !== oldroute.query.bounds ) {
+	          var tab = newroute.query.bounds.split(',')
+	          if (tab.length === 4) {
+	            var bounds = L.latLngBounds(
+	              L.latLng(parseFloat(tab[1]), parseFloat(tab[0])),
+	              L.latLng(parseFloat(tab[3]), parseFloat(tab[2]))
+	            )
+	            this.map.fitBounds(bounds)
+	           }
+	        }
+	        
         // this.$store.commit('changeBounds', false)
-       return
+          return
       }
       this.treatmentQuery(newroute.query)
       this.$store.commit('setReset', false)
@@ -312,6 +314,7 @@ export default {
       return query
     },
     routeChanged(oldroute, newroute) {
+      
       if (oldroute.name !== newroute.name) {
         return true
       }

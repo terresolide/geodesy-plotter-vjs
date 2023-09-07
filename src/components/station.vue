@@ -462,7 +462,11 @@ export default {
          credentials: true,
          emulateJSON: true
       }).then(resp => {
-        // this.removed = true
+        if (id2 === this.stationId) {
+          this.getStation()
+        } else {
+          this.$router.push({name: 'station', params:{name: this.stationName, id: id2}})
+        }
       }, resp => {alert('error status ' + resp.status)})
     },
     linkToM3G(id) {
@@ -561,6 +565,8 @@ export default {
             var duplicates = neighbours.filter(st => st.name == this.stationName)
             if (duplicates.length > 0) {
               this.duplicate = duplicates[0]
+            } else {
+              this.duplicate = null
             }
           }
           if (this.onMap) {
