@@ -201,8 +201,11 @@ export default {
     return {
       map: null,
       stationId: null,
-      tourStation: 3010,
       stations: [],
+      stationTour: {
+        data:null,
+        marker: null
+      },
 //       scheme: {},
       json: null,
 //      baseUrl: null,
@@ -254,6 +257,12 @@ export default {
   },
   methods: {
     showStation () {
+       if (this.stationTour.data) {
+         
+         this.map.panTo(this.stationTour.data[3])
+         this.openPopupTour()
+       }
+      return
       if (this.tourStation) {
         var query = Object.assign({}, this.$route.query) 
         query.selected = this.tourStation
@@ -907,6 +916,10 @@ export default {
           var marker = L.marker(feature[3], {icon: icon, id: feature[0], title: feature[1]})
           // marker.on('click', self.getData)
           self.markers[tile].addLayer(marker)
+          if (!self.stationTour.marker) {
+            self.stationTour.marker = marker
+            self.stationTour.data = feature
+          }
       })
       this.markers[tile].addTo(this.map)
       this.markers[tile].on('click', function (e) {
@@ -968,6 +981,18 @@ export default {
       }
       this.bounds.extend(feature[3])
     },
+    openPopupTour () {
+        this.mode = 'image'
+        this.show = true
+        var self = this
+        this.selected = this.stationTour.data
+        this.popup.setLatLng(this.stationTour.data[3])
+        this.wait = true
+        this.popup.openOn(this.map)
+    },
+    closePopupTour() {
+      
+    },
     openPopup (station) {
 	      this.selected = station
 	      this.mode = 'image'
@@ -996,7 +1021,6 @@ export default {
       }
       this.mode = 'image'
       this.selected = e.options
-      console.log(this.selected)
       this.show = true
 //       this.popup.setLatLng(e.target.getLatLng())
 //       this.popup.openOn(this.map)
