@@ -35,8 +35,9 @@
           <li class="gnss-bars-link disabled" @click="goTo($event, 'about')">About</li>
           <li class="gnss-hr" style="margin-bottom:5px;"><hr /></li>
          -->
-          <li class="gnss-bars-link" @click="goTo($event, 'contact')">
+         <!--   <li class="gnss-bars-link" @click="goTo($event, 'contact')">
            <font-awesome-icon icon="fa-solid fa-envelope" /> Contact</li>
+          -->
            <li class="gnss-bars-link" ><a :href="$store.state.api" target="_blank">
            <font-awesome-icon icon="fa-solid fa-gear" /> Geodesy Plotter Api</a></li>
          

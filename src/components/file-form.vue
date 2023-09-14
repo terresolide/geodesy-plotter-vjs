@@ -9,14 +9,14 @@
 		  </div>
 		  <div v-if="solutions && !$store.state.solution">
 		    <label >Solution  
-		       <span class="gnss-question" @click="showTooltip($event)">
+		     <!--  <span class="gnss-question" @click="showTooltip($event)">
 		         <font-awesome-icon icon="fa-solid fa-circle-question" />
 		        </span>
 		        <div class="gdm-tooltip" @click="hideTooltip($event)">
 		        <h4 >Solution</h4>
 		        <div>more info about solutions here @todo<br>
-		        </div>
-		     </div>
+		        </div>  
+		     </div> -->
 		    </label>
 		    <select class="gnss-control" v-model="searchparams.solution">
 		       <option :value="null">---</option>

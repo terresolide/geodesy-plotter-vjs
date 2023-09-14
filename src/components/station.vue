@@ -88,11 +88,15 @@
        <div v-if="station.properties.networks"><label>Networks:</label> 
 	       <span v-for="net in station.properties.networks">
 	        <span v-if="networks[net].metadata" class="gnss-network-item">
-	          <span v-if="isDoi(networks[net].metadata)">{{net}} (<a :href="'https://www.doi.org/' + isDoi(networks[net].metadata)" target="_blank">{{networks[net].metadata}}</a>)</span>
-	          <span v-else ><a :href="networks[net].metadata" target="_blank">{{net}}</a></span>
+	          <span v-if="isDoi(networks[net].metadata)">{{net}} 
+	              <gnss-credit :credit="networks[net].credit"></gnss-credit>(<a :href="'https://www.doi.org/' + isDoi(networks[net].metadata)" target="_blank">{{networks[net].metadata}}</a>)</span>
+	          <span v-else >
+	            <a :href="networks[net].metadata" target="_blank">{{net}}</a>
+	            <gnss-credit :credit="networks[net].credit"></gnss-credit>
+	          </span>
 	        </span>
-	        <span v-else class="gnss-network-item">{{net}}</span>
-	        <span v-if="networks[net].credit">{{networks[net].credit}}</span>
+	        <span v-else class="gnss-network-item">{{net}} <gnss-credit :credit="networks[net].credit"></gnss-credit></span>
+	       
 	        
 	        </span>
        </div>
@@ -279,11 +283,12 @@ import GnssMenu from './gnss-menu.vue'
 import GnssCarousel from './gnss-carousel.vue'
 import M3gContact from './m3g-contact.vue'
 import GnssMaterial from './gnss-material.vue'
+import GnssCredit from './gnss-credit.vue'
 import GnssTour from './gnss-tour.vue'
 // import Bokeh from '@bokeh/bokehjs/build/js/bokeh.esm.min.js';
 export default {
   name: 'Station',
-  components: {FileForm, GnssCarousel, GnssMaterial, GnssMenu, GnssTour, M3gContact},
+  components: {FileForm, GnssCarousel, GnssCredit, GnssMaterial, GnssMenu, GnssTour, M3gContact},
   data () {
     return {
       sari: 'https://alvarosg.shinyapps.io/sari/',
