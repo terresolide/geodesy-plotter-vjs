@@ -11,7 +11,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 /* import specific icons */
 import {faAngleLeft, faAnglesLeft, faAngleRight, faAnglesRight, faArrowsAlt, 
 faBars, faBookmark,  faCircle,  faCircleChevronLeft, faCircleChevronRight, faCircleChevronUp,
- faCircleQuestion, faClipboard, faClose, faDownload, faEnvelope, faFile, faHome, faGear,faList, 
+ faCircleQuestion, faClipboard, faClose, faCopyright, faDownload, faEnvelope, faFile, faHome, faGear,faList, 
 faLocationDot, faTriangleExclamation, faMap,faQuestion, faSearch, faRightFromBracket, faRightToBracket, faSpinner, faUser} from '@fortawesome/free-solid-svg-icons'
 
 import {
@@ -24,7 +24,7 @@ Vue.component('font-awesome-icon', FontAwesomeIcon)
 /* add icons to the library */
 library.add(faAngleLeft, faAnglesLeft, faAngleRight, faAnglesRight, faArrowsAlt,
  faBars, faBookmark, faCircle, faCircleChevronLeft, faCircleChevronRight, faCircleChevronUp,
- faCircleQuestion, faClipboard, faClose, faDownload, faEnvelope, faFile, faHome, faGear,faList,
+ faCircleQuestion, faClipboard, faClose, faCopyright, faDownload, faEnvelope, faFile, faHome, faGear,faList,
  faLocationDot, faMap, faQuestion, faSearch, faTriangleExclamation, faRightFromBracket, faRightToBracket, faSpinner, 
  faUser, farCircle)
 import App from './App.vue'

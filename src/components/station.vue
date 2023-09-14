@@ -87,11 +87,13 @@
        <div v-if="isEPOS"><label>EPOS</label> <a :href="'https://gnssdata-epos.oca.eu/#/metadata/marker='+ stationName.substring(0,4)" target="_blank">EPOS station page</a></div>
        <div v-if="station.properties.networks"><label>Networks:</label> 
 	       <span v-for="net in station.properties.networks">
-	        <span v-if="networks[net]" class="gnss-network-item">
-	          <span v-if="isDoi(networks[net])">{{net}} (<a :href="'https://www.doi.org/' + isDoi(networks[net])" target="_blank">{{networks[net]}}</a>)</span>
-	          <span v-else ><a :href="networks[net]" target="_blank">{{net}}</a></span>
+	        <span v-if="networks[net].metadata" class="gnss-network-item">
+	          <span v-if="isDoi(networks[net].metadata)">{{net}} (<a :href="'https://www.doi.org/' + isDoi(networks[net].metadata)" target="_blank">{{networks[net].metadata}}</a>)</span>
+	          <span v-else ><a :href="networks[net].metadata" target="_blank">{{net}}</a></span>
 	        </span>
 	        <span v-else class="gnss-network-item">{{net}}</span>
+	        <span v-if="networks[net].credit">{{networks[net].credit}}</span>
+	        
 	        </span>
        </div>
        <div v-if="!station.properties.m3g && !station.properties.from"><em>Sorry, we don't have more information about this station</em></div>
