@@ -56,7 +56,8 @@ export default {
       waitingUrl: null,
       pleaseLogin: false,
       msgBack:true,
-      escapeListener: null
+      escapeListener: null,
+      clickListener: null
     }
   },
   created () {
@@ -68,6 +69,8 @@ export default {
     .then(resp => {console.log(resp)}, resp => console.log('not authenticated'))
   },
   mounted () {
+    this.clickListener = this.closeTooltip.bind(this)
+    document.addEventListener('click', this.clickListener)
     let bokeh = document.createElement('script')
     bokeh.setAttribute('src', 'https://cdn.pydata.org/bokeh/release/bokeh-2.4.3.min.js')
     document.head.appendChild(bokeh)
@@ -102,11 +105,20 @@ export default {
     this.service = null
     document.removeEventListener('keyup', this.escapeListener)
     this.escapeListener = null
+    document.removeEventListener('click', this.clickListener)
+    this.clickListener = null
   },
   methods: {
     cancelPreLogin () {
       this.pleaseLogin = false
       this.waitingUrl = null
+    },
+    closeTooltip () {
+      var nodes = document.querySelectorAll('.tooltip-show')
+      nodes.forEach(function (el) {
+        el.classList.remove('tooltip-show')
+      })
+      
     },
     escape (e) {
       if (e.keyCode === 27) {
@@ -509,6 +521,7 @@ div.menu-context ul li:hover {
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
   color:#666;
   display:none;
+ 
 }
 .bookmark-tooltip {
   max-width:180px;
@@ -518,6 +531,7 @@ div.menu-context ul li:hover {
   top:18px;
   max-width:270px;
   min-width: 200px;
+  
 }
 .gdm-tooltip > div {
   font-weight: 500;
@@ -533,6 +547,7 @@ div.menu-context ul li:hover {
 
 .tooltip-show + .gdm-tooltip {
   display:block;
+   pointer-events:none;
 }
 div.gnss-shortcut {
   float:right;

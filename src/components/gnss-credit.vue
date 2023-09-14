@@ -1,10 +1,10 @@
 <template>
   <span v-if="credit" class="gnss-credit">
-   <span class="credit-link tooltip-show" title="copyright/credit">
+   <span class="credit-link" title="copyright/credit" @click="toggleShow($event)">
     <font-awesome-icon icon="fa-solid fa-copyright" />
     </span>
     <div class="gdm-tooltip">
-       {{credit}}
+      <div>{{credit}}</div>
     </div>
   </span>
 </template>
@@ -16,6 +16,14 @@ export default {
 	    type: String,
 	    default: null
     }
+  },
+  methods: {
+    toggleShow (event) {
+     
+      var target = event.target.closest('.credit-link')
+      target.classList.toggle('tooltip-show')
+      event.stopPropagation()
+    }
   }
 }
 </script>
@@ -25,6 +33,8 @@ export default {
 }
 .gnss-credit .gdm-tooltip {
   color:#333;
+  left:0;
+  max-width:300px;
 }
 .credit-link {
   cursor: pointer;
