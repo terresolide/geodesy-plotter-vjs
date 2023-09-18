@@ -653,7 +653,7 @@ export default {
       }
       
       this.$http.get(this.api + 'stations/' + this.stationName + '/sitelog')
-      .then(resp  => {this.updateM3GInfos(resp.body)})
+      .then(resp  => {this.updateM3GInfos(resp.body)}, resp => {console.log('Error sitelog: ' + resp.status)})
     },
     updateM3GInfos (data) {
       if (data.MOID) {
