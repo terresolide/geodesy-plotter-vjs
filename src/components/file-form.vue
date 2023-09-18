@@ -98,7 +98,7 @@
 		  </div>
 	
 		  <div v-if="networks && mode === 'map'" class="gnss-networks"> 
-		     <label>Networks
+		     <label>Network
 		     </label>
 		    <select class="gnss-control" v-model="searchparams.network">
            <option :value="null">---</option>
@@ -251,7 +251,7 @@ export default {
 //         if (key === 'network') {
 //           this.searchparams.network = query['network'].split(',')
 //         } else 
-        if (['center', 'radius', 'bbox', 'network'].indexOf(key) < 0) {
+        if (['center', 'radius', 'bbox'].indexOf(key) < 0) {
           this.searchparams[key] = query[key]
         }
         if (key === 'fill') {
