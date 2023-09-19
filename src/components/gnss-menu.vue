@@ -223,6 +223,8 @@ export default {
 }
 .gnss-bars-content a {
   color:inherit;
+  display:inline-block;
+  width:100%;
 }
 .gnss-bars-content a:hover {
   color:inherit;
