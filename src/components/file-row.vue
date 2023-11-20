@@ -3,12 +3,14 @@
       <div class="gnss-file-title">{{file.name}}</div>
       <div class="gnss-file-1"></div>
       <div class="gnss-file-2">
-         <div><label>Station</label>:   
-           <a class="station-link"  @click="goToStation($event)" style="position:relative;" @contextmenu="menuContext($event)">{{file.station}}
+         <div><label v-if="file.stationIds.length == 1">Station</label>
+         <label v-else >Stations</label>:   
+           <a  v-for="stationId, index in file.stationIds" class="station-link"  @click="goToStation($event,index)" style="position:relative;" @contextmenu="menuContext($event)">
+            <span>{{file.stations[index]}}</span>
                <div  class="menu-context" @click="closeMenuContext($event)">
                 <ul>
                    <li title="Open in new tab">
-                       <a  :href="$store.state.location + 'station/'+ file.station + '/' + file.stationId + '?newTab=true'" 
+                       <a  :href="$store.state.location + 'station/'+ file.stations[index] + '/' + stationId + '?newTab=true'" 
                        @contextmenu="$event.target.click()" target="_blank">Open in new tab</a>
                    </li></ul>
                </div>
@@ -61,7 +63,7 @@ export default {
     }
   },
   methods: {
-    goToStation (e) {
+    goToStation (e, index) {
       e.preventDefault()
       e.stopPropagation()
       var query = Object.assign({}, this.$route.query)
@@ -72,7 +74,7 @@ export default {
       delete query.page
       delete query.maxRecords
       delete query.orderBy
-      this.$router.push({ name: 'station', params: { name: this.file.station, id: this.file.stationId}, query: query})
+      this.$router.push({ name: 'station', params: { name: this.file.stations[index], id: this.file.stationIds[index]}, query: query})
 
     },
     closeMenuContext(e) {
@@ -82,16 +84,19 @@ export default {
     menuContext (e) {
       e.preventDefault()
       var target = e.target
-      while (target.tagName === 'svg' || target.tagName === 'path') {
+      console.log(target)
+      while (!target.classList.contains('station-link')) {
         target = target.parentNode
       }
      // if (target.classList.contains('link-area')) {
         var menu = target.querySelector('.menu-context')
+        console.log(menu)
         if (menu) {
         menu.style.top = e.offsetY + 'px'
         menu.style.left = e.offsetX + 'px'
        }
      // }
+      console.log(e)
       this.$parent.$parent.removeContextMenu()
       target.classList.add('context')
     },
