@@ -742,11 +742,15 @@ export default {
       if (this.$store.state.back) {
         query = {}
       }
+      this.productType = null
       this.$http.get(this.api + 'stations/' + this.stationId + '/products', {params: query})
       .then(resp => {
         var files = resp.body.products
         var self = this
         files.forEach(function (file) {
+          if (!self.productType) {
+            self.productType = file.productType
+          }
           var years = moment(file.tempEnd).diff(file.tempStart, 'years', true)
           file.properties.years = years.toFixed(1)
           if (!self.files[file.productType]) {

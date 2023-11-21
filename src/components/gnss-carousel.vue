@@ -1,6 +1,6 @@
 <template>
  <span>
- <div style="overflow:hidden;position:relative;" :style="{width:(nbSlides * slideWidth) + 'px'}">
+ <div style="overflow:hidden;position:relative;" v-if="$slots.slide" :style="{width:(nbSlides * slideWidth) + 'px'}">
     <div style="text-align:center;" v-if="dotPosition === 'top' && nbSlides < $slots.slide.length" >
            <span v-for="file, index in $slots.slide" style="padding: 0 3px;">
               <span v-if="index >= curSlide && index < curSlide + nbSlides">

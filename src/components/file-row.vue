@@ -25,11 +25,11 @@
       </div>
       <div class="gnss-file-4">
          <div><label>Temporal</label>:  {{toDateStr(file.tempStart)}} &rarr; {{toDateStr(file.tempEnd)}}</div>
-         <div><label>Years</label>: {{Math.round(file.years)}}<label style="margin-left:20px;">FillRate</label>: {{(Math.round(file.properties.fillRate * 100)).toLocaleString()}}%</div>
+         <div><label>Years</label>: {{Math.round(file.years)}}<label v-if="file.properties.fillRate" style="margin-left:20px;">FillRate</label>: {{(Math.round(file.properties.fillRate * 100)).toLocaleString()}}%</div>
  
       </div>
       <div class="gnss-file-5">
-         <div><label>AnalysisCentre</label>: {{file.properties.operator || file.properties.producer || file.properties.analysisCenter || file.properties.analysisCentre}}</div>
+         <div v-if="file.properties.analysisCentre"><label>AnalysisCentre</label>: {{file.properties.operator || file.properties.producer || file.properties.analysisCenter || file.properties.analysisCentre}}</div>
          <div v-if="file.properties.refFrame"><label>RefFrame</label>: {{file.properties.refFrame}}</div>
  
       </div>
