@@ -3,8 +3,8 @@
       <div class="gnss-file-title">{{file.name}}</div>
       <div class="gnss-file-1"></div>
       <div class="gnss-file-2">
-         <div><label v-if="file.stationIds.length == 1">Station</label>
-         <label v-else >Stations</label>:   
+         <div class="ellipsis" ><label v-if="file.stationIds.length == 1">Station</label>
+         <label v-else >Stations</label>: 
            <a  v-for="stationId, index in file.stationIds" class="station-link"  @click="goToStation($event,index)" style="position:relative;" @contextmenu="menuContext($event)">
             <span>{{file.stations[index]}}</span>
                <div  class="menu-context" @click="closeMenuContext($event)">
@@ -16,7 +16,7 @@
                </div>
            </a>
          </div>
-         <div v-if="file.networks"><label>Networks</label>: {{file.networks.join(', ')}}</div>
+         <div v-if="file.networks" class="ellipsis"><label>Networks</label>: {{file.networks.join(', ')}}</div>
       </div>
       <div class="gnss-file-3">
          <div><label>Solution</label>: {{file.solution}}</div>
@@ -25,7 +25,10 @@
       </div>
       <div class="gnss-file-4">
          <div><label>Temporal</label>:  {{toDateStr(file.tempStart)}} &rarr; {{toDateStr(file.tempEnd)}}</div>
-         <div><label>Years</label>: {{Math.round(file.years)}}<label v-if="file.properties.fillRate" style="margin-left:20px;">FillRate</label>: {{(Math.round(file.properties.fillRate * 100)).toLocaleString()}}%</div>
+         <div><label>Years</label>: {{Math.round(file.years)}}
+              <span v-if="file.properties.fillRate"><label  style="margin-left:20px;">FillRate</label>: {{(Math.round(file.properties.fillRate * 100)).toLocaleString()}}%
+              </span>
+         </div>
  
       </div>
       <div class="gnss-file-5">
@@ -149,6 +152,11 @@ export default {
   font-size:0.8em;
   
   border-bottom:1px solid lightgrey;
+}
+.gnss-file .ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 .header.gnss-file {
 
