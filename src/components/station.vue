@@ -248,7 +248,11 @@
             <div v-if="file.properties.fillRate"><label>Fill Rate</label> {{Math.round(file.properties.fillRate * 100)}} %</div>
             
          </div>
-         <div style="text-align:center;"><img :src="file.properties.img"  title="Click to show interactive graph" @click="getSerie(file)" /></div>
+         <div style="text-align:center;">
+              <img v-if="file.productType === 'POSITION'" class="interactive" :src="file.properties.img"  title="Click to show interactive graph" @click="getSerie(file)" />
+              <img v-else :src="file.properties.img"   />
+         </div>
+         
          </div>
           </div>
           </slot> 
@@ -988,7 +992,7 @@ span.gnss-network-item::after {
   div.file-container img {
     max-width:96%;
   }
-  div.file-container img:hover {
+  div.file-container img.interactive:hover {
     max-width:98%;
     border: 1px solid lightgrey;
     border-radius:10px;
