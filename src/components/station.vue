@@ -180,7 +180,7 @@
    <div v-if="Object.keys(files).length > 0"style="padding-top:10px;position:relative;">
    <div  v-if="selected" class="file-selected">
      <span class="close button" @click="unselect"><font-awesome-icon icon="fa-solid fa-close" /></span>
-     <h3> {{selected.station}} {{selected.solution }} {{selected.productType}}</h3>
+     <h3 style="margin-left:5px;"> {{stationName}} {{selected.solution }} {{selected.productType}}</h3>
      <div v-if="plot.div" v-html="plot.div">STATION INCONNUE</div>
      <div v-if="plot.div" style="text-align:center;margin-top:10px;font-size:12px;width:100%;">
        Remarquables dates: <span class="line" style="background:green;"></span> Material change
@@ -208,22 +208,24 @@
               <button type="button" @click="removeFile(index)">Supprimer</button>
             </div>
             <div v-else class="product-link">
+               <a  v-if="file.productType === 'DISCONTINUITY'" :href="api + 'products/' + file.name + '/download'" :download="file.name"  title="Extract discontinuities for this station">
+               <font-awesome-icon icon="fa-solid fa-arrow-down-wide-short" /></a>
                <a v-if="file.solution === 'SPOTGINS' && file.productType === 'POSITION'"
                 :href="sari + '?server=formater&station=' + file.station + '&product=spotgins_pos'"
                 target="_blank"><font-awesome-icon icon="fa-solid fa-cog" /> SARI</a> 
                <a v-if="(file.solution === 'GAMIT-GLOBK' || file.solution.indexOf('UGA')>=0) && file.productType === 'POSITION'"
                 :href="sari + '?server=formater&station=' + file.station + '&product=uga_pos'"
                 target="_blank" ><font-awesome-icon icon="fa-solid fa-cog" /> SARI</a> 
-             <a v-if="$store.state.auth && !$store.getters['user/email']" @click="$parent.preLogin(api + 'products/' + file.name + '/download')">
+             <a v-if="$store.state.auth && !$store.getters['user/email']" @click="$parent.preLogin(api + 'products/' + file.name + '/download')" title="Download file source">
              <font-awesome-icon icon="fa-solid fa-download" /></a>
-             <a  v-else :href="api + 'products/' + file.name + '/download'" :download="file.name" >
+             <a  v-else :href="api + 'products/' + file.name + '/download'" :download="file.name" title="Download file source">
                <font-awesome-icon icon="fa-solid fa-download" /></a>
             
             </div>
             
             
            <div><label>Name</label> {{file.name}}</div>
-           <div><label>Ref Frame</label> <span style="letter-spacing: .07em;">{{file.properties.refFrame}}</span></div>
+           <div v-if="file.productType === 'POSITION'"><label>Ref Frame</label> <span style="letter-spacing: .07em;">{{file.properties.refFrame}}</span></div>
            <div style="font-size:0.8rem;height:175px;">
             <div><label>Solution</label>
              <span class="station-link"  @click="goToSolution(file.solution)" style="position:relative;margin-left:-5px;" @contextmenu="menuContext($event)">{{file.solution}}
@@ -246,8 +248,8 @@
               <span v-else-if="!(key === 'products' && file.solution === 'GAMIT-GLOBK')"> <label>{{labelize(key)}}</label> {{value}}</span>
             </div>
             <div v-if="file.properties.fillRate"><label>Fill Rate</label> {{Math.round(file.properties.fillRate * 100)}} %</div>
-            
          </div>
+         
          <div style="text-align:center;">
               <img v-if="file.productType === 'POSITION'" class="interactive" :src="file.properties.img"  title="Click to show interactive graph" @click="getSerie(file)" />
               <img v-else :src="file.properties.img"   />
@@ -974,7 +976,8 @@ span.gnss-network-item::after {
     top:5px;
     
   }
-  div.product-link a {
+  div.product-link a,
+  a.button-link {
     display: inline-block;
     padding: 2px 5px;
     margin-right: 5px;

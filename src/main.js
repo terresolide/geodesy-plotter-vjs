@@ -9,7 +9,7 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 /* import font awesome icon component */
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 /* import specific icons */
-import {faAngleLeft, faAnglesLeft, faAngleRight, faAnglesRight, faArrowsAlt, 
+import {faAngleLeft, faAnglesLeft, faAngleRight, faAnglesRight, faArrowsAlt, faArrowDownWideShort,
 faBars, faBookmark,  faCircle,  faCircleChevronLeft, faCircleChevronRight, faCircleChevronUp,
  faCircleQuestion, faClipboard, faClose, faCopyright, faDownload, faEnvelope, faFile, faHome, faGear,faList, 
 faLocationDot, faTriangleExclamation, faMap,faQuestion, faSearch, faRightFromBracket, faRightToBracket, faSpinner, faUser} from '@fortawesome/free-solid-svg-icons'
@@ -22,7 +22,7 @@ import {
 /* add font awesome icon component */
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 /* add icons to the library */
-library.add(faAngleLeft, faAnglesLeft, faAngleRight, faAnglesRight, faArrowsAlt,
+library.add(faAngleLeft, faAnglesLeft, faAngleRight, faAnglesRight, faArrowsAlt, faArrowDownWideShort,
  faBars, faBookmark, faCircle, faCircleChevronLeft, faCircleChevronRight, faCircleChevronUp,
  faCircleQuestion, faClipboard, faClose, faCopyright, faDownload, faEnvelope, faFile, faHome, faGear,faList,
  faLocationDot, faMap, faQuestion, faSearch, faTriangleExclamation, faRightFromBracket, faRightToBracket, faSpinner, 

@@ -3,14 +3,24 @@
       <div class="gnss-file-title">{{file.name}}</div>
       <div class="gnss-file-1"></div>
       <div class="gnss-file-2">
-         <div class="ellipsis" ><label v-if="file.stationIds.length == 1">Station</label>
+         <div class="ellipsis" ><label v-if="file.stations.length == 1">Station</label>
          <label v-else >Stations</label>: 
-           <a  v-for="stationId, index in file.stationIds" class="station-link"  @click="goToStation($event,index)" style="position:relative;" @contextmenu="menuContext($event)">
-            <span>{{file.stations[index]}}</span>
+           <a v-if="file.stations.length === 1 && file.thingName === file.stations[0]" class="station-link"  @click="goToStation($event,file.thingName, file.thingId)" style="position:relative;" @contextmenu="menuContext($event)">
+            <span>{{file.thingName}}</span>
                <div  class="menu-context" @click="closeMenuContext($event)">
                 <ul>
                    <li title="Open in new tab">
-                       <a  :href="$store.state.location + 'station/'+ file.stations[index] + '/' + stationId + '?newTab=true'" 
+                       <a  :href="$store.state.location + 'station/'+ file.thingName + '/' + file.thingId + '?newTab=true'" 
+                       @contextmenu="$event.target.click()" target="_blank">Open in new tab</a>
+                   </li></ul>
+               </div>
+           </a>
+           <a v-else v-for="station in file.stations" class="station-link"  @click="goToStation($event,station, null)" style="position:relative;" @contextmenu="menuContext($event)">
+            <span>{{station}}</span>
+               <div  class="menu-context" @click="closeMenuContext($event)">
+                <ul>
+                   <li title="Open in new tab">
+                       <a  :href="$store.state.location + 'station/'+ station + '?newTab=true'" 
                        @contextmenu="$event.target.click()" target="_blank">Open in new tab</a>
                    </li></ul>
                </div>
@@ -66,7 +76,7 @@ export default {
     }
   },
   methods: {
-    goToStation (e, index) {
+    goToStation (e, station, index) {
       e.preventDefault()
       e.stopPropagation()
       var query = Object.assign({}, this.$route.query)
@@ -77,7 +87,12 @@ export default {
       delete query.page
       delete query.maxRecords
       delete query.orderBy
-      this.$router.push({ name: 'station', params: { name: this.file.stations[index], id: this.file.stationIds[index]}, query: query})
+      var params = { name: station}
+      if (index) {
+        params.id = index
+      }
+      var name = index ? 'station': 'stations'
+      this.$router.push({ name: name, params: params, query: query})
 
     },
     closeMenuContext(e) {
