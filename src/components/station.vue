@@ -250,9 +250,10 @@
             <div v-if="file.properties.fillRate"><label>Fill Rate</label> {{Math.round(file.properties.fillRate * 100)}} %</div>
          </div>
          
-         <div style="text-align:center;">
+         <div style="text-align:center;position:relative;">
+              <div v-if="file.productType === 'DISCONTINUITY'" class="interactive" style="position:absolute;width:100%;height:100%;background:rgba(255,255,255,0.4);text-align:center;padding-top:30%;"><font-awesome-icon icon="fa-solid fa-arrow-down-wide-short" /></div>
               <img v-if="file.productType === 'POSITION'" class="interactive" :src="file.properties.img"  title="Click to show interactive graph" @click="getSerie(file)" />
-              <img v-else :src="file.properties.img"   />
+              <img v-else :src="file.properties.img"  class="interactive" />
          </div>
          
          </div>
@@ -995,6 +996,7 @@ span.gnss-network-item::after {
   div.file-container img {
     max-width:96%;
   }
+ 
   div.file-container img.interactive:hover {
     max-width:98%;
     border: 1px solid lightgrey;
