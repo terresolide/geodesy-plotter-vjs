@@ -208,7 +208,7 @@
               <button type="button" @click="removeFile(index)">Supprimer</button>
             </div>
             <div v-else class="product-link">
-               <a  v-if="file.productType === 'DISCONTINUITY'" :href="api + 'products/' + file.name + '/download'" :download="file.name"  title="Extract discontinuities for this station">
+               <a  v-if="file.productType === 'DISCONTINUITY'" :href="api + 'stations/' + file.name + '/download'" :download="file.name"  title="Extract discontinuities for this station">
                <font-awesome-icon icon="fa-solid fa-arrow-down-wide-short" /></a>
                <a v-if="file.solution === 'SPOTGINS' && file.productType === 'POSITION'"
                 :href="sari + '?server=formater&station=' + file.station + '&product=spotgins_pos'"
@@ -251,7 +251,11 @@
          </div>
          
          <div style="text-align:center;position:relative;">
-              <div v-if="file.productType === 'DISCONTINUITY'" class="interactive" style="position:absolute;width:100%;height:100%;background:rgba(255,255,255,0.4);text-align:center;padding-top:30%;"><font-awesome-icon icon="fa-solid fa-arrow-down-wide-short" /></div>
+              <div v-if="file.productType === 'DISCONTINUITY'" class="interactive"  style="position:absolute;width:100%;height:100%;background:rgba(255,255,255,0.4);text-align:center;padding-top:30%;">
+                <div style="width:200px;display:inline-block;background:white;">
+                     <font-awesome-icon icon="fa-solid fa-arrow-down-wide-short" /> Extract discontinuities for this station
+                </div>
+              </div>
               <img v-if="file.productType === 'POSITION'" class="interactive" :src="file.properties.img"  title="Click to show interactive graph" @click="getSerie(file)" />
               <img v-else :src="file.properties.img"  class="interactive" />
          </div>
