@@ -161,8 +161,8 @@
 	        <div v-if="neighbours.length > 0">
 		        <div  v-for="st in neighbours" class="gnss-neighbour">
 		          <span class="station-link" style="position:relative;" @click="goToStation(st)" @contextmenu="menuContext($event)" :title="'Go to station ' + st.name">{{st.name}}
-		          <div class="menu-context">
-		            <ul>
+		          <div class="menu-context" >
+		            <ul style="display:block;">
 		               <li title="Open in new tab">
 		                   <a :href="locationUrl + 'station/'+ st.name + '/' + st.id + '?newTab=true'" 
 		                   @contextmenu="$event.target.click()" target="_blank">Open in new tab</a>
@@ -208,8 +208,16 @@
               <button type="button" @click="removeFile(index)">Supprimer</button>
             </div>
             <div v-else class="product-link">
-               <a  v-if="file.productType === 'DISCONTINUITY'" :href="api + 'stations/' + file.name + '/download'" :download="file.name"  title="Extract discontinuities for this station">
+              <span  v-if="file.productType === 'DISCONTINUITY'" class="expand" @click="toggleMenu($event)">
+               <a  :href="api + 'products/' + file.name + '/download'" :download="file.name"  title="Download extracted discontinuities for this station">
                <font-awesome-icon icon="fa-solid fa-arrow-down-wide-short" /></a>
+               <div class="menu-content" style="margin-top:3px;" >
+               <ul >
+                 <li><a @click="downloadDiscontinuities(file.solution, 'txt')">ASCII</a></li>
+                 <li><a @click="downloadDiscontinuities(file.solution, 'json')">JSON</a></li>
+               </ul>
+               </div>
+               </span>
                <a v-if="file.solution === 'SPOTGINS' && file.productType === 'POSITION'"
                 :href="sari + '?server=formater&station=' + file.station + '&product=spotgins_pos'"
                 target="_blank"><font-awesome-icon icon="fa-solid fa-cog" /> SARI</a> 
@@ -418,7 +426,10 @@ export default {
       e.stopPropagation()
       this.$parent.removeContextMenu()
     },
-    
+    downloadDiscontinuities (solution, format) {
+      var url = this.api + 'stations/' + this.stationName + '/discontinuities?solution=' + solution
+      console.log(url)
+    },
     menuContext (e) {
       e.preventDefault()
       this.$parent.removeContextMenu()
@@ -550,6 +561,9 @@ export default {
 //       var elt = document.querySelector('.form')
 //       elt.classList.toggle('expand')
 //     },
+    toggleMenu (event) {
+      console.log(event)
+    },
     getNeighbours () {
       if (!this.location) {
         return

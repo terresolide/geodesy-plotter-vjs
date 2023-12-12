@@ -269,7 +269,8 @@ ul[id="shortcuts"] {
   z-index:10;
 }
 
-div.menu-context {
+div.menu-context,
+div.menu-content {
   display:none;
   position: absolute;
   border-radius: 5px;
@@ -279,34 +280,51 @@ div.menu-context {
   top:20px;
   background: #444;
   color: #f9f9f9;
-  min-width:200px;
+
   padding:0px;
   z-index:1;
    border:1px solid white;
    box-shadow: 0 0 5px rgba(0,0,0,0.5);
 }
-.context > div.menu-context {
+div.menu-context {
+    min-width:200px;
+}
+.context > div.menu-context,
+.expand > div.menu-content {
   display:block;
 }
-div.menu-context ul {
+div.menu-context ul,
+div.menu-content ul {
   margin:0;
   padding:0;
   list-style-type:none;
 }
-div.menu-context ul li {
+div.menu-context ul li,
+div.menu-content ul li {
   padding:2px 5px;
   border-radius:5px;
   margin:2px
 }
-div.menu-context ul li a{
+div.menu-context ul li a,
+div.menu-content ul li a,
+div.product-link div.menu-content ul li a{
   text-decoration:none;
   color: #f9f9f9;
-   min-width:200px;
+   min-width:55px;
   display:inline-block;
   background: transparent;
+  border:none;
 }
-div.menu-context ul li:hover {
+div.menu-context ul li a {
+  min-width:200px;
+}
+div.menu-context ul li:hover,
+div.product-link div.menu-content ul li:hover {
   background:#f4661b;
+}
+div.product-link div.menu-content ul li a:hover {
+    color:inherit;
+    background: inherit;
 }
  div.page-station {
     width:100%;

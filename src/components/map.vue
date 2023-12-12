@@ -1331,7 +1331,7 @@ div.leaflet-control-layers-overlays div.marker-orange {
   height: 15px;
   vertical-align: middle;
 } 
- ul.menu-content {
+/* ul.menu-content {
   font-size: 0.8rem;
   border-bottom: 1px solid #adadad;
   margin:5px 0;
@@ -1375,5 +1375,5 @@ ul.menu-content li span.selected {
   background:white;
   color:#b8412c;
 }
-
+*/
 </style>
