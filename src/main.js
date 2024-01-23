@@ -30,8 +30,7 @@ library.add(faAngleLeft, faAnglesLeft, faAngleRight, faAnglesRight, faArrowsAlt,
 import App from './App.vue'
 import router from './router'
 import makeStore from './store'
-var sso = require('./config.js')
-console.log(sso)
+var sso = require('./config.json')
 console.log(process.env.NODE_ENV)
 let config = {}
 if (typeof geodesyConfig != 'undefined') {
