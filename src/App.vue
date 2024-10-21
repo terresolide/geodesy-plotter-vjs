@@ -17,10 +17,17 @@
         </div>
       </div>
       <div v-if="maintenance" class="gnss-maintenance">
+        <div v-if="message" v-html="message"></div>
+        <div v-else>
         SERVICE <b>UNDER MAINTENANCE.</b><br>
         Please come back later.
+        </div>
       </div>
       <div v-else >
+        <div v-if="message && showMessage" class="gnss-message" @click="showMessage=false">
+          <div style="position:absolute;top:0px;right:4px;">&times;</div>
+          <div  v-html="message"></div>
+        </div>
 	     <map-component ref="map"></map-component>
 	
 			 <div  v-if="$route.name !== 'home'" id="page" style="position:absolute;z-index:2;">
@@ -45,11 +52,15 @@ export default {
   computed: {
     email () {
       return this.$store.getters['user/email']
+    },
+    message () {
+      return this.$store.state.message
     }
   },
   data () {
     return {
       maintenance: false,
+      showMessage: true,
       hello: false,
       bye: null,
       service: null,
@@ -173,6 +184,23 @@ export default {
 </script>
 <style src='./assets/fontello/css/fontello.css' />
 <style>
+.gnss-message {
+  position:absolute;
+  width: 700px;
+  margin:auto;
+  color:darkred;
+  font-size:26px;
+  line-height:2rem;
+  top:10%;
+  left: calc(50% - 350px);
+  text-align:center;
+  background: white;
+  border: 2px solid darkred;
+  padding:20px;
+  border-radius: 5px;
+  z-index: 1000;
+  cursor:pointer;
+}
 .gnss-terresolide {
   overflow:hidden;
 }
