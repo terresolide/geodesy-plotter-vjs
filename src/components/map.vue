@@ -1052,9 +1052,9 @@ export default {
 </style> 
 <style src="leaflet-draw/dist/leaflet.draw.css"></style>
 <style src="leaflet.markercluster/dist/MarkerCluster.Default.css"></style>
-<style src="hopscotch/dist/css/hopscotch.css"></link>
+/** <style src="hopscotch/dist/css/hopscotch.css"></link>
 <!--  <style src='../assets/css/leaflet.divicon.arrow.css'></style>-->
-
+*/
 <style>
 .tour-hello-hopscotch {
   z-index:1000;
