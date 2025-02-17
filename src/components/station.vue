@@ -253,6 +253,12 @@
             <div v-for="value, key in file.properties" v-if="key !== 'img' && key!== 'file' && key!=='fillRate' && key !== 'refFrame'" >
               <span v-if="key === 'doi'"><label>{{labelize(key)}}</label> <a class="station-link" :href="'https://doi.org/' + value" target="_blank">{{value}}</a></span>
               <span v-else-if="key === 'operator'"><label>Analysis center</label> {{value}}</span>
+              <span v-else-if="key === 'dataSource'"><label>Data Source</label>
+                <span v-for="name in value" class="source">
+                 <template v-if="sources[name]"><a :href="sources[name].url" :title="sources[name].name">{{name}}</a></template>
+                 <template v-else >{{name}}</template>
+                 </span>
+              </span>
               <span v-else-if="!(key === 'products' && file.solution === 'GAMIT-GLOBK')"> <label>{{labelize(key)}}</label> {{value}}</span>
             </div>
             <div v-if="file.properties.fillRate"><label>Fill Rate</label> {{Math.round(file.properties.fillRate * 100)}} %</div>
@@ -359,6 +365,9 @@ export default {
     },
     networks () {
       return this.$store.getters['networks']
+    },
+    sources () {
+      return this.$store.getters['sources']
     },
     isEPOS() {
       if (!this.station) {
@@ -853,6 +862,9 @@ export default {
 }
 </script>
 <style>
+ span.source ~ span.source::before {
+  content: ', ';
+ }
 .gnss-admin-box {
    border:2px solid darkgrey;
    border-radius:5px;

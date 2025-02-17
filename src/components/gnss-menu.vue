@@ -3,7 +3,7 @@
        <div class="gnss-shortcut gnss-bars" @click="toggle($event)"><font-awesome-icon icon="fa-solid fa-bars" /></div>
        <div class="gnss-bars-content" >
          <ul>
-            <li v-if="$store.state.auth && email" class="gnss-bars-link" @click="goTo($event, 'account')">  <font-awesome-icon icon="fa-solid fa-user" /> 
+           <li v-if="$store.state.auth && email" class="gnss-bars-link" @click="goTo($event, 'account')">  <font-awesome-icon icon="fa-solid fa-user" /> 
              Your Account
            </li>
             <li v-if="$store.state.auth && email" class="gnss-bars-link" @click="logout" :title="'You are authenticated as ' + email"> 

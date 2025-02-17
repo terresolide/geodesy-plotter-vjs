@@ -77,15 +77,24 @@ export default {
     this.escapeListener = this.escape.bind(this)
     document.addEventListener('keyup', this.escapeListener)
     // test userinfo
-    this.$http.get(this.$store.state.api.replace('api/1.0/', 'userinfo'), {credentials: true})
-    .then(resp => {console.log(resp)}, resp => console.log('not authenticated'))
+    if (this.$store.state.auth) {
+      this.$http.get(this.$store.state.api.replace('api/1.0/', 'userinfo'), {credentials: true})
+      .then(resp => {console.log(resp)}, resp => console.log('not authenticated'))
+    }
   },
   mounted () {
     this.clickListener = this.closeTooltip.bind(this)
     document.addEventListener('click', this.clickListener)
-    let bokeh = document.createElement('script')
-    bokeh.setAttribute('src', 'https://cdn.pydata.org/bokeh/release/bokeh-2.4.3.min.js')
-    document.head.appendChild(bokeh)
+    // let bokeh = document.createElement('script')
+    // bokeh.setAttribute('src', 'https://cdn.bokeh.org/bokeh/release/bokeh-3.4.3.min.js')
+    // document.head.appendChild(bokeh)
+    // let table = document.createElement('script')
+    // table.setAttribute('src', 'https://cdn.bokeh.org/bokeh/release/bokeh-tables-3.4.3.min.js')
+    // document.head.appendChild(table)
+
+    // let widget = document.createElement('script')
+    // widget.setAttribute('src', 'https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.4.3.min.js')
+    // document.head.appendChild(widget)
     var location = window.location.href
     var pos = location.indexOf('#')
     this.$store.state.location = location.substring(0, pos +2)
@@ -113,8 +122,10 @@ export default {
     
   },
   destroyed () {
-    this.service.remove()
-    this.service = null
+    if (this.service) {
+      this.service.remove()
+      this.service = null
+    }
     document.removeEventListener('keyup', this.escapeListener)
     this.escapeListener = null
     document.removeEventListener('click', this.clickListener)
@@ -141,7 +152,9 @@ export default {
     },
     launchLogin () {
       this.pleaseLogin = false
-      this.service.login()
+      if (this.service) {
+        this.service.login()
+      }
     },
     launchWaiting () {
       if (!this.waitingUrl) {

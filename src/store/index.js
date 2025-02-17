@@ -68,6 +68,12 @@ export default function makeStore( config ) {
       search (state, getters) {
         return state.search
       },
+      sources (state, getters) {
+        if (state.codelists.sources) {
+          return state.codelists.sources
+        }
+        return []
+      },
       analysisCentres (state, getters) {
          if (state.codelists.analysisCentres) {
           return state.codelists.analysisCentres

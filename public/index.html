@@ -8,7 +8,12 @@
 --> 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"  crossorigin="anonymous">
 
- 
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-3.4.3.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-3.4.3.min.js"></script>
+<script type="text/javascript" src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-3.4.3.min.js"></script>
+
+<script type="text/javascript" src="https://unpkg.com/@holoviz/panel@1.4.4/dist/panel.min.js"></script>
+
     <title>test</title>
     <style>
       html {
@@ -34,10 +39,9 @@
       -->
      <script id="geodesyConfig" type="application/json" >
      {
-        "api": "https://geodesy-plotter.ipgp.fr/api/1.0/",
-        "preview": "https://geodesy-plotter.ipgp.fr/data/preview/",
-        "auth": true,
-        "message": "The service will be <b>unavailable</b><br> from <b>October 28 to 30</b><br> for a maintenance operation",
+        "api": "http://127.0.0.1:8083/api/1.0/",
+        "preview": "https://spotgins.formater/data/preview/",
+        "auth": false,
         "ssoLogin": "http://localhost:8080/#/sso-login",
         "ssoLogout": "http://localhost:8080/#/sso-login",
         "limit": 500
