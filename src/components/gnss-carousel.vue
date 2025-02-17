@@ -1,6 +1,6 @@
 <template>
  <span>
- <div style="overflow:hidden;position:relative;" v-if="$slots.slide" :style="{width:(nbSlides * slideWidth) + 'px'}">
+ <div style="overflow:hidden;position:relative;" v-if="$slots.slide" :style="{width: containerWidth}" ><!--:style="{width:(nbSlides * slideWidth) + 'px'}"-->
     <div style="text-align:center;" v-if="dotPosition === 'top' && nbSlides < $slots.slide.length" >
            <span v-for="file, index in $slots.slide" style="padding: 0 3px;">
               <span v-if="index >= curSlide && index < curSlide + nbSlides">
@@ -69,6 +69,7 @@ export default {
       nbSlides: 1,
       curSlide: 0,
       resizeListener: null,
+      containerWidth: '350px',
       index:0
     }
   },
@@ -97,6 +98,11 @@ export default {
       this.nbSlides = parseInt(width / this.slideWidth)
       if (this.nbSlides === 0) {
         this.nbSlides = 1
+      }
+      if (this.nbSlides === 1) {
+        this.containerWidth = '100%'
+      } else {
+        this.containerWidth = 'calc(100% - 20px)'
       }
       this.curSlide = 0
     }
