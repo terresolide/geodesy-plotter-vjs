@@ -906,7 +906,6 @@ export default {
       
       features.forEach(function (feature) {
         self.stations[feature[0]] = feature
-        console.log(feature)
         var html = '<span>' + feature[4].length + '</span>'
         var className = self.getClassname(feature[2])
         var icon = L.divIcon({
