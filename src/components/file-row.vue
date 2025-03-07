@@ -87,7 +87,7 @@ export default {
     }
   },
   methods: {
-    goToStation (e, station, index) {
+    goToStation (e) {
       e.preventDefault()
       e.stopPropagation()
       var query = Object.assign({}, this.$route.query)
@@ -98,12 +98,7 @@ export default {
       delete query.page
       delete query.maxRecords
       delete query.orderBy
-      var params = { name: station}
-      if (index) {
-        params.id = index
-      }
-      var name = index ? 'station': 'stations'
-      this.$router.push({ name: name, params: params, query: query})
+      this.$router.push({ name: 'station', params: { name: this.file.station, id: this.file.stationId}, query: query})
 
     },
     closeMenuContext(e) {
