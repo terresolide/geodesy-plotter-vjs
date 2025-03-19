@@ -73,7 +73,7 @@
     
     
       <h3 style="margin-left:-10px;position:relative;">Information
-        <div style="position:relative;font-size:1.1rem;display:inline-block;" v-if="station.properties.from || station.properties.m3g">
+        <div style="position:relative;font-size:1.1rem;font-weight:500;display:inline-block;" v-if="station.properties.from || station.properties.m3g">
           <a class="info"   @click="toggle($event)"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /></a>
           <div class="gdm-tooltip" style="width:350px;max-width:350px;">The station information has been harvested.<br>If you find any errors, please contact the sitelog directory maintainers.</div>
         </div>
@@ -88,7 +88,11 @@
            <span v-else-if="station.owner.acronym">{{station.owner.acronym}}</span>
            <span v-else>{{station.owner.agencyName}}</span>
         </div>
-       
+        <div v-if="station.onSite"><label>On Site: </label> 
+           <span v-if="station.onSite.ROR"><a :href="station.onSite.ROR" target="_blank">{{station.onSite.acronym}}</a></span>
+           <span v-else-if="station.onSite.acronym">{{station.onSite.acronym}}</span>
+           <span v-else>{{station.owner.agencyName}}</span>
+        </div>
        <div v-if="isEPOS"><label>EPOS</label> <a :href="'https://gnssdata-epos.oca.eu/#/metadata/marker='+ stationName.substring(0,4)" target="_blank">EPOS station page</a></div>
        <div v-if="station.properties.networks"><label>Networks:</label> 
 	       <span v-for="net in station.properties.networks">
@@ -740,6 +744,19 @@ export default {
         if (data.sitelog.onSiteContact && ((data.sitelog.onSiteContact.agency && data.sitelog.onSiteContact.agency.agencyName)
             || data.sitelog.onSiteContact.agencyName)) {
           this.station.contacts.onSiteContact = data.sitelog.onSiteContact
+          if (data.sitelog.onSiteContact.agency && data.sitelog.onSiteContact.agency.preferedAbbreviation) {
+            this.station.onSite = { acronym: data.sitelog.onSiteContact.agency.preferedAbbreviation}
+            if (data.sitelog.onSiteContact.agency.ROR) {
+              this.station.onSite.ROR = data.sitelog.onSiteContact.agency.ROR
+            }
+          }
+          if (data.sitelog.onSiteContact.preferredAbbreviation) {
+            this.station.onSite = { acronym: data.sitelog.onSiteContact.preferredAbbreviation}
+          } else if (data.sitelog.onSiteContact.preferedAbbreviation) {
+            this.station.onSite = { acronym: data.sitelog.onSiteContact.preferedAbbreviation}
+          } else if (data.sitelog.onSiteContact.agencyName) {
+            this.station.onSite = {agencyName: data.sitelog.onSiteContact.agencyName}
+          }
         }
         if (data.sitelog.siteMetadataCustodian && data.sitelog.siteMetadataCustodian.agency &&
             data.sitelog.siteMetadataCustodian.agency.agencyName) {
