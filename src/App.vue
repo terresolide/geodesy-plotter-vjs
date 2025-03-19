@@ -136,12 +136,11 @@ export default {
       this.pleaseLogin = false
       this.waitingUrl = null
     },
-    closeTooltip () {
+    closeTooltip (e) {
       var nodes = document.querySelectorAll('.tooltip-show')
       nodes.forEach(function (el) {
         el.classList.remove('tooltip-show')
       })
-      
     },
     escape (e) {
       if (e.keyCode === 27) {
@@ -582,6 +581,7 @@ div.product-link div.menu-content ul li a:hover {
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.4);
   color:#666;
   display:none;
+  pointer-events: none;
  
 }
 .bookmark-tooltip {
