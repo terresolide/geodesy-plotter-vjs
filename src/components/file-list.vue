@@ -15,10 +15,16 @@
 	   
 	   <div ><gnss-paging color="#b8412c" :page="pagination.page" :max-records="pagination.maxRecords" :count="files.length"
 	   :total-results="pagination.tot" @change="paginationChange"></gnss-paging>
-	   <div style="display:inline-block;width:30%;text-align:right;padding-right:20px;">
+	   <div style="display:inline-block;width:37%;text-align:right;padding-right:20px;">
 	     <button type="button"   >
            <a   :href="exportQuery":download="'exportGnss.csv'" >
            Export CSV
+            <font-awesome-icon icon="fa-solid fa-file" />
+           </a>
+      </button>
+      <button type="button"   >
+           <a   :href="filesUrl" target="_blanck" >
+            List of file URLs
             <font-awesome-icon icon="fa-solid fa-file" />
            </a>
       </button>
@@ -99,6 +105,16 @@ export default {
     },
     exportQuery () {
       var query = Object.assign({output: 'csv'}, this.$route.query)
+      var queryString = new URLSearchParams(query).toString()
+      var url = this.api + 'products/?' + queryString
+      console.log(url)
+      
+      return url
+    },
+    filesUrl () {
+      var query = Object.assign({output: 'list'}, this.$route.query)
+      query.maxRecords = 50000
+      query.page = 1
       var queryString = new URLSearchParams(query).toString()
       var url = this.api + 'products/?' + queryString
       console.log(url)

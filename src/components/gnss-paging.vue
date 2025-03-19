@@ -103,7 +103,7 @@ export default {
       currentPage : 1,
       recordPerPage: this.maxRecords,
       notExactly: '',
-      options: [10, 25, 50, 100]
+      options: [10, 25, 50, 100, 500]
     }
   },
 
@@ -148,7 +148,7 @@ export default {
 </script>
 <style>
 .gnss-paging > div {
-   width: 68%;
+   width: 62%;
    height: 33px;
    text-align: right;
    display: inline-block;
