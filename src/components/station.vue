@@ -74,7 +74,7 @@
     
       <h3 style="margin-left:-10px;position:relative;">Information
         <div style="position:relative;font-size:1.1rem;display:inline-block;" v-if="station.properties.from || station.properties.m3g">
-          <span :class="tooltipClass" style="color:darkred;" @click="toggle($event)"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /></span>
+          <a class="link" :class="tooltipClass"  @click="toggle($event)"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /></a>
           <div class="gdm-tooltip" style="width:350px;max-width:350px;">The station information has been harvested.<br>If you find any errors, please contact the sitelog directory maintainers.</div>
         </div>
       </h3>
@@ -506,7 +506,6 @@ export default {
     },
     toggle(event) {
       this.tooltipClass = this.tooltipClass ? '' : 'tooltip-show'
-      console.log(this.tooltipClass)
       event.stopPropagation()
       event.preventDefault()
 

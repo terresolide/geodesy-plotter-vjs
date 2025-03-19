@@ -219,6 +219,7 @@ export default {
   overflow:hidden;
 }
 .gnss-terresolide  a {
+ cursor: pointer;
  color: #b8412c;
 }
 .gnss-terresolide a:hover {
@@ -601,7 +602,7 @@ div.product-link div.menu-content ul li a:hover {
   text-align:left;
   font-weight:800;
   font-size:1em;
-  font-color:black;
+  color:black;
   opacity:1;
 }
 
