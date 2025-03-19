@@ -72,7 +72,12 @@
          <div v-if="location.properties.z"><label>Z coordinate:</label> {{location.properties.z.toLocaleString()}} m</div>
     
     
-      <h3 style="margin-left:-10px;">Information</h3>
+      <h3 style="margin-left:-10px;position:relative;">Information
+        <div style="position:relative;font-size:1.1rem;display:inline-block;" v-if="station.properties.from || station.properties.m3g">
+          <span :class="tooltipClass" style="color:darkred;" @click="toggle($event)"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /></span>
+          <div class="gdm-tooltip" style="width:350px;max-width:350px;">The station information has been harvested.<br>If you find any errors, please contact the sitelog directory maintainers.</div>
+        </div>
+      </h3>
          <div v-if="station.properties.domes"><label>IERS DOMES Number:</label> {{station.properties.domes}}</div>
        
         <div v-if="station.MOID"><label>MOID:</label>  <a :href="station.MOID" target="_blank">M<sup>3</sup>G GNSS station page </a></div>
@@ -350,6 +355,7 @@ export default {
         nearest: false,
         siteForm: false
       },
+      tooltipClass: '',
       scrollY: 0,
       newTab: false,
       removed: false,
@@ -497,6 +503,13 @@ export default {
         this.neighboursLayer.remove()
         this.onMap = false
       } 
+    },
+    toggle(event) {
+      this.tooltipClass = this.tooltipClass ? '' : 'tooltip-show'
+      console.log(this.tooltipClass)
+      event.stopPropagation()
+      event.preventDefault()
+
     },
     mergeIn (id1, id2) {
       this.$http.post(this.$store.state.back + '/entities/merge',{from: id1, to:id2}, {
