@@ -81,8 +81,18 @@
          <div v-if="station.properties.domes"><label>IERS DOMES Number:</label> {{station.properties.domes}}</div>
        
         <div v-if="station.MOID"><label>MOID:</label>  <a :href="station.MOID" target="_blank">M<sup>3</sup>G GNSS station page </a></div>
-       <div v-if="station.properties.m3g"><label>Sitelog:</label>  <a :href="m3gUrl+ 'sitelog/exportlog?id=' + stationName.toUpperCase()" target="_blank">M<sup>3</sup>G sitelog</a></div>
-       <div v-if="station.properties.from"><label>Sitelog:</label> <a :href="api + 'stations/' + stationName + '/sitelog'" target="_blank">Sitelog from {{station.properties.from}}</a></div>
+        <div v-if="station.properties.from && station.properties.from.length > 0"><label>Sitelog:</label> 
+    
+          <a v-for="sitelog in station.properties.from" :href="api + 'stations/' + stationName + '/sitelog?repository=' + sitelog"
+          class="gnss-network-item" target="_blank">
+            <template v-if="sitelog === 'M3G'">
+              M<sup>3</sup>G
+            </template>
+            <template v-else>
+            {{sitelog}}
+            </template>
+          </a>
+        </div>
         <div v-if="station.owner"><label>Site owner: </label> 
            <span v-if="station.owner.ROR"><a :href="station.owner.ROR" target="_blank">{{station.owner.acronym}}</a></span>
            <span v-else-if="station.owner.acronym">{{station.owner.acronym}}</span>
@@ -953,7 +963,8 @@ div[id="stationMap"] {
 }
 </style>
 <style scoped>
-span.gnss-network-item::after {
+span.gnss-network-item::after,
+a.gnss-network-item::after {
   content: ", "
 }
 
