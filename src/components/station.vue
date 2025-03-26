@@ -285,13 +285,12 @@
               <span v-else-if="!(key === 'products' && file.solution === 'GAMIT-GLOBK')"> <label>{{labelize(key)}}</label> {{value}}</span>
             </div>
             <div v-if="file.properties.fillRate"><label>Fill Rate</label> {{Math.round(file.properties.fillRate * 100)}} %</div>
+            
          </div>
          
          <div style="text-align:center;position:relative;">
-              <div v-if="file.productType === 'DISCONTINUITY'" class="interactive"  style="position:absolute;width:100%;height:100%;background:rgba(255,255,255,0.4);text-align:center;padding-top:30%;">
-                <div style="width:200px;display:inline-block;background:white;">
-                     <font-awesome-icon icon="fa-solid fa-arrow-down-wide-short" /> Extract discontinuities for this station
-                </div>
+              <div v-if="file.productType === 'POSITION'" class="interactive"  style="position:absolute;top:2px;right:4px;background:rgba(255,255,255,0.4);">
+                <offset-list :station="stationName" :offsets="offsets[file.solution]" :columns="offsetHeaders"></offset-list>
               </div>
               <img v-if="file.productType === 'POSITION'" class="interactive" :src="file.properties.img"  title="Click to show interactive graph" @click="getSerie(file)" />
               <img v-else :src="file.properties.img"  class="interactive" />
@@ -333,10 +332,11 @@ import M3gContact from './m3g-contact.vue'
 import GnssMaterial from './gnss-material.vue'
 import GnssCredit from './gnss-credit.vue'
 import GnssTour from './gnss-tour.vue'
+import OffsetList from './offset-list.vue'
 // import Bokeh from '@bokeh/bokehjs/build/js/bokeh.esm.min.js';
 export default {
   name: 'Station',
-  components: {FileForm, GnssCarousel, GnssCredit, GnssMaterial, GnssMenu, GnssTour, M3gContact},
+  components: {FileForm, GnssCarousel, GnssCredit, GnssMaterial, GnssMenu, GnssTour, M3gContact, OffsetList},
   data () {
     return {
       sari: 'https://alvarosg.shinyapps.io/sari/',
@@ -350,6 +350,8 @@ export default {
       icon: null,
       stationLayer: null,
       neighboursLayer: null,
+      offsets: null,
+      offsetHeaders: [],
       radiusChanged:true,
       radius: 100,
       searchRadius: 100,
@@ -709,6 +711,30 @@ export default {
             this.setNoStation()
           }
         }, resp => {this.setNoStation()})
+        this.getOffsets()
+    },
+    getOffsets () {
+      var url = this.api + 'stations/' + this.stationName + '/offsets'
+      this.offsets = null
+      this.$http.get(url)
+      .then(resp => {
+          if (resp.body.columns) {
+          this.offsetHeaders = resp.body.columns
+          }
+          if (resp.body.offsets) {
+            var self = this
+            resp.body.offsets.forEach(function (item) {
+              if (!self.offsets) {
+                self.offsets = {}
+              }
+              if (!self.offsets[item[0]]) {
+              self.offsets[item[0]] = [item]
+              } else {
+              self.offsets[item[0]].push(item)
+              }
+            })
+          }
+      })
     },
     getMoreInfo () {
       if (!this.station.properties.m3g && !this.station.properties.from) {
@@ -961,6 +987,22 @@ div[id="stationMap"] {
   z-index:0;
   float:left;
 }
+div.product-link a,
+  a.button-link {
+    display: inline-block;
+    padding: 2px 5px;
+    margin-right: 5px;
+    border-radius: 3px;
+    text-decoration:none;
+    color: #b8412c;
+    border: 1px dotted grey;
+    background:#f3f3F3; 
+  }
+  div.product-link a:hover {
+    text-decoration: none;
+    color:#7b080e;
+    background: #e5e5e5;
+  }
 </style>
 <style scoped>
 span.gnss-network-item::after,
@@ -1050,22 +1092,7 @@ a.gnss-network-item::after {
     top:5px;
     
   }
-  div.product-link a,
-  a.button-link {
-    display: inline-block;
-    padding: 2px 5px;
-    margin-right: 5px;
-    border-radius: 3px;
-    text-decoration:none;
-    color: #b8412c;
-    border: 1px dotted grey;
-    background:#f3f3F3; 
-  }
-  div.product-link a:hover {
-    text-decoration: none;
-    color:#7b080e;
-    background: #e5e5e5;
-  }
+  
   div.file-container img {
     max-width:96%;
   }
