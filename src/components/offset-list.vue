@@ -46,7 +46,7 @@ export default {
     },
     data () {
         return {
-            show:true
+            show:false
         }
     },
     methods: {
@@ -63,10 +63,7 @@ export default {
 }
 </script>
 <style scoped>
-label {
-    display: inline-block;
-    min-width:150px;
-}
+
 table {
     width:100%;
 }
@@ -84,7 +81,7 @@ table td {
 
 tbody {
     display: block;
-    max-height: 160px;
+    max-height: 135px;
     overflow: auto;
 }
 tr {
@@ -93,8 +90,8 @@ tr {
     table-layout: fixed;/* even columns width , fix width of table too*/
 }
 
-td:first-child(),
-th:first-child() {
+td:first-child,
+th:first-child {
     width:80px;
 }
 td:nth-child(2),
@@ -112,8 +109,9 @@ th:nth-child(3) {
     bottom:25px;
     right:-30px;
     background:white;
-    padding:3px;
-    -webkit-box-shadow: 0 0 3px rgba(0,0,0,.5);
-    box-shadow: 0 0 3px rgba(0,0,0,.5);
+    padding:6px;
+    line-height:1;
+    -webkit-box-shadow: 0 0 3px rgba(0,0,0,.8);
+    box-shadow: 0 0 3px rgba(0,0,0,.8);
 }
 </style>
