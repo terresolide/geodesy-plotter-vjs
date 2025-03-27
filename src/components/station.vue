@@ -289,7 +289,7 @@
          </div>
          
          <div style="text-align:center;position:relative;">
-              <div v-if="file.productType === 'POSITION'" class="interactive"  style="position:absolute;top:2px;right:4px;background:rgba(255,255,255,0.4);">
+              <div v-if="file.productType === 'POSITION' && offsets" class="interactive"  style="position:absolute;top:2px;right:4px;background:rgba(255,255,255,0.4);">
                 <offset-list :station="stationName" :offsets="offsets[file.solution]" :columns="offsetHeaders"></offset-list>
               </div>
               <img v-if="file.productType === 'POSITION'" class="interactive" :src="file.properties.img"  title="Click to show interactive graph" @click="getSerie(file)" />
