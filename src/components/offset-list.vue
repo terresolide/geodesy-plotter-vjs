@@ -105,6 +105,7 @@ th:nth-child(3) {
 }
 .offset-box {
     position:absolute;
+    z-index:10;
     font-size:.8rem;
     bottom:25px;
     right:-30px;
