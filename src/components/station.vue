@@ -73,7 +73,7 @@
     
       <h3 style="margin-left:-10px;position:relative;">Information</h3>
       <div v-if="station.properties.from && station.properties.from.length > 0"><label>Sitelog:</label> 
-    
+
           <a v-for="sitelog in station.properties.from" :href="api + 'stations/' + stationName + '/sitelog?repository=' + sitelog"
           class="gnss-network-item" target="_blank">
             <template v-if="sitelog === 'M3G'">
@@ -100,7 +100,7 @@
 	        </span>
        </div>
       <h4 style="margin-left:-10px;position:relative;"  v-if="station.properties.from && station.properties.from.length > 0">Information from 
-           <template v-if="station.properties.from[0]='M3G'">M<sup>3</sup>G</template>
+           <template v-if="station.properties.from[0]==='M3G'">M<sup>3</sup>G</template>
            <template v-else >{{station.properties.from[0]}}</template>
         <div style="position:relative;font-size:1.1rem;font-weight:500;display:inline-block;" >
           <a class="info"   @click="toggle($event)"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /></a>
@@ -469,7 +469,6 @@ export default {
     },
     downloadDiscontinuities (solution, format) {
       var url = this.api + 'stations/' + this.stationName + '/discontinuities?solution=' + solution
-      console.log(url)
     },
     menuContext (e) {
       e.preventDefault()
@@ -609,7 +608,6 @@ export default {
 //       elt.classList.toggle('expand')
 //     },
     toggleMenu (event) {
-      console.log(event)
     },
     getNeighbours () {
       if (!this.location) {
@@ -697,6 +695,7 @@ export default {
         if (this.stationId) {
           url += '/' + this.stationId
         }
+        this.station = null
         this.$http.get(url)
         .then(resp => {
           if (resp.body.id) {
@@ -706,6 +705,7 @@ export default {
 	            this.location = this.station.location
 	            this.getFiles()
 	            this.getMoreInfo()
+              this.getOffsets()
 	            // this.getInfo()
 	            this.$nextTick(() => this.initMap())
             } else {
@@ -718,7 +718,7 @@ export default {
             this.setNoStation()
           }
         }, resp => {this.setNoStation()})
-        this.getOffsets()
+        
     },
     getOffsets () {
       var url = this.api + 'stations/' + this.stationName + '/offsets'
