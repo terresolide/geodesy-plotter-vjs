@@ -15,11 +15,13 @@
       <div class="station-body" @scroll="scroll($event)" >
         <span v-if="solution && !metadata" >
           <div><label>Description</label> <div style="display:inline-block;width:calc(100% - 200px);">{{solution.description}}</div></div>
-          <div><a :href="solution.metadata"><font-awesome-icon icon="fa-solid fa-file" /> {{solution.metadata}}</a></div>
+          <div style="text-align:center;"><a :href="solution.metadata" target="_blank"><font-awesome-icon icon="fa-solid fa-file" /> {{solution.metadata}}</a></div>
        </span>
        <span v-if="metadata">
         <pre v-if="metadata" style="width:auto;white-space: pre-wrap;">{{metadata}}</pre>
        </span>
+       <div v-if="pdf" style="border:1px solid grey;max-width:1000px;margin:auto;"> <vue-pdf-embed :source="pdf" />
+       </div>
       
       </div>
  </div>
@@ -27,12 +29,13 @@
 </template>
 <script>
 import GnssMenu from './gnss-menu.vue'
+import VuePdfEmbed from 'vue-pdf-embed/dist/vue2-pdf-embed'
 export default {
   name: 'Solution',
-  components: {GnssMenu},
+  components: {GnssMenu, VuePdfEmbed},
   created () {
     this.name = this.$route.params.name
-   
+    this.pdf = null
     this.get()
     window.scrollTo(0, 0)
   },
@@ -46,7 +49,8 @@ export default {
       name: null,
       metadata: null,
       solution: null,
-      scrollY: 0
+      scrollY: 0,
+      pdf: null
     }
   },
   methods: {
@@ -68,11 +72,17 @@ export default {
         if (resp.body && resp.body.name) {
           this.solution = resp.body
           if (this.solution.metadata) {
-            this.getMetadata()
+           switch (this.solution.encodingType) {
+            case 'text/plain':
+              this.getMetadata()
+              break
+            case 'application/pdf':
+              console.log(this.pdf)
+              this.pdf = this.solution.metadata
+              break
+           } 
           }
-        } else {
-          
-        }
+        } 
       }, resp => {console.log('NOT FOUND')})
     },
     isLocalFile (url) {
