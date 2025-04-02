@@ -71,17 +71,8 @@
          <div v-if="location.properties.y"><label>Y coordinate: </label> {{location.properties.y.toLocaleString(lang,{ maximumFractionDigits: 1,minimumFractionDigits:1})}} m</div>
          <div v-if="location.properties.z"><label>Z coordinate:</label> {{location.properties.z.toLocaleString(lang, {maximumFractionDigits: 1,minimumFractionDigits:1})}} m</div>
     
-    
-      <h3 style="margin-left:-10px;position:relative;">Information
-        <div style="position:relative;font-size:1.1rem;font-weight:500;display:inline-block;" v-if="station.properties.from || station.properties.m3g">
-          <a class="info"   @click="toggle($event)"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /></a>
-          <div class="gdm-tooltip" style="width:350px;max-width:350px;">The station information has been harvested.<br>If you find any errors, please contact the sitelog directory maintainers.</div>
-        </div>
-      </h3>
-         <div v-if="station.properties.domes"><label>IERS DOMES Number:</label> {{station.properties.domes}}</div>
-       
-        <div v-if="station.MOID"><label>MOID:</label>  <a :href="station.MOID" target="_blank">M<sup>3</sup>G GNSS station page </a></div>
-        <div v-if="station.properties.from && station.properties.from.length > 0"><label>Sitelog:</label> 
+      <h3 style="margin-left:-10px;position:relative;">Information</h3>
+      <div v-if="station.properties.from && station.properties.from.length > 0"><label>Sitelog:</label> 
     
           <a v-for="sitelog in station.properties.from" :href="api + 'stations/' + stationName + '/sitelog?repository=' + sitelog"
           class="gnss-network-item" target="_blank">
@@ -92,19 +83,8 @@
             {{sitelog}}
             </template>
           </a>
-        </div>
-        <div v-if="station.owner"><label>Site owner: </label> 
-           <span v-if="station.owner.ROR"><a :href="station.owner.ROR" target="_blank">{{station.owner.acronym}}</a></span>
-           <span v-else-if="station.owner.acronym">{{station.owner.acronym}}</span>
-           <span v-else>{{station.owner.agencyName}}</span>
-        </div>
-        <div v-if="station.onSite"><label>On Site: </label> 
-           <span v-if="station.onSite.ROR"><a :href="station.onSite.ROR" target="_blank">{{station.onSite.acronym}}</a></span>
-           <span v-else-if="station.onSite.acronym">{{station.onSite.acronym}}</span>
-           <span v-else>{{station.owner.agencyName}}</span>
-        </div>
-       <div v-if="isEPOS"><label>EPOS</label> <a :href="'https://gnssdata-epos.oca.eu/#/metadata/marker='+ stationName.substring(0,4)" target="_blank">EPOS station page</a></div>
-       <div v-if="station.properties.networks"><label>Networks:</label> 
+      </div>
+      <div v-if="station.properties.networks"><label>Networks:</label> 
 	       <span v-for="net in station.properties.networks">
 	        <span v-if="networks[net].metadata" class="gnss-network-item">
 	          <span v-if="isDoi(networks[net].metadata)">{{net}} 
@@ -119,6 +99,30 @@
 	        
 	        </span>
        </div>
+      <h4 style="margin-left:-10px;position:relative;"  v-if="station.properties.from && station.properties.from.length > 0">Information from 
+           <template v-if="station.properties.from[0]='M3G'">M<sup>3</sup>G</template>
+           <template v-else >{{station.properties.from[0]}}</template>
+        <div style="position:relative;font-size:1.1rem;font-weight:500;display:inline-block;" >
+          <a class="info"   @click="toggle($event)"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /></a>
+          <div class="gdm-tooltip" style="width:350px;max-width:350px;">The station information has been harvested.<br>If you find any errors, please contact the sitelog directory maintainers.</div>
+        </div>
+      </h4>
+      <div v-if="station.properties.domes"><label>IERS DOMES Number:</label> {{station.properties.domes}}</div>
+       
+        <div v-if="station.MOID"><label>MOID:</label>  <a :href="station.MOID" target="_blank">M<sup>3</sup>G GNSS station page </a></div>
+       
+        <div v-if="station.owner"><label>Site owner: </label> 
+           <span v-if="station.owner.ROR"><a :href="station.owner.ROR" target="_blank">{{station.owner.acronym}}</a></span>
+           <span v-else-if="station.owner.acronym">{{station.owner.acronym}}</span>
+           <span v-else>{{station.owner.agencyName}}</span>
+        </div>
+        <div v-if="station.onSite"><label>On Site: </label> 
+           <span v-if="station.onSite.ROR"><a :href="station.onSite.ROR" target="_blank">{{station.onSite.acronym}}</a></span>
+           <span v-else-if="station.onSite.acronym">{{station.onSite.acronym}}</span>
+           <span v-else>{{station.owner.agencyName}}</span>
+        </div>
+       <div v-if="isEPOS"><label>EPOS</label> <a :href="'https://gnssdata-epos.oca.eu/#/metadata/marker='+ stationName.substring(0,4)" target="_blank">EPOS station page</a></div>
+      
        <div v-if="!station.properties.m3g && !station.properties.from"><em>Sorry, we don't have more information about this station</em></div>
        
       </div>
@@ -404,7 +408,6 @@ export default {
       return false
     },
     lang() {
-      console.log(navigator.language)
       return navigator.language
     }
   },
@@ -763,7 +766,6 @@ export default {
           this.station.antennas = data.sitelog.antennas
         }
         this.station.contacts = {}
-        console.log(data.sitelog.siteOwner)
         if (data.sitelog.siteOwner && ((data.sitelog.siteOwner.agency && data.sitelog.siteOwner.agency.agencyName)
             || data.sitelog.siteOwner.agencyName)) {
           this.station.contacts.siteOwner = data.sitelog.siteOwner
