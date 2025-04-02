@@ -54,8 +54,8 @@
 		       <router-link class="station-link"  :to="{name: 'station', params: {name: st.name, id: st.id}}">
 		       
 		       <h3>{{st.name}} N°{{st.id}}</h3>
-		        <div>Latitude: {{st.location.geometry.coordinates[1].toLocaleString()}}°</div>
-		        <div>Longitude: {{st.location.geometry.coordinates[0].toLocaleString()}}°</div>
+		        <div>Latitude: {{st.location.geometry.coordinates[1].toLocaleString(lang,{ maximumFractionDigits: 6, minimumFractionDigits: 6})}}°</div>
+		        <div>Longitude: {{st.location.geometry.coordinates[0].toLocaleString(lang,{ maximumFractionDigits: 6, minimumFractionDigits: 6})}}°</div>
 		  
 		      </router-link>
 	      </div>
@@ -64,12 +64,12 @@
       <h3 style="margin-bottom:0;">Approximate position</h3>
       <div style="float:left;margin-left:10px;min-width:600px;margin-top:18px;margin-right:50px;">
        
-	       <div><label>Latitude: </label> {{location.geometry.coordinates[1].toLocaleString()}}°</div>
-	       <div><label>Longitude: </label> {{location.geometry.coordinates[0].toLocaleString()}}°</div>
-	       <div v-if="location.properties.elevation"><label>Elevation: </label> {{location.properties.elevation.toLocaleString()}} m</div>
-         <div v-if="location.properties.x"><label>X coordinate: </label> {{location.properties.x.toLocaleString()}} m</div>
-         <div v-if="location.properties.y"><label>Y coordinate: </label> {{location.properties.y.toLocaleString()}} m</div>
-         <div v-if="location.properties.z"><label>Z coordinate:</label> {{location.properties.z.toLocaleString()}} m</div>
+	       <div><label>Latitude: </label> {{location.geometry.coordinates[1].toLocaleString(lang,{ maximumFractionDigits: 6, minimumFractionDigits: 6})}}°</div>
+	       <div><label>Longitude: </label> {{location.geometry.coordinates[0].toLocaleString(lang,{ maximumFractionDigits: 6, minimumFractionDigits: 6})}}°</div>
+	       <div v-if="location.properties.elevation"><label>Elevation: </label> {{location.properties.elevation.toLocaleString(lang,{ maximumFractionDigits: 1, minimumFractionDigits:1})}} m</div>
+         <div v-if="location.properties.x"><label>X coordinate: </label> {{location.properties.x.toLocaleString(lang,{ maximumFractionDigits: 1,minimumFractionDigits:1 })}} m</div>
+         <div v-if="location.properties.y"><label>Y coordinate: </label> {{location.properties.y.toLocaleString(lang,{ maximumFractionDigits: 1,minimumFractionDigits:1})}} m</div>
+         <div v-if="location.properties.z"><label>Z coordinate:</label> {{location.properties.z.toLocaleString(lang, {maximumFractionDigits: 1,minimumFractionDigits:1})}} m</div>
     
     
       <h3 style="margin-left:-10px;position:relative;">Information
@@ -402,6 +402,10 @@ export default {
         return true
       }
       return false
+    },
+    lang() {
+      console.log(navigator.language)
+      return navigator.language
     }
   },
   watch: {
