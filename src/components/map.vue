@@ -643,6 +643,8 @@ export default {
       delete query.center
       delete query.radius
       delete query.several
+      delete query.solution
+      delete query.analysisCentre
       this.$router.push({ name: 'station', params: { name: this.selected[1], id: this.selected[0]}, query: query})
     },
     loadTile(index, tiles, params, first) {
