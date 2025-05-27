@@ -173,7 +173,7 @@ export default {
 	          } else if (this.stations[parseInt(this.$route.query.selected)]){
 		          var station = this.stations[parseInt(this.$route.query.selected)]
 			        if (station) {
-			           this.openPopup(station)
+			           this.openPopup(station, this.$route.query.c)
 			        }
 	          }
 	         
@@ -216,6 +216,7 @@ export default {
 //      dataJsonUrl: null,
       show: false,
       markers: {},
+      copyMarkers: {},
       popup: null,
     //  groups: [],
     // groupLayers: [],
@@ -332,7 +333,7 @@ export default {
       }
       var oldquery = Object.assign({}, oldroute.query)
       var newquery = Object.assign({}, newroute.query)
-      var exclud = ['bounds', 'selected', 'nodraw', 'expand']
+      var exclud = ['bounds', 'selected', 'c', 'nodraw', 'expand']
       for (var key in exclud) {
         delete oldquery[exclud[key]]
         delete newquery[exclud[key]]
@@ -571,6 +572,7 @@ export default {
         
          self.closingPopup = query['selected']
          delete query['selected']
+         delete query.c
          
          setTimeout(function () {
            self.closingPopup = false
@@ -638,6 +640,7 @@ export default {
       var query = Object.assign({}, this.$route.query)
       delete query.network
       delete query.selected
+      delete query.c
       delete query.bounds
       delete query.bbox
       delete query.center
@@ -677,7 +680,13 @@ export default {
        }
        
        this.markers = {}
-
+       for (var x in this.copyMarkers) {
+         this.copyMarkers[x].off()
+         this.copyMarkers[x].clearLayers()
+         this.copyMarkers[x].remove(this.map)
+         this.copyMarkers[x] = null
+       }
+       this.copyMarkers = {}
        this.stations = []
        // this.bounds = null
      
@@ -851,8 +860,9 @@ export default {
       }
       if (this.$route.query.selected) {
         var station = this.stations[parseInt(this.$route.query.selected)]
+        
         if (station) {
-           this.openPopup(station)
+           this.openPopup(station, this.$route.query.c)
         } else {
            this.closePopup()
         }
@@ -881,12 +891,59 @@ export default {
     addCopyTile (index, tiles, features, params) {
        var newfeatures = []
        features.forEach(function(feature, index) {
-        if (feature[3][1] < -160) {
+        if (feature[3][1] < -145) {
           newfeatures.push([feature[0], feature[1], feature[2], [feature[3][0], feature[3][1] + 360], feature[4]])
         }
 
        })
-       this.addTile(index, tiles, newfeatures, params, false)
+       var tile = tiles[index]
+       if (newfeatures.length > 0) {
+       // tiles.push(tiles[index])
+        var zoomMax = this.zoomMax
+        console.log('tile copy=' + index + '..ie ' + tiles[index])
+        this.copyMarkers[tile] = L.markerClusterGroup({
+          polygonOptions:{weight:1, color: '#00008b', opacity:1, fillOpacity:0.1},
+          disableClusteringAtZoom: null,
+          chunkedLoading: true,
+          removeOutsideVisibleBounds:true,
+          spiderfyOnMaxZoom: true,
+          chunkInterval: 200,
+          chunkDelay: 50,
+          maxClusterRadius:function(zoom) {
+            if (zoom > zoomMax) {
+              return 3
+            }
+            return 80
+          },
+          animateAddingMarkers:false})
+  //        this.markers[tile].on('animationend', function () {
+  //          //self.loadTile(index + 1, tiles, params, init)
+  //         // self.animationEnd()
+  //       })
+        var self = this
+        newfeatures.forEach(function (feature) {
+          // self.stations[feature[0]] = feature
+          var html = '<span>' + feature[4].length + '</span>'
+          var className = self.getClassname(feature[2])
+          var icon = L.divIcon({
+            className: 'icon-marker marker-' + className, 
+            iconSize: [15,15],
+            html: html})
+
+            var marker = L.marker(feature[3], {icon: icon, id: feature[0], title: feature[1]})
+            // marker.on('click', self.getData)
+            self.copyMarkers[tile].addLayer(marker)
+            
+        })
+        this.copyMarkers[tile].addTo(this.map)
+        this.copyMarkers[tile].on('click', function (e) {
+            self.getData(e.layer, true)
+        })
+        this.copyMarkers[tile].on('contextmenu', function (e) {
+            self.openStationContextMenu(e)
+        })
+        
+      }
     },
     addTile (index, tiles, features, params, init) {
       var self = this
@@ -1009,13 +1066,16 @@ export default {
     closePopupTour() {
       
     },
-    openPopup (station) {
+    openPopup (station, copy) {
 	      this.selected = station
 	      this.mode = 'image'
 	      this.show = true
 	      var self = this
-	     
-	      this.popup.setLatLng(station[3])
+        var latlng = station[3]
+	      if (copy) {
+           latlng = [latlng[0], latlng[1] + 360]
+        }
+	      this.popup.setLatLng(latlng)
 	      this.wait = true
 	      this.popup.openOn(this.map)
 	       
@@ -1029,7 +1089,7 @@ export default {
         this.map.fitBounds(this.bounds)
       }
     },
-    getData (e) {
+    getData (e, copy=false) {
       var query = Object.assign({}, this.$route.query)
       if (this.closingPopup === e.options.id) {
         this.closingPopup = false
@@ -1041,6 +1101,11 @@ export default {
 //       this.popup.setLatLng(e.target.getLatLng())
 //       this.popup.openOn(this.map)
       query.selected = e.options.id
+      if (copy) {
+        query.c = true
+      } else {
+        delete query.c
+      }
       this.$router.push({name: 'home', query: query}).catch(()=>{})
       return false
     },
