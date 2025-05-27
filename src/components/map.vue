@@ -767,6 +767,8 @@ export default {
 //     },
     displayByTile (stations, index, tiles, params, init) {
       var self = this
+      var tile = tiles[index].split('/')
+      var tileY = parseInt(tile[1])
       
 //       if (index === 0) {
 //            for (var x in this.markers) {
@@ -799,6 +801,9 @@ export default {
 //         return
 //      }
      this.addTile(index, tiles,stations, params, init)
+     if (tileY === 1) {
+        this.addCopyTile(index, tiles, stations, params)
+     }
      if (index === tiles.length - 1) {
       this.displayEnd(init)
      }
@@ -873,7 +878,16 @@ export default {
         }
       }
     },
+    addCopyTile (index, tiles, features, params) {
+       var newfeatures = []
+       features.forEach(function(feature, index) {
+        if (feature[3][1] < -160) {
+          newfeatures.push([feature[0], feature[1], feature[2], [feature[3][0], feature[3][1] + 360], feature[4]])
+        }
 
+       })
+       this.addTile(index, tiles, newfeatures, params, false)
+    },
     addTile (index, tiles, features, params, init) {
       var self = this
       var tile = tiles[index]
