@@ -4,7 +4,7 @@
    <div style="position:absolute;top:55px;right:0;z-index:2;pointer-events:none;">
    <gnss-menu :top="5"></gnss-menu>
   <file-form v-if="!$store.state.back" mode="station" ></file-form>
-  <gnss-tour mode="map" id="station"></gnss-tour> 
+  <!--<gnss-tour mode="map" id="station"></gnss-tour> -->
   </div>
   <div v-if="scrollY > 400" class="gnss-top" @click="scrollTop"><font-awesome-icon icon="fa-solid fa-circle-chevron-up" /></div>
  <div class="station-content"  >
@@ -62,7 +62,7 @@
 	  </div>
     <div v-if="location">
       <h3 style="margin-bottom:0;">Approximate position</h3>
-      <div style="float:left;margin-left:10px;min-width:600px;margin-top:18px;margin-right:50px;">
+      <div style="float:left;margin-left:10px;min-width:600px;margin-top:18px;margin-right:50px;max-width:calc(100% - 450px);">
        
 	       <div><label>Latitude: </label> {{location.geometry.coordinates[1].toLocaleString(lang,{ maximumFractionDigits: 6, minimumFractionDigits: 6})}}°</div>
 	       <div><label>Longitude: </label> {{location.geometry.coordinates[0].toLocaleString(lang,{ maximumFractionDigits: 6, minimumFractionDigits: 6})}}°</div>
@@ -84,7 +84,8 @@
             </template>
           </a>
       </div>
-      <div v-if="station.properties.networks"><label>Networks:</label> 
+      <div v-if="station.properties.networks" ><label style="vertical-align: top;">Networks:</label> 
+        <div style="display:inline-block;max-width:calc(100% - 150px);">
 	       <span v-for="net in station.properties.networks">
 	        <span v-if="networks[net].metadata" class="gnss-network-item">
 	          <span v-if="isDoi(networks[net].metadata)">{{net}} 
@@ -98,6 +99,7 @@
 	       
 	        
 	        </span>
+          </div>
        </div>
       <h4 style="margin-left:-10px;position:relative;"  v-if="station.properties.from && station.properties.from.length > 0">Information from 
            <template v-if="station.properties.from[0]==='M3G'">M<sup>3</sup>G</template>
@@ -197,9 +199,9 @@
 	        </div>
 	        <div v-else ><em>No other stations within {{searchRadius}}km radius</em></div>
 	        </div>      
-      
+             <igs-coseismic :station="station"></igs-coseismic>
     </div>
-   <igs-coseismic></igs-coseismic>
+
    <div v-if="Object.keys(files).length > 0" style="position:relative;">
       <div  v-if="selected" class="file-selected">
         <span class="close button" @click="unselect"><font-awesome-icon icon="fa-solid fa-close" /></span>
