@@ -171,7 +171,7 @@
         <h3  v-if="stationId" >Nearest stations
             <span class="fa button in-title" @click="show.nearest = !show.nearest">{{show.nearest ? '-' : '+'}}</span>
         </h3>
-        <div  v-if="stationId" style="margin-left:10px;" :style="{display: show.nearest ? 'block': 'none'}">
+        <div  v-if="stationId" style="margin-left:10px;" v-show="show.nearest">
           <div style="margin-bottom:10px;">
 	            <input type="number" step="10" min="1" v-model="radius" @change="radiusChanged=true"
 	           class="gnss-control" /> km &nbsp;
@@ -199,22 +199,22 @@
 	        </div>      
       
     </div>
-   
-   <div v-if="Object.keys(files).length > 0"style="padding-top:10px;position:relative;">
-   <div  v-if="selected" class="file-selected">
-     <span class="close button" @click="unselect"><font-awesome-icon icon="fa-solid fa-close" /></span>
-     <h3 style="margin-left:5px;"> {{stationName}} {{selected.solution }} {{selected.productType}}</h3>
-     <div v-if="plot.div" v-html="plot.div">STATION INCONNUE</div>
-     <div v-if="plot.div" style="text-align:center;margin-top:10px;font-size:12px;width:100%;">
-       Remarquables dates: <span class="line" style="background:green;"></span> Material change
-       <span class="line" style="background:red;"></span> Earthquake
-       <span class="line" style="background:grey;"></span> Unknown change
-     </div>
-     <div v-else style="text-align:center;margin-top:45%;font-size:50px;">
-        <font-awesome-icon icon="fa-sharp fa-spinner" spin></font-awesome-icon>
-     </div>
-   </div>
- 
+   <igs-coseismic></igs-coseismic>
+   <div v-if="Object.keys(files).length > 0" style="position:relative;">
+      <div  v-if="selected" class="file-selected">
+        <span class="close button" @click="unselect"><font-awesome-icon icon="fa-solid fa-close" /></span>
+        <h3 style="margin-left:5px;"> {{stationName}} {{selected.solution }} {{selected.productType}}</h3>
+        <div v-if="plot.div" v-html="plot.div">STATION INCONNUE</div>
+        <div v-if="plot.div" style="text-align:center;margin-top:10px;font-size:12px;width:100%;">
+          Remarquables dates: <span class="line" style="background:green;"></span> Material change
+          <span class="line" style="background:red;"></span> Earthquake
+          <span class="line" style="background:grey;"></span> Unknown change
+        </div>
+        <div v-else style="text-align:center;margin-top:45%;font-size:50px;">
+            <font-awesome-icon icon="fa-sharp fa-spinner" spin></font-awesome-icon>
+        </div>
+    </div>
+
    <h3>Data</h3>
      <div style="margin-left:10px;"><label>Product type</label> 
      <select v-model="productType" class="gnss-control" style="max-width:160px;">
@@ -321,26 +321,27 @@
 <script>
 var L = require('leaflet')
 import { Icon } from 'leaflet';
-import Util from '../modules/util.js'
-import moment from 'moment'
+import moment from 'moment';
+import Util from '../modules/util.js';
+import FileForm from './file-form.vue';
+import GnssCarousel from './gnss-carousel.vue';
+import GnssCredit from './gnss-credit.vue';
+import GnssMaterial from './gnss-material.vue';
+import GnssMenu from './gnss-menu.vue';
+import M3gContact from './m3g-contact.vue';
 delete Icon.Default.prototype._getIconUrl;
 Icon.Default.mergeOptions({
   iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png').default,
   iconUrl: require('leaflet/dist/images/marker-icon.png').default,
   shadowUrl: require('leaflet/dist/images/marker-shadow.png').default,
 });
-import FileForm from './file-form.vue'
-import GnssMenu from './gnss-menu.vue'
-import GnssCarousel from './gnss-carousel.vue'
-import M3gContact from './m3g-contact.vue'
-import GnssMaterial from './gnss-material.vue'
-import GnssCredit from './gnss-credit.vue'
-import GnssTour from './gnss-tour.vue'
-import OffsetList from './offset-list.vue'
+// import GnssTour from './gnss-tour.vue'
+import IgsCoseismic from './igs-coseismic.vue';
+import OffsetList from './offset-list.vue';
 // import Bokeh from '@bokeh/bokehjs/build/js/bokeh.esm.min.js';
 export default {
   name: 'Station',
-  components: {FileForm, GnssCarousel, GnssCredit, GnssMaterial, GnssMenu, GnssTour, M3gContact, OffsetList},
+  components: {FileForm, GnssCarousel, GnssCredit, GnssMaterial, GnssMenu, IgsCoseismic, M3gContact, OffsetList},
   data () {
     return {
       sari: 'https://alvarosg.shinyapps.io/sari/',
@@ -1009,6 +1010,9 @@ div.product-link a,
     color:#7b080e;
     background: #e5e5e5;
   }
+  span.in-title {
+    font-size: 1rem;
+  }
 </style>
 <style scoped>
 span.gnss-network-item::after,
@@ -1133,9 +1137,7 @@ a.gnss-network-item::after {
     border-color: grey;
     color:#7b080e;
   }
-  span.in-title {
-    font-size: 1rem;
-  }
+ 
   
 
 </style>
