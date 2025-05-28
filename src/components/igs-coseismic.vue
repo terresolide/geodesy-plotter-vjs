@@ -10,21 +10,33 @@
                 </label>
                 <div v-show="showRequest">
                     <div> @see <a href="https://webigs-rf.ign.fr/api/doc/#/Seismic/post_coseismic_request" target="_blank">https://webigs-rf.ign.fr/api/doc/#/Seismic/post_coseismic_request</a></div>
+                    <pre>curl -X 'POST' \
+  'https://webigs-rf.ign.fr/api/coseismic_request' \
+  -H 'accept: application/json' \
+  -H 'Content-Type: application/json' \
+  -d '{
+    "start_date": "1980-01-01",
+    "dmin": 1,
+    "stations": [{
+      "name": "{{station.name.substring(0,4)}}",
+      "latlng": [{{latlng[0]}},{{latlng[1]}}]
+    }]
+  }'</pre>
                 </div>
             </div>
             <div class="coseismic-row" style="margin-top:10px;font-weight:700;border-top:1px solid lightgray;">
                 <div>Date</div>
                 <div>Description</div>
                 <div>Earthquake location</div>
-                <div>Distance</div>
-                <div v-for="key, index in keys">{{ key.replace('_', ' ') }}</div>
+                <div style="text-align:center;">Distance</div>
+                <div v-for="key, index in keys" style="text-align:center;">{{ key.replace('_', ' ') }}</div>
             </div>
             <div class="coseismic-row" v-for="item  in list" style="color:darkred;">
                 <div>{{item['datetime'].substring(0,10)}}</div>
                 <div>{{ item['description'] }}</div>
                 <div>lat: {{item['position'][0]}}°<br>lng: {{ item.position[1] }}°</div>
-                <div>{{ item['distance'].toLocaleString() }}km</div>
-                <div v-for="key in keys">{{ item[key] }}</div>
+                <div  style="text-align:right;">{{ item['distance'].toLocaleString() }}&nbsp;km</div>
+                <div v-for="key in keys" style="text-align:right;">{{ item[key] }}</div>
             </div>
             
         </div>
@@ -43,6 +55,7 @@ export default {
         return {
             expand: false,
             showRequest: false,
+            latlng: null,
             list: [],
             keys: []
         }
@@ -54,12 +67,13 @@ export default {
         search () {
             console.log(this.station)
             var pos = this.station.location.geometry.coordinates
+            this.latlng = [pos[1], pos[0]]
             var data = {
                 start_date: '1980-01-01',
                 dmin: 1,
                 stations: [{
                     name: this.station.name.substring(0,4),
-                    latlng: [pos[1], pos[0]]
+                    latlng: this.latlng
                 }]
             }
             var headers = {
@@ -105,7 +119,7 @@ export default {
 <style scoped>
 .coseismic-row {
   display: grid;
-  grid-template-columns: 90px minmax(250px,2fr) 90px 90px 90px 90px 90px 90px 90px 90px;
+  grid-template-columns: minmax(90px, 0.5fr) minmax(250px,2fr) minmax(90px, 0.5fr)  minmax(90px, 0.5fr)  minmax(90px, 0.5fr)  minmax(90px, 0.5fr)  minmax(90px, 0.5fr)  minmax(90px, 0.5fr) minmax(90px, 0.5fr)  minmax(90px, 0.5fr) ;
   grid-gap: 0px;
   grid-template-rows: 30px;
   grid-auto-rows: minmax(100px, auto);
