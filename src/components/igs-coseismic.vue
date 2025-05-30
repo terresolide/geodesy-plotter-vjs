@@ -4,6 +4,17 @@
                 <span class="fa button in-title" @click="expand = !expand">{{expand ? '-' : '+'}}</span>
         </h3>
         <div style="margin-left:10px;" v-show="expand">
+            <div>
+                <label> Diclaimer
+                    <span class="fa button in-title" @click="showDisclaimer = !showDisclaimer">{{showDisclaimer ? '-' : '+'}}</span>
+                </label>
+                <div v-show="showDisclaimer" class="disclaimer" >
+            Coseismic displacements are predicted using Okada (1985)'s approach relying on the Global Centroid-Moment-Tensor (CMT) catalog.
+             They are calculated based on several coarse approximations, and are subject to various sources of uncertainty. 
+             Thus, they should not be used for a rigorous quantification of the actual co-seismic displacements, but only to estimate the order of magnitude of expected displacements. 
+             Please refer to the IGS-RF API for more information (<a href="https://webigs-rf.ign.fr/coseismic" target="_blank">https://webigs-rf.ign.fr/coseismic</a>).
+                </div>
+            </div>
            <div>
                 <label> Request
                     <span class="fa button in-title" @click="showRequest = !showRequest">{{showRequest ? '-' : '+'}}</span>
@@ -15,7 +26,7 @@
   -H 'accept: application/json' \
   -H 'Content-Type: application/json' \
   -d '{
-    "start_date": "1980-01-01",
+    "start_date": "{{startDate}}",
     "dmin": 1,
     "stations": [{
       "name": "{{station.name.substring(0,4)}}",
@@ -31,7 +42,7 @@
                 <div style="text-align:center;">Distance</div>
                 <div v-for="key, index in keys" style="text-align:center;">{{ key.replace('_', ' ') }}</div>
             </div>
-            <div class="coseismic-row" v-for="item  in list" style="color:darkred;">
+            <div class="coseismic-row" v-for="item  in list" v-if="item['datetime'].substring(0,10) >= startDate" style="color:darkred;">
                 <div>{{item['datetime'].substring(0,10)}}</div>
                 <div>{{ item['description'] }}</div>
                 <div>lat: {{item['position'][0]}}°<br>lng: {{ item.position[1] }}°</div>
@@ -49,12 +60,17 @@ export default {
         station: {
             type: Object,
             default: null
+        },
+        startDate: {
+            type: String,
+            default: '1980-01-01'
         }
     },
     data () {
         return {
             expand: false,
             showRequest: false,
+            showDisclaimer: false,
             latlng: null,
             list: [],
             keys: []
@@ -69,7 +85,7 @@ export default {
             var pos = this.station.location.geometry.coordinates
             this.latlng = [pos[1], pos[0]]
             var data = {
-                start_date: '1980-01-01',
+                start_date: this.startDate ,
                 dmin: 1,
                 stations: [{
                     name: this.station.name.substring(0,4),
@@ -95,8 +111,6 @@ export default {
                         }
                         
                         for (var key in result[i]) {
-                            console.log(key)
-                            console.log(key.indexOf('earthquake'))
                             if (key.indexOf('earthquake') < 0) {
                                 console.log(i)
                                 if (i === '0' && key !== 'dist[km]') {
@@ -118,21 +132,27 @@ export default {
 </script>
 <style scoped>
 .coseismic-row {
-  display: grid;
-  grid-template-columns: minmax(90px, 0.5fr) minmax(250px,2fr) minmax(90px, 0.5fr)  minmax(90px, 0.5fr)  minmax(90px, 0.5fr)  minmax(90px, 0.5fr)  minmax(90px, 0.5fr)  minmax(90px, 0.5fr) minmax(90px, 0.5fr)  minmax(90px, 0.5fr) ;
-  grid-gap: 0px;
-  grid-template-rows: 30px;
-  grid-auto-rows: minmax(100px, auto);
-  font-size: 0.8em;
-   border-left: 1px solid lightgrey;
+    display: grid;
+    grid-template-columns: minmax(90px, 0.5fr) minmax(250px,2fr) minmax(90px, 0.5fr)  minmax(90px, 0.5fr)  minmax(90px, 0.5fr)  minmax(90px, 0.5fr)  minmax(90px, 0.5fr)  minmax(90px, 0.5fr) minmax(90px, 0.5fr)  minmax(90px, 0.5fr) ;
+    grid-gap: 0px;
+    grid-template-rows: 30px;
+    grid-auto-rows: minmax(100px, auto);
+    font-size: 0.8em;
+    border-left: 1px solid lightgrey;
     border-bottom:1px solid lightgrey;
-   max-width:calc(100% - 10px);
-   
+    max-width:calc(100% - 10px);
 }
 .coseismic-row > div {
-   
-     border-right:1px solid lightgrey;
+    border-right:1px solid lightgrey;
     border-bottom:0;
     padding: 0 3px;
+}
+.disclaimer {
+    border:1px solid grey;
+    border-radius:5px;padding:5px;
+    background-color: #fafafa;
+    border: 1px solid #a3a3a3;
+    font-size: smaller;
+    line-height:1.3
 }
 </style>

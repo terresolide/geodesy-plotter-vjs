@@ -199,7 +199,7 @@
 	        </div>
 	        <div v-else ><em>No other stations within {{searchRadius}}km radius</em></div>
 	        </div>      
-             <igs-coseismic :station="station"></igs-coseismic>
+             <igs-coseismic :station="station" :start-date="startDate"></igs-coseismic>
     </div>
 
    <div v-if="Object.keys(files).length > 0" style="position:relative;">
@@ -353,6 +353,7 @@ export default {
       stationId: null,
       stationName: null,
       station: null,
+      startDate: '1980-01-01',
       stations: null,
       icon: null,
       stationLayer: null,
@@ -817,6 +818,7 @@ export default {
        
         if (data.sitelog.siteForm) {
           if (data.sitelog.siteForm.dateInstalled) {
+            this.startDate = data.sitelog.siteForm.dateInstalled.substring(0,10)
             this.station.dateInstalled = data.sitelog.siteForm.dateInstalled
             this.station.dateRemoved = data.sitelog.siteForm.dateRemoved ? data.sitelog.siteForm.dateRemoved : null
           }
