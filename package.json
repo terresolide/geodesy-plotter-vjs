@@ -1,6 +1,6 @@
 {
   "name": "geodesy-plotter-vjs",
-  "version": "1.9.0",
+  "version": "1.9.1",
   "description": "Component to search and display Gnss products",
   "production": {
     "url": "https://cdn.jsdelivr.net/gh/terresolide"
