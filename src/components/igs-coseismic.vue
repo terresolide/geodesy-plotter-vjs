@@ -12,7 +12,7 @@
             Possible coseismic displacements are predicted using Okada (1985)'s approach relying on the Global Centroid-Moment-Tensor (CMT) catalog. 
             They are calculated based on several coarse approximations, and are subject to various sources of uncertainty. 
             Thus, they should not be used for a rigorous quantification of the actual coseismic displacements, but only as rough orders of magnitude of the expected displacements. 
-            Please refer to the IGS-RF API for more information (<a href="https://webigs-rf.ign.fr/coseismic" target="_blank">https://webigs-rf.ign.fr/coseismic</a>).
+            Please refer to the IGS-RF API for more information (<a href="https://webigs-rf.ign.fr/api/doc/#/Seismic/post_coseismic_request" target="_blank">https://webigs-rf.ign.fr/api/doc/#/Seismic/post_coseismic_request</a>).
                 </div>
             </div>
            <div>
