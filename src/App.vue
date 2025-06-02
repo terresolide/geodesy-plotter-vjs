@@ -42,8 +42,8 @@
 
 <script>
 // import {AuthService} from 'formater-auth-service-js'
-import {AuthService} from './modules/AuthService.js'
 import MapComponent from './components/map.vue'
+import { AuthService } from './modules/AuthService.js'
 export default {
   name: 'App',
   components: {

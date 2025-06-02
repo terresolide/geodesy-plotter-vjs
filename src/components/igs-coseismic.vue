@@ -1,18 +1,18 @@
 <template>
     <div v-show="list.length > 0">
-        <h3> Coseismic displacements from IGS
+        <h3> Possible coseismic displacements
                 <span class="fa button in-title" @click="expand = !expand">{{expand ? '-' : '+'}}</span>
         </h3>
         <div style="margin-left:10px;" v-show="expand">
             <div>
-                <label> Diclaimer
+                <label> Disclaimer
                     <span class="fa button in-title" @click="showDisclaimer = !showDisclaimer">{{showDisclaimer ? '-' : '+'}}</span>
                 </label>
                 <div v-show="showDisclaimer" class="disclaimer" >
-            Coseismic displacements are predicted using Okada (1985)'s approach relying on the Global Centroid-Moment-Tensor (CMT) catalog.
-             They are calculated based on several coarse approximations, and are subject to various sources of uncertainty. 
-             Thus, they should not be used for a rigorous quantification of the actual co-seismic displacements, but only to estimate the order of magnitude of expected displacements. 
-             Please refer to the IGS-RF API for more information (<a href="https://webigs-rf.ign.fr/coseismic" target="_blank">https://webigs-rf.ign.fr/coseismic</a>).
+            Possible coseismic displacements are predicted using Okada (1985)'s approach relying on the Global Centroid-Moment-Tensor (CMT) catalog. 
+            They are calculated based on several coarse approximations, and are subject to various sources of uncertainty. 
+            Thus, they should not be used for a rigorous quantification of the actual coseismic displacements, but only as rough orders of magnitude of the expected displacements. 
+            Please refer to the IGS-RF API for more information (<a href="https://webigs-rf.ign.fr/coseismic" target="_blank">https://webigs-rf.ign.fr/coseismic</a>).
                 </div>
             </div>
            <div>
@@ -27,7 +27,7 @@
   -H 'Content-Type: application/json' \
   -d '{
     "start_date": "{{startDate}}",
-    "dmin": 1,
+    "dmin": 2,
     "stations": [{
       "name": "{{station.name.substring(0,4)}}",
       "latlng": [{{latlng[0]}},{{latlng[1]}}]
@@ -70,7 +70,7 @@ export default {
         return {
             expand: false,
             showRequest: false,
-            showDisclaimer: false,
+            showDisclaimer: true,
             latlng: null,
             list: [],
             keys: []
@@ -81,12 +81,11 @@ export default {
     },
     methods: {
         search () {
-            console.log(this.station)
             var pos = this.station.location.geometry.coordinates
             this.latlng = [pos[1], pos[0]]
             var data = {
                 start_date: this.startDate ,
-                dmin: 1,
+                dmin: 2,
                 stations: [{
                     name: this.station.name.substring(0,4),
                     latlng: this.latlng
@@ -122,8 +121,6 @@ export default {
                         }
                         this.list.push(item)
                     }
-                    console.log(this.list)
-                    console.log(this.keys)
                 }
             })
         }

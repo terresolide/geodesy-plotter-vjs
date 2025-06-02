@@ -1,6 +1,7 @@
 // import Vue from 'vue'
 import Vuex from 'vuex'
 import user from './user'
+import offset from './offset'
 // import tour from './tour'
 export default function makeStore( config ) {
   var defaultConfig = {
@@ -113,7 +114,8 @@ export default function makeStore( config ) {
       }
     },
     modules: {
-      user: user //,
+      user: user,
+      offset: offset
      // tour: tour
     }
   })

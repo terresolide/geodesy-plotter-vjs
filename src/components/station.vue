@@ -128,8 +128,6 @@
        <div v-if="!station.properties.m3g && !station.properties.from"><em>Sorry, we don't have more information about this station</em></div>
        
       </div>
-           
-    
   </div>
   <div  id="stationMap"  ></div>
    <div style="clear:left;"> </div>
@@ -208,9 +206,10 @@
         <h3 style="margin-left:5px;"> {{stationName}} {{selected.solution }} {{selected.productType}}</h3>
         <div v-if="plot.div" v-html="plot.div">STATION INCONNUE</div>
         <div v-if="plot.div" style="text-align:center;margin-top:10px;font-size:12px;width:100%;">
-          Remarquables dates: <span class="line" style="background:green;"></span> Material change
-          <span class="line" style="background:red;"></span> Earthquake
-          <span class="line" style="background:grey;"></span> Unknown change
+          Remarquables dates: 
+          <template v-for="item, key in labelColors">
+            <span class="line" :style="{background:key}"></span> {{item}}
+          </template>
         </div>
         <div v-else style="text-align:center;margin-top:45%;font-size:50px;">
             <font-awesome-icon icon="fa-sharp fa-spinner" spin></font-awesome-icon>
@@ -395,6 +394,9 @@ export default {
     },
     locationUrl () {
       return this.$store.state.location
+    },
+    labelColors () {
+      return this.$store.getters['offset/labelColors']
     },
     networks () {
       return this.$store.getters['networks']
@@ -860,6 +862,7 @@ export default {
       .then(resp => {
         var files = resp.body.products
         var self = this
+
         files.forEach(function (file) {
           if (!self.productType) {
             self.productType = file.productType
@@ -871,6 +874,15 @@ export default {
           }
           self.files[file.productType].push(file)
         })
+        if (this.startDate === '1980-01-01') {
+          var minDate = null
+          this.files[this.productType].forEach(function (file) {
+            if (!minDate || minDate > file.tempStart.substring(0,10)) {
+              minDate = file.tempStart.substring(0,10)
+            }
+          })
+          this.startDate = minDate
+        }
       })
     },
     goToStation (station) {

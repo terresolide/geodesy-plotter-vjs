@@ -1,6 +1,6 @@
 <template>
-    <div v-if="offsets" style="position:relative;width:450px;text-align:right;">
-       
+    <div v-if="offsets" style="position:relative;width:500px;text-align:right;">
+      
         <div v-show="show" class="offset-box"> 
             <div style="position:absolute;top:3px;right:5px;" class="close button" @click="show=false">&times;</div>
         <div style="text-align:left;font-weight:700;padding:5px 0 10px 0;">Offsets for this station and solution: <a :href="url" target="_blank">
@@ -9,12 +9,13 @@
         <table style="border:1px solid grey;">
            <thead >
             <tr >
-                <th v-for="key, i in columns" v-if="i == 1 || i == 9 || i == 10" style="text-transform:capitalize;">{{ key }}</th>
+                <th v-for="key, i in columns" v-if="i == 1 || i == 9 || i == 10 || i == 11" style="text-transform:capitalize;">
+                    {{ i == 10 ? 'O': key }}</th>
             </tr>
            </thead>
            <tbody >
             <tr v-for="item in offsets" style="display:table;" >
-                <td v-for="value, i in item"  v-if="i == 1 || i == 9 || i == 10" :style="{color: color(item)}">{{ value }}</td>
+                <td v-for="value, i in item"  v-if="i == 1 || i == 9 || i == 10 || i == 11" :style="{color: color(item)}">{{ value }}</td>
             </tr>
            </tbody>
         </table></div>
@@ -49,8 +50,12 @@ export default {
             show:false
         }
     },
+    created () {
+       this.$store.dispatch('offset/load')
+    },
     methods: {
         color(item) {
+            return this.$store.getters['offset/color'](item[9])
             if (item[9] === 'CHANGE') {
                 return 'darkgreen';
             } else if (item[9].indexOf('EQ') >=0 ) {
@@ -96,12 +101,18 @@ th:first-child {
 }
 td:nth-child(2),
 th:nth-child(2) {
-    width:70px;
+    width:130px;
+    word-break: break-word;
 }
 
 td:nth-child(3),
 th:nth-child(3) {
-    width:250px;
+    width:15px;
+    text-align:center;
+}
+td:nth-child(4),
+th:nth-child(4) {
+    width:220px;
 }
 .offset-box {
     position:absolute;
