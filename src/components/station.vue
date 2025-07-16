@@ -158,7 +158,7 @@
         <span class="fa button in-title" @click="show.contact = !show.contact">{{show.contact ? '-' : '+'}}</span>
       </label>
       <div :style="{display: show.contact ? 'flex': 'none'}"  style="flex-flow: row wrap;">
-          <m3g-contact type="siteOwner" :contact="station.properties.siteOwner.primaryContact"></m3g-contact>
+          <m3g-contact type="siteOwner" :contact="station.properties.siteOwner"></m3g-contact>
 
       </div>
     </div>
@@ -181,12 +181,13 @@
 	         </div>
 	         </div>
        </div>
-       <div v-if="station && (station.antennas|| station.receivers)" style="margin-left:10px;">
+       <div v-if="station && (station.antennas|| station.receivers || station.properties.instruments)" style="margin-left:10px;">
          <label> Instruments
             <span class="fa button in-title" @click="show.material = !show.material">{{show.material ? '-' : '+'}}</span>
          </label>
           <div :style="{display: show.material ? 'block': 'none'}" class="more-information" style="margin-left:10px;">
-            <gnss-material :antennas="station.antennas" :receivers="station.receivers"></gnss-material>
+            <gnss-material :antennas="station.antennas || station.properties.instruments.antennas"
+                           :receivers="station.receivers || station.properties.instruments.receivers"></gnss-material>
           </div>
         </div>
         <h3  v-if="stationId" >Nearest stations

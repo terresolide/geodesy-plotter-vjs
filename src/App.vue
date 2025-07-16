@@ -33,7 +33,7 @@
 	
 			 <div  v-if="$route.name !== 'home'" id="page" style="position:absolute;z-index:2;">
 			
-			     <div class="gnss-attribution">Component by <a href="https://www.poleterresolide.fr" title="FormaTerre"><img :src="require('./assets/img/favicon.png').default" width="24" /></a></div>
+			     <div class="gnss-attribution">Component by <a href="https://www.poleterresolide.fr" title="FormaTerre"><img :src="require('./assets/img/new_favicon.png').default" width="24" /></a></div>
 			     <router-view></router-view>
 			 </div>
 		 </div>

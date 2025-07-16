@@ -20,7 +20,6 @@
                     <span class="fa button in-title" @click="showRequest = !showRequest">{{showRequest ? '-' : '+'}}</span>
                 </label>
                 <div v-show="showRequest">
-                    <div> @see <a href="https://webigs-rf.ign.fr/api/doc/#/Seismic/post_coseismic_request" target="_blank">https://webigs-rf.ign.fr/api/doc/#/Seismic/post_coseismic_request</a></div>
                     <pre>curl -X 'POST' \
   'https://webigs-rf.ign.fr/api/coseismic_request' \
   -H 'accept: application/json' \
