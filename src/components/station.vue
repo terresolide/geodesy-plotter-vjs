@@ -109,6 +109,13 @@
           <div class="gdm-tooltip" style="width:350px;max-width:350px;">The station information has been harvested.<br>If you find any errors, please contact the sitelog directory maintainers.</div>
         </div>
       </h4>
+        <h4 v-else="station.properties.siteOwner && station.properties.siteOwner.preferredAbbreviation">
+           Information from {{station.properties.siteOwner.preferredAbbreviation}}
+          <div style="position:relative;font-size:1.1rem;font-weight:500;display:inline-block;" >
+            <a class="info"   @click="toggle($event)"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /></a>
+            <div class="gdm-tooltip" style="width:350px;max-width:350px;">The station information was recorded by us.<br>If you find any errors, please contact us (geodesy-plotter@poleterresolide.fr).</div>
+          </div>
+        </h4>
       <div v-if="station.properties.domes"><label>IERS DOMES Number:</label> {{station.properties.domes}}</div>
        
         <div v-if="station.MOID"><label>MOID:</label>  <a :href="station.MOID" target="_blank">M<sup>3</sup>G GNSS station page </a></div>
@@ -118,6 +125,11 @@
            <span v-else-if="station.owner.acronym">{{station.owner.acronym}}</span>
            <span v-else>{{station.owner.agencyName}}</span>
         </div>
+        <div v-else="station.properties.siteOwner"><label>Site owner: </label>
+
+          <span v-if="station.properties.siteOwner.preferredAbbreviation">{{station.properties.siteOwner.preferredAbbreviation}}</span>
+          <span v-else-if="station.properties.siteOwner.agencyName">{{station.properties.siteOwner.agencyName}}</span>
+        </div>
         <div v-if="station.onSite"><label>On Site: </label> 
            <span v-if="station.onSite.ROR"><a :href="station.onSite.ROR" target="_blank">{{station.onSite.acronym}}</a></span>
            <span v-else-if="station.onSite.acronym">{{station.onSite.acronym}}</span>
@@ -125,7 +137,7 @@
         </div>
        <div v-if="isEPOS"><label>EPOS</label> <a :href="'https://gnssdata-epos.oca.eu/#/metadata/marker='+ stationName.substring(0,4)" target="_blank">EPOS station page</a></div>
       
-       <div v-if="!station.properties.m3g && !station.properties.from"><em>Sorry, we don't have more information about this station</em></div>
+       <div v-if="!station.properties.m3g && !station.properties.from && !station.properties.siteOwner"><em>Sorry, we don't have more information about this station</em></div>
        
       </div>
   </div>
@@ -141,6 +153,15 @@
 	         </div>
 	       </div>
        </div>
+    <div v-else-if="station.properties.siteOwner && station.properties.siteOwner.primaryContact" style="margin-left:10px;">
+      <label> Contacts
+        <span class="fa button in-title" @click="show.contact = !show.contact">{{show.contact ? '-' : '+'}}</span>
+      </label>
+      <div :style="{display: show.contact ? 'flex': 'none'}"  style="flex-flow: row wrap;">
+          <m3g-contact type="siteOwner" :contact="station.properties.siteOwner.primaryContact"></m3g-contact>
+
+      </div>
+    </div>
        <div v-if="station && (station.monument || station.dateInstalled || station.geological)" style="margin-left:10px;">
          <label> Monument and geological information
             <span class="fa button in-title" @click="show.siteForm = !show.siteForm">{{show.siteForm ? '-' : '+'}}</span>
@@ -709,6 +730,12 @@ export default {
 	            this.station = resp.body
 	            this.stationId = this.station.id
 	            this.location = this.station.location
+              if (this.station.properties.siteOwner && this.station.properties.siteOwner.primaryContact) {
+                this.station.properties.siteOwner.primaryContact.agency = {
+                  agencyName: this.station.properties.siteOwner.agencyName,
+                  preferredAbbreviation: this.station.properties.siteOwner.preferredAbbreviation
+                }
+              }
 	            this.getFiles()
 	            this.getMoreInfo()
               this.getOffsets()
