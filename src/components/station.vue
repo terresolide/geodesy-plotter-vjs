@@ -70,158 +70,164 @@
          <div v-if="location.properties.x"><label>X coordinate: </label> {{location.properties.x.toLocaleString(lang,{ maximumFractionDigits: 1,minimumFractionDigits:1 })}} m</div>
          <div v-if="location.properties.y"><label>Y coordinate: </label> {{location.properties.y.toLocaleString(lang,{ maximumFractionDigits: 1,minimumFractionDigits:1})}} m</div>
          <div v-if="location.properties.z"><label>Z coordinate:</label> {{location.properties.z.toLocaleString(lang, {maximumFractionDigits: 1,minimumFractionDigits:1})}} m</div>
+     <template v-if="station">
+         <h3 style="margin-left:-10px;position:relative;">Information</h3>
+
+          <div v-if="station.properties.from && station.properties.from.length > 0"><label>Sitelog:</label> 
     
-      <h3 style="margin-left:-10px;position:relative;">Information</h3>
-      <div v-if="station.properties.from && station.properties.from.length > 0"><label>Sitelog:</label> 
-
-          <a v-for="sitelog in station.properties.from" :href="api + 'stations/' + stationName + '/sitelog?repository=' + sitelog"
-          class="gnss-network-item" target="_blank">
-            <template v-if="sitelog === 'M3G'">
-              M<sup>3</sup>G
-            </template>
-            <template v-else>
-            {{sitelog}}
-            </template>
-          </a>
-      </div>
-      <div v-if="station.properties.networks" ><label style="vertical-align: top;">Networks:</label> 
-        <div style="display:inline-block;max-width:calc(100% - 150px);">
-	       <span v-for="net in station.properties.networks">
-	        <span v-if="networks[net].metadata" class="gnss-network-item">
-	          <span v-if="isDoi(networks[net].metadata)">{{net}} 
-	              <gnss-credit :credit="networks[net].credit"></gnss-credit>(<a :href="'https://www.doi.org/' + isDoi(networks[net].metadata)" target="_blank">{{networks[net].metadata}}</a>)</span>
-	          <span v-else >
-	            <a :href="networks[net].metadata" target="_blank">{{net}}</a>
-	            <gnss-credit :credit="networks[net].credit"></gnss-credit>
-	          </span>
-	        </span>
-	        <span v-else class="gnss-network-item">{{net}} <gnss-credit :credit="networks[net].credit"></gnss-credit></span>
-	       
-	        
-	        </span>
+              <a v-for="sitelog in station.properties.from" :href="api + 'stations/' + stationName + '/sitelog?repository=' + sitelog"
+              class="gnss-network-item" target="_blank">
+                <template v-if="sitelog === 'M3G'">
+                  M<sup>3</sup>G
+                </template>
+                <template v-else>
+                {{sitelog}}
+                </template>
+              </a>
           </div>
-       </div>
-      <h4 style="margin-left:-10px;position:relative;"  v-if="station.properties.from && station.properties.from.length > 0">Information from 
-           <template v-if="station.properties.from[0]==='M3G'">M<sup>3</sup>G</template>
-           <template v-else >{{station.properties.from[0]}}</template>
-        <div style="position:relative;font-size:1.1rem;font-weight:500;display:inline-block;" >
-          <a class="info"   @click="toggle($event)"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /></a>
-          <div class="gdm-tooltip" style="width:350px;max-width:350px;">The station information has been harvested.<br>If you find any errors, please contact the sitelog directory maintainers.</div>
+          <div v-if="station.properties.networks" ><label style="vertical-align: top;">Networks:</label> 
+            <div style="display:inline-block;max-width:calc(100% - 150px);">
+    	       <span v-for="net in station.properties.networks">
+    	        <span v-if="networks[net].metadata" class="gnss-network-item">
+    	          <span v-if="isDoi(networks[net].metadata)">{{net}} 
+    	              <gnss-credit :credit="networks[net].credit"></gnss-credit>(<a :href="'https://www.doi.org/' + isDoi(networks[net].metadata)" target="_blank">{{networks[net].metadata}}</a>)</span>
+    	          <span v-else >
+    	            <a :href="networks[net].metadata" target="_blank">{{net}}</a>
+    	            <gnss-credit :credit="networks[net].credit"></gnss-credit>
+    	          </span>
+    	        </span>
+    	        <span v-else class="gnss-network-item">{{net}} <gnss-credit :credit="networks[net].credit"></gnss-credit></span>
+    	       
+    	        
+    	        </span>
+              </div>
+           </div>
+          <h4 style="margin-left:-10px;position:relative;"  v-if="station.properties.from && station.properties.from.length > 0">Information from 
+               <template v-if="station.properties.from[0]==='M3G'">M<sup>3</sup>G</template>
+               <template v-else >{{station.properties.from[0]}}</template>
+            <div style="position:relative;font-size:1.1rem;font-weight:500;display:inline-block;" >
+              <a class="info"   @click="toggle($event)"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /></a>
+              <div class="gdm-tooltip" style="width:350px;max-width:350px;">The station information has been harvested.<br>If you find any errors, please contact the sitelog directory maintainers.</div>
+            </div>
+          </h4>
+           <h4 v-else-if="station.properties.siteOwner && station.properties.siteOwner.preferredAbbreviation">
+               Information from {{station.properties.siteOwner.preferredAbbreviation}}
+              <div style="position:relative;font-size:1.1rem;font-weight:500;display:inline-block;" >
+                <a class="info"   @click="toggle($event)"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /></a>
+                <div class="gdm-tooltip" style="width:350px;max-width:350px;">The station information was recorded by us.<br>If you find any errors, please contact us (geodesy-plotter@poleterresolide.fr).</div>
+              </div>
+            </h4> 
+          <div v-if="station.properties.domes"><label>IERS DOMES Number:</label> {{station.properties.domes}}</div>
+           
+            <div v-if="station.MOID"><label>MOID:</label>  <a :href="station.MOID" target="_blank">M<sup>3</sup>G GNSS station page </a></div>
+           
+            <div v-if="station.owner"><label>Site owner: </label> 
+               <span v-if="station.owner.ROR"><a :href="station.owner.ROR" target="_blank">{{station.owner.acronym}}</a></span>
+               <span v-else-if="station.owner.acronym">{{station.owner.acronym}}</span>
+               <span v-else>{{station.owner.agencyName}}</span>
+            </div>
+            <div v-else-if="station.properties.siteOwner"><label>Site owner: </label>
+    
+              <span v-if="station.properties.siteOwner.preferredAbbreviation">{{station.properties.siteOwner.preferredAbbreviation}}</span>
+              <span v-else-if="station.properties.siteOwner.agencyName">{{station.properties.siteOwner.agencyName}}</span>
+            </div>
+            <div v-if="station.onSite"><label>On Site: </label> 
+               <span v-if="station.onSite.ROR"><a :href="station.onSite.ROR" target="_blank">{{station.onSite.acronym}}</a></span>
+               <span v-else-if="station.onSite.acronym">{{station.onSite.acronym}}</span>
+               <span v-else>{{station.owner.agencyName}}</span>
+            </div>
+           <div v-if="isEPOS"><label>EPOS</label> <a :href="'https://gnssdata-epos.oca.eu/#/metadata/marker='+ stationName.substring(0,4)" target="_blank">EPOS station page</a></div>
+          
+           <div v-if="!station.properties.m3g && !station.properties.from && !station.properties.siteOwner"><em>Sorry, we don't have more information about this station</em></div>
+         </template>
         </div>
-      </h4>
-       <h4 v-else-if="station.properties.siteOwner && station.properties.siteOwner.preferredAbbreviation">
-           Information from {{station.properties.siteOwner.preferredAbbreviation}}
-          <div style="position:relative;font-size:1.1rem;font-weight:500;display:inline-block;" >
-            <a class="info"   @click="toggle($event)"><font-awesome-icon icon="fa-solid fa-triangle-exclamation" /></a>
-            <div class="gdm-tooltip" style="width:350px;max-width:350px;">The station information was recorded by us.<br>If you find any errors, please contact us (geodesy-plotter@poleterresolide.fr).</div>
-          </div>
-        </h4> 
-      <div v-if="station.properties.domes"><label>IERS DOMES Number:</label> {{station.properties.domes}}</div>
        
-        <div v-if="station.MOID"><label>MOID:</label>  <a :href="station.MOID" target="_blank">M<sup>3</sup>G GNSS station page </a></div>
-       
-        <div v-if="station.owner"><label>Site owner: </label> 
-           <span v-if="station.owner.ROR"><a :href="station.owner.ROR" target="_blank">{{station.owner.acronym}}</a></span>
-           <span v-else-if="station.owner.acronym">{{station.owner.acronym}}</span>
-           <span v-else>{{station.owner.agencyName}}</span>
-        </div>
-        <div v-else-if="station.properties.siteOwner"><label>Site owner: </label>
-
-          <span v-if="station.properties.siteOwner.preferredAbbreviation">{{station.properties.siteOwner.preferredAbbreviation}}</span>
-          <span v-else-if="station.properties.siteOwner.agencyName">{{station.properties.siteOwner.agencyName}}</span>
-        </div>
-        <div v-if="station.onSite"><label>On Site: </label> 
-           <span v-if="station.onSite.ROR"><a :href="station.onSite.ROR" target="_blank">{{station.onSite.acronym}}</a></span>
-           <span v-else-if="station.onSite.acronym">{{station.onSite.acronym}}</span>
-           <span v-else>{{station.owner.agencyName}}</span>
-        </div>
-       <div v-if="isEPOS"><label>EPOS</label> <a :href="'https://gnssdata-epos.oca.eu/#/metadata/marker='+ stationName.substring(0,4)" target="_blank">EPOS station page</a></div>
-      
-       <div v-if="!station.properties.m3g && !station.properties.from && !station.properties.siteOwner"><em>Sorry, we don't have more information about this station</em></div>
-       
       </div>
-  </div>
-  <div  id="stationMap"  ></div>
-   <div style="clear:left;"> </div>
-       <div v-if="station && station.contacts" style="margin-left:10px;">
-         <label> Contacts
-            <span class="fa button in-title" @click="show.contact = !show.contact">{{show.contact ? '-' : '+'}}</span>
-         </label>
-         <div :style="{display: show.contact ? 'flex': 'none'}"  style="flex-flow: row wrap;">
-	         <div v-for="contact, key in station.contacts" style="width:calc(33% - 5px);margin-left:5px;min-width:300px;"> 
-	         <m3g-contact :type="key" :contact="contact"></m3g-contact>
-	         </div>
-	       </div>
-       </div>
-    <div v-else-if="station.properties.siteOwner && station.properties.siteOwner.primaryContact" style="margin-left:10px;">
-      <label> Contacts
-        <span class="fa button in-title" @click="show.contact = !show.contact">{{show.contact ? '-' : '+'}}</span>
-      </label>
-      <div :style="{display: show.contact ? 'flex': 'none'}"  style="flex-flow: row wrap;">
-          <m3g-contact type="siteOwner" :contact="station.properties.siteOwner"></m3g-contact>
-
-      </div>
-    </div>
-       <div v-if="station && (station.monument || station.dateInstalled || station.geological)" style="margin-left:10px;">
-         <label> Monument and geological information
-            <span class="fa button in-title" @click="show.siteForm = !show.siteForm">{{show.siteForm ? '-' : '+'}}</span>
-         </label>
-         <div :style="{display: show.siteForm ? 'block': 'none'}" class="more-information">
-	         <div v-if="station.monument || station.dateInstalled"  style="width:calc(49% - 10px);vertical-align:top; margin-left:5px;margin-right:10px;min-width:300px;display:inline-block;">
-	            <div v-if="station.dateInstalled"><label>Installed/Removed</label> {{date2str(station.dateInstalled)}} &rarr; {{date2str(station.dateRemoved)}}</div>
-      
-	           <div v-for="key, index in monumentKeys" v-if="station.monument[key]" > 
-	           <label>{{translateMonument[index]}}</label> <div class="more-information-line">{{station.monument[key]}}</div>
-	           </div>
-	         </div>
-	         <div v-if="station.geological"  style="width:calc(49% - 10px);vertical-align:top; margin-left:5px;font-size:0.9rem;min-width:300px;display:inline-block;">
-	           <div v-for="key, index in geologicalKeys" v-if="station.geological[key]" > 
-	           <label>{{translateGeo[index]}}</label><div class="more-information-line">{{station.geological[key]}}</div>
-	           </div>
-	         </div>
-	         </div>
-       </div>
-       <div v-if="station && (station.antennas|| station.receivers || station.properties.instruments)" style="margin-left:10px;">
-         <label> Instruments
-            <span class="fa button in-title" @click="show.material = !show.material">{{show.material ? '-' : '+'}}</span>
-         </label>
-          <div :style="{display: show.material ? 'block': 'none'}" class="more-information" style="margin-left:10px;">
-            <gnss-material :antennas="station.antennas || station.properties.instruments.antennas"
-                           :receivers="station.receivers || station.properties.instruments.receivers"></gnss-material>
-          </div>
+    
+      <div  id="stationMap"  ></div>
+      <div style="clear:left;"> </div>
+    <template v-if="station">
+           <div v-if="station && station.contacts" style="margin-left:10px;">
+             <label> Contacts
+                <span class="fa button in-title" @click="show.contact = !show.contact">{{show.contact ? '-' : '+'}}</span>
+             </label>
+             <div :style="{display: show.contact ? 'flex': 'none'}"  style="flex-flow: row wrap;">
+    	         <div v-for="contact, key in station.contacts" style="width:calc(33% - 5px);margin-left:5px;min-width:300px;"> 
+    	         <m3g-contact :type="key" :contact="contact"></m3g-contact>
+    	         </div>
+    	       </div>
+           </div>
+            <div v-else-if="station.properties.siteOwner && station.properties.siteOwner.primaryContact" style="margin-left:10px;">
+                  <label> Contacts
+                    <span class="fa button in-title" @click="show.contact = !show.contact">{{show.contact ? '-' : '+'}}</span>
+                  </label>
+                  <div :style="{display: show.contact ? 'flex': 'none'}"  style="flex-flow: row wrap;">
+                      <m3g-contact type="siteOwner" :contact="station.properties.siteOwner"></m3g-contact>
+            
+                  </div>
+            </div>
+            <div v-if="station && (station.monument || station.dateInstalled || station.geological)" style="margin-left:10px;">
+                 <label> Monument and geological information
+                    <span class="fa button in-title" @click="show.siteForm = !show.siteForm">{{show.siteForm ? '-' : '+'}}</span>
+                 </label>
+                 <div :style="{display: show.siteForm ? 'block': 'none'}" class="more-information">
+        	         <div v-if="station.monument || station.dateInstalled"  style="width:calc(49% - 10px);vertical-align:top; margin-left:5px;margin-right:10px;min-width:300px;display:inline-block;">
+        	         <div v-if="station.dateInstalled"><label>Installed/Removed</label> {{date2str(station.dateInstalled)}} &rarr; {{date2str(station.dateRemoved)}}</div>
+              
+        	        <div v-for="key, index in monumentKeys" v-if="station.monument[key]" > 
+        	           <label>{{translateMonument[index]}}</label> <div class="more-information-line">{{station.monument[key]}}</div>
+        	         </div>
+        	     </div>
+        	     <div v-if="station.geological"  style="width:calc(49% - 10px);vertical-align:top; margin-left:5px;font-size:0.9rem;min-width:300px;display:inline-block;">
+        	           <div v-for="key, index in geologicalKeys" v-if="station.geological[key]" > 
+        	           <label>{{translateGeo[index]}}</label><div class="more-information-line">{{station.geological[key]}}</div>
+        	           </div>
+        	         </div>
+    	         </div>
+            </div>
+            <div v-if="station && (station.antennas|| station.receivers || station.properties.instruments)" style="margin-left:10px;">
+                 <label> Instruments
+                    <span class="fa button in-title" @click="show.material = !show.material">{{show.material ? '-' : '+'}}</span>
+                 </label>
+                  <div :style="{display: show.material ? 'block': 'none'}" class="more-information" style="margin-left:10px;">
+                    <gnss-material :antennas="station.antennas || station.properties.instruments.antennas"
+                                   :receivers="station.receivers || station.properties.instruments.receivers"></gnss-material>
+                  </div>
+            </div>
+            <h3  v-if="stationId" >Nearest stations
+                <span class="fa button in-title" @click="show.nearest = !show.nearest">{{show.nearest ? '-' : '+'}}</span>
+            </h3>
+            <div  v-if="stationId" style="margin-left:10px;" v-show="show.nearest">
+              <div style="margin-bottom:10px;">
+    	            <input type="number" step="10" min="1" v-model="radius" @change="radiusChanged=true"
+    	           class="gnss-control" /> km &nbsp;
+    	           <button type="button" @click="getNeighbours()"
+    	           style="margin-right:20px;">Search</button>
+    	           <button type="button" v-if="onMap"
+    	              value="Remove" @click="removeNeighboursFromMap">Hide <font-awesome-icon icon="fa-solid fa-location-dot" /></button>
+    	           <button type="button" v-else title="Show on map" @click="addNeighboursToMap">Show on map <font-awesome-icon icon="fa-solid fa-location-dot" /></button>
+              </div>
+    	        <div v-if="neighbours.length > 0">
+    		        <div  v-for="st in neighbours" class="gnss-neighbour">
+    		          <span class="station-link" style="position:relative;" @click="goToStation(st)" @contextmenu="menuContext($event)" :title="'Go to station ' + st.name">{{st.name}}
+    		          <div class="menu-context" >
+    		            <ul style="display:block;">
+    		               <li title="Open in new tab">
+    		                   <a :href="locationUrl + 'station/'+ st.name + '/' + st.id + '?newTab=true'" 
+    		                   @contextmenu="$event.target.click()" target="_blank">Open in new tab</a>
+    		               </li></ul>
+    		           </div>
+    		          </span>
+    		          ({{Math.round(st.distance)}} km)
+    		        </div>
+    	        </div>
+    	        <div v-else ><em>No other stations within {{searchRadius}}km radius</em></div>
+    	        </div>      
+                 <igs-coseismic :station="station" :start-date="startDate"></igs-coseismic>
+        </template>
         </div>
-        <h3  v-if="stationId" >Nearest stations
-            <span class="fa button in-title" @click="show.nearest = !show.nearest">{{show.nearest ? '-' : '+'}}</span>
-        </h3>
-        <div  v-if="stationId" style="margin-left:10px;" v-show="show.nearest">
-          <div style="margin-bottom:10px;">
-	            <input type="number" step="10" min="1" v-model="radius" @change="radiusChanged=true"
-	           class="gnss-control" /> km &nbsp;
-	           <button type="button" @click="getNeighbours()"
-	           style="margin-right:20px;">Search</button>
-	           <button type="button" v-if="onMap"
-	              value="Remove" @click="removeNeighboursFromMap">Hide <font-awesome-icon icon="fa-solid fa-location-dot" /></button>
-	           <button type="button" v-else title="Show on map" @click="addNeighboursToMap">Show on map <font-awesome-icon icon="fa-solid fa-location-dot" /></button>
-          </div>
-	        <div v-if="neighbours.length > 0">
-		        <div  v-for="st in neighbours" class="gnss-neighbour">
-		          <span class="station-link" style="position:relative;" @click="goToStation(st)" @contextmenu="menuContext($event)" :title="'Go to station ' + st.name">{{st.name}}
-		          <div class="menu-context" >
-		            <ul style="display:block;">
-		               <li title="Open in new tab">
-		                   <a :href="locationUrl + 'station/'+ st.name + '/' + st.id + '?newTab=true'" 
-		                   @contextmenu="$event.target.click()" target="_blank">Open in new tab</a>
-		               </li></ul>
-		           </div>
-		          </span>
-		          ({{Math.round(st.distance)}} km)
-		        </div>
-	        </div>
-	        <div v-else ><em>No other stations within {{searchRadius}}km radius</em></div>
-	        </div>      
-             <igs-coseismic :station="station" :start-date="startDate"></igs-coseismic>
-    </div>
-
+        
+  
    <div v-if="Object.keys(files).length > 0" style="position:relative;">
       <div  v-if="selected" class="file-selected">
         <span class="close button" @click="unselect"><font-awesome-icon icon="fa-solid fa-close" /></span>
@@ -283,7 +289,13 @@
             
             
            <div><label>Name</label> {{file.name}}</div>
-           <div v-if="file.productType === 'POSITION'"><label>Ref Frame</label> <span style="letter-spacing: .07em;">{{file.properties.refFrame}}</span></div>
+           <div v-if="file.productType === 'POSITION'" >
+                <label style="vertical-align:top">Ref Frame</label> 
+                <template v-if="file.properties.refFrame" > <span style="letter-spacing: .07em;">{{file.properties.refFrame}}</span></template>
+                <template v-else-if="file.properties.procItrfRef && file.properties.meanVelocityRef">
+                <div style="font-size:0.9rem;display:inline-block;width:calc(100% - 165px);">local, {{file.properties.procItrfRef}} minus ENU mean motion: <br>{{file.properties.meanVelocityRef}}</div>
+                </template>
+            </div>
            <div style="font-size:0.8rem;height:175px;">
             <div><label>Solution</label>
              <span class="station-link"  @click="goToSolution(file.solution)" style="position:relative;margin-left:-5px;" @contextmenu="menuContext($event)">{{file.solution}}
@@ -300,7 +312,7 @@
             <div><label>Product Type</label> <span style="letter-spacing: .07em;">{{file.productType}}</span></div>
             <div><label>Product date range</label> {{date2str(file.tempStart)}} &rarr; {{date2str(file.tempEnd)}}</div>
             <div><label>Updated</label> {{date2str(file.creationDate)}}</div>
-            <div v-for="value, key in file.properties" v-if="key !== 'img' && key!== 'file' && key!=='fillRate' && key !== 'refFrame'" >
+            <div v-for="value, key in file.properties" v-if="key !== 'img' && key!== 'file' && key!=='fillRate' && key !== 'refFrame' && key !== 'procItrfRef' && key !== 'meanVelocityRef'" >
               <span v-if="key === 'doi'"><label>{{labelize(key)}}</label> <a class="station-link" :href="'https://doi.org/' + value" target="_blank">{{value}}</a></span>
               <span v-else-if="key === 'operator'"><label>Analysis center</label> {{value}}</span>
               <span v-else-if="key === 'dataSource'"><label>Data Source</label>
@@ -312,7 +324,6 @@
               <span v-else-if="!(key === 'products' && file.solution === 'GAMIT-GLOBK')"> <label>{{labelize(key)}}</label> {{value}}</span>
             </div>
             <div v-if="file.properties.fillRate"><label>Fill Rate</label> {{Math.round(file.properties.fillRate * 100)}} %</div>
-            
          </div>
          
          <div style="text-align:center;position:relative;">
@@ -332,7 +343,7 @@
 
    </div>
    
-   
+    
    <div v-if="!station && !stations">
       No station found with this code
    </div>
