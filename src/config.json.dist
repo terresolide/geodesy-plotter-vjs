@@ -1,0 +1,12 @@
+{
+    "dev": {
+		"keycloakUrl": "https://keycloakurl/realms/formater",
+		"clientId": "geodesy-plotter-vjs",
+        "method": "public"		
+	},
+	"prod": {
+	   "keycloakUrl": "https://keycloakurl/auth/realms/formater",
+		"clientId": "geodesy-plotter-vjs",
+        "method": "public"
+	}
+}
