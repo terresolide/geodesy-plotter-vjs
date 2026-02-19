@@ -228,7 +228,7 @@ export default {
       },
       drawControl: null,
       drawLayers: null,
-      init: false,
+      init: true,
       wait: false,
       noStation: false,
       initialized: false,
@@ -485,11 +485,12 @@ export default {
         })
     },
     animationEnd () {
+      console.log(this.init)
       if (this.init || this.wait) {
         this.init = false
         return
       }
-      
+    
       var bbox = this.map.getBounds().toBBoxString()
       var query = Object.assign({}, this.$route.query)
       query.bounds = bbox
@@ -586,8 +587,8 @@ export default {
        })
 	     this.map.on('zoomend moveend', function (e) {
 	       // console.log(self.map.getZoom())
-	       if (self.$route.name === 'home') {
-	        self.animationEnd()
+	       if (self.$route.name === 'home' ) {
+	          self.animationEnd()
 	       }
 	       
 	     })
@@ -857,7 +858,8 @@ export default {
       }
       // this.$store.commit('resetStations')
 
-      if (bounds && bounds.isValid()) {
+      if (bounds && bounds.isValid() && Object.keys(this.$route.query).length > 0) {
+          this.init = true
           this.map.fitBounds(bounds)
       }
       if (this.$route.query.selected) {
@@ -1038,7 +1040,7 @@ export default {
           },
           animateAddingMarkers:false})
         this.markers[region].on('animationend', function () {
-          self.animationEnd()
+          // self.animationEnd()
         })
          this.markers[region].on('click', function (e) {
             self.getData(e.layer)
