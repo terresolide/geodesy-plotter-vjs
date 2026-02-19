@@ -651,8 +651,11 @@ export default {
       this.$router.push({ name: 'station', params: { name: this.selected[1], id: this.selected[0]}, query: query})
     },
     loadTile(index, tiles, params, first) {
-      
+      if (index === 0) {
+        this.bounds = null
+      }
       if (index >= tiles.length) {
+        // fit bounds
         return
       }
       var url = this.api + 'stations/' + tiles[index]
@@ -830,8 +833,7 @@ export default {
         this.drawLayers.remove()
       }
       var bounds = this.bounds
-      if (this.$route.query.bounds ) {
-        console.log('hasBounds')
+      if (!bounds && this.$route.query.bounds ) {
         var tab = this.$route.query.bounds.split(',')
         if (tab.length === 4) {
           bounds = L.latLngBounds(
@@ -854,8 +856,8 @@ export default {
         this.$store.commit('setDraw', false)
       }
       // this.$store.commit('resetStations')
+
       if (bounds && bounds.isValid()) {
-          console.log('fit bounds')
           this.map.fitBounds(bounds)
       }
       if (this.$route.query.selected) {
@@ -867,6 +869,7 @@ export default {
            this.closePopup()
         }
       }
+    
     },
     getClassname (year) {
       if (year < 1) {
@@ -994,6 +997,7 @@ export default {
             self.stationTour.data = feature
           }
       })
+     
       this.markers[tile].addTo(this.map)
       this.markers[tile].on('click', function (e) {
           self.getData(e.layer)
