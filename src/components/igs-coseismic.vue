@@ -121,7 +121,7 @@ export default {
                         this.list.push(item)
                     }
                 }
-            })
+            }, err => {console.log(err)})
         }
     }
 }

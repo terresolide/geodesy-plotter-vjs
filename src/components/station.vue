@@ -282,7 +282,7 @@
                   <font-awesome-icon icon="fa-solid fa-cog" />SARI</a>
              <a v-if="$store.state.auth && !$store.getters['user/email']" @click="$parent.preLogin(api + 'products/' + file.name + '/download')" title="Download file source">
              <font-awesome-icon icon="fa-solid fa-download" /></a>
-             <a  v-else :href="api + 'products/' + file.name + '/download'" :download="file.name" title="Download file source">
+             <a  v-else-if="file.properties.file" :href="api + 'products/' + file.name + '/download'" :download="file.name" title="Download file source">
                <font-awesome-icon icon="fa-solid fa-download" /></a>
             
             </div>
