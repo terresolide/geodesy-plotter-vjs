@@ -246,7 +246,7 @@
 
    <h3>Data</h3>
      <div style="margin-left:10px;"><label>Product type</label> 
-     <select v-model="productType" class="gnss-control" style="max-width:160px;">
+     <select v-model="productType" class="gnss-control" style="max-width:240px;">
        <option v-for="group, key in files" :value="key">{{key}}</option>
      </select></div>
      <div style="width:100%">

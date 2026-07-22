@@ -25,10 +25,12 @@
 		  </div>
 		      <div v-if="productTypes">
         <label>Product type</label>
-        <select class="gnss-control" v-model="searchparams.productType">
-           <option :value="null">---</option>
-           <option v-for="pt in productTypes" :value="pt">{{pt}}</option>
-        </select>
+        <div style="margin-left:64px;">
+          <select class="gnss-control" v-model="searchparams.productType" style="width:calc(100% - 80px);max-width:calc(100% - 80px);">
+            <option :value="null">---</option>
+            <option v-for="pt in productTypes" :value="pt">{{pt}}</option>
+          </select>
+        </div>
       </div>
       <div v-if="mode === 'map'" style="position:relative;" >
         <label style="width:auto;">Has several products

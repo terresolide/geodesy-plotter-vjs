@@ -65,7 +65,8 @@
          
          <div > 
            <a v-if="$store.state.auth && !$store.getters['user/email']" @click="$parent.$parent.preLogin(api + 'products/' + file.name + '/download')"><font-awesome-icon icon="fa-solid fa-download" /></a>
-           <a v-else :href="api + 'products/' + file.name + '/download'" :download="file.name" ><font-awesome-icon icon="fa-solid fa-download" /></a>
+           <a v-else :href="api + 'products/' + file.name + '/download'" :download="file.name" 
+           :class= "{disabled: file.productType.startsWith('TROPO')}"><font-awesome-icon icon="fa-solid fa-download" /></a>
           </div>
  
       </div>
@@ -150,13 +151,17 @@ export default {
   color: #b8412c;
   cursor:pointer;
 }
+.gnss-file a.disabled {
+  pointer-events: none;
+  opacity:0.5;
+}
 .gnss-file a.station-link:hover {
    text-decoration: none;
     color:#7b080e;
 }
 .gnss-file {
   display: grid;
-  grid-template-columns: 10px minmax(120px,1fr) minmax(120px,0.8fr)  minmax(150px,1.2fr) minmax(100px,0.8fr) minmax(50px,0.3fr);
+  grid-template-columns: 10px minmax(120px,1fr) minmax(150px,1.2fr)  minmax(150px,1.2fr) minmax(100px,0.8fr) minmax(50px,0.3fr);
   grid-gap: 5px;
   grid-template-rows: 14px 30px; 
   /*grid-auto-rows: minmax(100px, auto);*/

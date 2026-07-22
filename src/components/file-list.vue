@@ -28,7 +28,9 @@
             <font-awesome-icon icon="fa-solid fa-file" />
            </a>
       </button>
-	    <button v-if="!$store.state.back" type="button" :disabled="downloading"  title="Download only the files in the page" @click="downloadPage">
+	    <button v-if="!$store.state.back" type="button" title="Download only the files in the page" 
+      :disabled="downloading || ($route.query.productType && $route.query.productType.startsWith('TROPO'))"  
+      @click="downloadPage">
           Download All
           <font-awesome-icon icon="fa-solid fa-download" />
       </button>
@@ -318,6 +320,7 @@ export default {
 <style>
 button[disabled] {
   pointer-events: none;
+  opacity: 0.5;
 }
 div.box-station {
   display: inline-block;
