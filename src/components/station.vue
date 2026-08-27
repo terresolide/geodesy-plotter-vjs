@@ -293,7 +293,7 @@
                 <label style="vertical-align:top">Ref Frame</label> 
                 <template v-if="file.properties.refFrame" > <span style="letter-spacing: .07em;">{{file.properties.refFrame}}</span></template>
                 <template v-else-if="file.properties.procItrfRef && file.properties.meanVelocityRef">
-                <div style="font-size:0.9rem;display:inline-block;width:calc(100% - 165px);">local, {{file.properties.procItrfRef}} minus ENU mean motion: <br>{{file.properties.meanVelocityRef}}</div>
+                <div style="font-size:0.9rem;display:inline-block;width:calc(100% - 165px);">local, {{file.properties.procItrfRef}} minus ENU <br>mean motion (mm/yr): <br>{{file.properties.meanVelocityRef}}</div>
                 </template>
             </div>
            <div style="font-size:0.8rem;height:175px;">
