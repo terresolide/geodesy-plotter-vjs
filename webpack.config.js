@@ -25,7 +25,18 @@ module.exports = {
     publicPath: '/dist/',
     filename: buildName+'.js'
   },
+  ignoreWarnings: [
+    {
+      module: /\.vue/,
+      message: /export 'default' \(imported as 'style0'\) was not found/,
+    },
+  ],
   module: {
+    // parser: {
+    //   'css/auto': {
+    //     namedExports: false
+    //   }
+    // },
     rules: [
       {
         test: /\.vue$/,
@@ -37,6 +48,12 @@ module.exports = {
 //          }
           // other vue-loader options go here
 //        }
+      },
+       // NOUVELLE RÈGLE À AJOUTER ICI :
+      {
+        test: /\.vue$/,
+        resourceQuery: /type=style/,
+        sideEffects: true
       },
       {
         resourceQuery: /blockType=i18n/,
@@ -52,9 +69,15 @@ module.exports = {
         test: /\.css$/,
         use: [
           'vue-style-loader',
-          'css-loader'
+          {
+            loader: 'css-loader',
+            options: {
+              esModule: false
+            },
+          }
         ]
       },
+      
 //      {
 //        test: /\.s[a|c]ss$/,
 //        loader: 'style!css!sass'

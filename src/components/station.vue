@@ -271,14 +271,16 @@
                </div>
                </span>
                <a v-if="file.solution === 'SPOTGINS' && file.productType === 'POSITION'"
-                :href="sari + '?server=formaterre&station=' + file.station + '&product=spotgins_pos'"
+                :href="sari + '?server=formaterre&station=' + file.station + '&product=spotgins_pos'" rel="nofollow noopener"
                 target="_blank"><font-awesome-icon icon="fa-solid fa-cog" /> SARI</a> 
                <a v-if="(file.solution === 'GAMIT-GLOBK' || file.solution.indexOf('UGA')>=0) && file.productType === 'POSITION'"
-                :href="sari + '?server=formaterre&station=' + file.station + '&product=uga_pos'"
+                :href="sari + '?server=formaterre&station=' + file.station + '&product=uga_pos'" rel="nofollow noopener"
                 target="_blank" ><font-awesome-icon icon="fa-solid fa-cog" /> SARI</a> 
-               <a v-if="file.solution === 'IGS' && file.productType === 'POSITION'" :href="sari + '?server=formaterre&station=' + file.station + '&product=igs20'" target="_blank">
+               <a v-if="file.solution === 'IGS' && file.productType === 'POSITION'" :href="sari + '?server=formaterre&station=' + file.station + '&product=igs20'" 
+               rel="nofollow noopener" target="_blank">
                  <font-awesome-icon icon="fa-solid fa-cog" />SARI</a>
-               <a v-if="file.solution === 'SOAM_GNSS_solENS' && file.productType === 'POSITION'" :href="sari + '?server=formaterre&station=' + file.station + '&product=ens'" target="_blank">
+               <a v-if="file.solution === 'SOAM_GNSS_solENS' && file.productType === 'POSITION'" :href="sari + '?server=formaterre&station=' + file.station + '&product=ens'" 
+               rel="nofollow noopener" target="_blank">
                   <font-awesome-icon icon="fa-solid fa-cog" />SARI</a>
              <a v-if="$store.state.auth && !$store.getters['user/email']" @click="$parent.preLogin(api + 'products/' + file.name + '/download')" title="Download file source">
              <font-awesome-icon icon="fa-solid fa-download" /></a>
@@ -993,89 +995,13 @@ export default {
   }
 }
 </script>
-<style>
- span.source ~ span.source::before {
-  content: ', ';
- }
-.gnss-admin-box {
-   border:2px solid darkgrey;
-   border-radius:5px;
-   background: #f3f3f3;
-   padding: 10px;
-   margin-right:50px;
-}
-.removed .gnss-admin-box {
-  display:none;
-}
-.removed .station-body,
-.file-container.removed {
-  opacity: 0.5;
-}
-.line {
-  border:0;
-  display:inline-block;
-  vertical-align:middle;
-  height:2px;
-  width:15px;
-  margin-left:10px;
-}
 
-
-div.box-station {
-  display: inline-block;
-overflow: hidden;
-padding: 5px 20px 20px 20px;
-margin:20px;
- border: 1px solid grey;
- border-radius: 10px;
--webkit-box-shadow: 0 0 3px rgba(0,0,0,.5);
-box-shadow: 0 0 3px rgba(0,0,0,.5);
-}
-div.box-station h3 {
-  margin-top: 10px;
-}
-div.box-station a.station-link {
-  margin: 5px;
-  line-height: 1.1;
-  text-decoration: none;
-  color: #000;
-  cursor:pointer;
-}
-.file-container label {
-  margin-bottom:1px;
-}
-div[id="stationMap"] {
-  position: relative;
-  width:300px;
-  height:200px;
-  z-index:0;
-  float:left;
-}
-div.product-link a,
-  a.button-link {
-    display: inline-block;
-    padding: 2px 5px;
-    margin-right: 5px;
-    border-radius: 3px;
-    text-decoration:none;
-    color: #b8412c;
-    border: 1px dotted grey;
-    background:#f3f3F3; 
-  }
-  div.product-link a:hover {
-    text-decoration: none;
-    color:#7b080e;
-    background: #e5e5e5;
-  }
-  span.in-title {
-    font-size: 1rem;
-  }
-</style>
-<style scoped>
+ <style scoped>
 span.gnss-network-item::after,
 a.gnss-network-item::after {
   content: ", "
 }
+
 
 /**  div.page-station {
     width:100%;

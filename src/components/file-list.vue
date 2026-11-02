@@ -317,33 +317,7 @@ export default {
   }
 }
 </script>
-<style>
-button[disabled] {
-  pointer-events: none;
-  opacity: 0.5;
-}
-div.box-station {
-  display: inline-block;
-overflow: hidden;
-padding: 5px 20px 20px 20px;
-margin:20px;
- border: 1px solid grey;
- border-radius: 10px;
--webkit-box-shadow: 0 0 3px rgba(0,0,0,.5);
-box-shadow: 0 0 3px rgba(0,0,0,.5);
-}
-div.box-station h3 {
-  margin-top: 10px;
-}
-div.box-station a.station-link {
-  margin: 5px;
-  line-height: 1.1;
-  text-decoration: none;
-  color: #000;
-  cursor:pointer;
-}
 
-</style>
 <style scoped>
   div.gnss-file:nth-child(2n) {
    background: #eee;

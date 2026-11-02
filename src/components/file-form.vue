@@ -130,7 +130,7 @@
 </template>
 <script>
 import VueSlider from 'vue-slider-component'
-
+import 'vue-slider-component/theme/default.css'
 
 export default {
   name: 'FileForm',
@@ -326,20 +326,8 @@ export default {
 }
 
 </script>
-<style src='vue-slider-component/theme/default.css' />
-<style>
+<!--<style src='vue-slider-component/theme/default.css' />-->
 
-div.custom-checkbox label.custom-control-label {
-  width:auto;
-  min-width:0;
-}
-input[type="number"].gnss-control{
-  width:100px;
-}
-input[id="fillrate"]::after {
-  content: '%';
-}
-</style>
 <style scoped>
 div.form {
   clear:both;
